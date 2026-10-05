@@ -437,6 +437,20 @@ export function redactSensitive(str: string): string {
   return redacted;
 }
 
+/**
+ * Clone an error before exposing it as structured metadata.
+ *
+ * Error messages and stacks can contain request parameters supplied by a
+ * network client. Keep the useful error identity while dropping custom
+ * enumerable fields and redacting secret-shaped substrings.
+ */
+function sanitizeErrorCause(error: Error): Error {
+  const sanitized = new Error(redactSensitive(error.message));
+  sanitized.name = error.name;
+  if (error.stack) sanitized.stack = redactSensitive(error.stack);
+  return sanitized;
+}
+
 export function wrapError(
   error: unknown,
   context: string,
@@ -444,15 +458,14 @@ export function wrapError(
 ): PocketPayError {
   if (error instanceof PocketPayError) return error;
 
-  const message =
-    error instanceof Error ? error.message : String(error);
-  const cause = error instanceof Error ? error : undefined;
+  const cause = error instanceof Error ? sanitizeErrorCause(error) : undefined;
+  const message = cause?.message ?? redactSensitive(String(error));
 
   return new PocketPayError(
     `${context}: ${message}`,
     code,
     undefined,
-    cause
+    cause,
   );
 }
 
