@@ -2,13 +2,82 @@ import { getHorizonServer } from '../config';
 import { TransactionPollConfig, TransactionPollResult, TransactionRecord, SDKConfig } from '../types';
 import { classifySubmitError } from '../errors';
 
+const DEFAULT_INTERVAL_MS = 2000;
+const DEFAULT_TIMEOUT_MS = 30000;
+
+function positiveInteger(value: number | undefined, fallback: number): number {
+  return Number.isFinite(value) && (value as number) > 0
+    ? Math.floor(value as number)
+    : fallback;
+}
+
+function abortError(): Error {
+  const error = new Error('Transaction polling cancelled');
+  error.name = 'AbortError';
+  return error;
+}
+
+function throwIfAborted(signal: AbortSignal | undefined): void {
+  if (signal?.aborted) {
+    throw abortError();
+  }
+}
+
+function withAbort<T>(request: Promise<T>, signal: AbortSignal | undefined): Promise<T> {
+  if (!signal) return request;
+  throwIfAborted(signal);
+
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => {
+      cleanup();
+      reject(abortError());
+    };
+    const cleanup = () => signal.removeEventListener('abort', onAbort);
+
+    signal.addEventListener('abort', onAbort, { once: true });
+    request.then(
+      (value) => {
+        cleanup();
+        resolve(value);
+      },
+      (error) => {
+        cleanup();
+        reject(error);
+      },
+    );
+  });
+}
+
+function waitForNextAttempt(ms: number, signal: AbortSignal | undefined): Promise<void> {
+  if (ms <= 0) return Promise.resolve();
+  throwIfAborted(signal);
+
+  return new Promise<void>((resolve, reject) => {
+    const timer = setTimeout(() => {
+      cleanup();
+      resolve();
+    }, ms);
+    const onAbort = () => {
+      clearTimeout(timer);
+      cleanup();
+      reject(abortError());
+    };
+    const cleanup = () => signal?.removeEventListener('abort', onAbort);
+
+    signal?.addEventListener('abort', onAbort, { once: true });
+  });
+}
+
 /**
  * Polls Horizon for the confirmation status of a transaction by its hash.
- * 
+ *
+ * This helper performs status lookups only. It never submits or resubmits the
+ * transaction, so retrying a status request cannot duplicate a payment.
+ *
  * @param hash - The transaction hash to poll for.
- * @param config - Polling interval and timeout configuration.
+ * @param config - Polling interval, timeout, attempt bound, and cancellation.
  * @param sdkConfig - Optional SDK config overrides.
- * @returns A typed poll result with final status mapping.
+ * @returns A typed poll result with both completion status and ledger state.
  */
 export async function pollTransaction(
   hash: string,
@@ -16,24 +85,33 @@ export async function pollTransaction(
   sdkConfig?: Partial<SDKConfig>
 ): Promise<TransactionPollResult> {
   const server = getHorizonServer(sdkConfig);
-  const interval = config.interval ?? 2000;
-  const timeout = config.timeout ?? 30000;
-  
+  const interval = positiveInteger(config.interval, DEFAULT_INTERVAL_MS);
+  const timeout = positiveInteger(config.timeout, DEFAULT_TIMEOUT_MS);
+  const derivedMaxAttempts = Math.max(1, Math.ceil(timeout / interval));
+  const maxAttempts = positiveInteger(config.maxAttempts, derivedMaxAttempts);
   const startTime = Date.now();
 
-  while (Date.now() - startTime < timeout) {
+  let attempts = 0;
+  let lastState: TransactionPollResult['state'] = 'unknown';
+
+  while (attempts < maxAttempts && Date.now() - startTime < timeout) {
+    throwIfAborted(config.signal);
+    attempts += 1;
+
     try {
-      const tx = await server.transactions().transaction(hash).call();
-      
+      const tx = await withAbort(
+        server.transactions().transaction(hash).call(),
+        config.signal,
+      );
+
       const record: TransactionRecord = {
         hash: tx.hash,
-        // `tx.ledger` is Horizon's link-follow helper, not the ledger number —
+        // `tx.ledger` is Horizon's link-follow helper, not the ledger number;
         // the numeric sequence is exposed as `ledger_attr`.
         ledger: tx.ledger_attr,
         createdAt: tx.created_at,
         sourceAccount: tx.source_account,
-        // Horizon types `fee_charged` as `string | number`; the SDK's record
-        // keeps fees as strings so stroop values never lose precision.
+        // Horizon types `fee_charged` as `string | number`; preserve stroops.
         fee: String(tx.fee_charged),
         operationCount: tx.operation_count,
         successful: tx.successful,
@@ -43,30 +121,53 @@ export async function pollTransaction(
 
       return {
         status: tx.successful ? 'success' : 'failure',
+        state: tx.successful ? 'confirmed' : 'failed',
         hash,
+        attempts,
         transaction: record,
       };
     } catch (error: any) {
+      if (error?.name === 'AbortError') {
+        throw error;
+      }
+
       const isNotFound = error?.response?.status === 404 || error?.status === 404;
-      
-      if (!isNotFound) {
+      if (isNotFound) {
+        lastState = 'pending';
+      } else {
         const classified = classifySubmitError(error, hash);
         if (classified.code !== 'TX_STATUS_UNKNOWN') {
           return {
             status: 'unknown',
+            state: 'unknown',
             hash,
+            attempts,
             error: classified.message,
           };
         }
+        lastState = 'unknown';
       }
     }
 
-    await new Promise((resolve) => setTimeout(resolve, interval));
+    const elapsed = Date.now() - startTime;
+    if (attempts >= maxAttempts || elapsed >= timeout) {
+      break;
+    }
+
+    await waitForNextAttempt(
+      Math.min(interval, Math.max(0, timeout - elapsed)),
+      config.signal,
+    );
   }
 
+  const attemptBoundReached = attempts >= maxAttempts && Date.now() - startTime < timeout;
   return {
     status: 'timeout',
+    state: lastState,
     hash,
-    error: `Transaction polling timed out after ${timeout}ms`,
+    attempts,
+    error: attemptBoundReached
+      ? `Transaction polling stopped after ${attempts} attempts while status was ${lastState}`
+      : `Transaction polling timed out after ${timeout}ms while status was ${lastState}`,
   };
 }
