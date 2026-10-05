@@ -81,6 +81,28 @@ describe('recipient validation and normalisation', () => {
     });
   });
 
+  it('rejects malformed typed fields instead of silently dropping them', () => {
+    const malformedRecipients: unknown[] = [
+      { kind: 'saved_contact', publicKey: 42 },
+      { kind: 'saved_contact', publicKey: VALID_DESTINATION_G, contactId: 42 },
+      { kind: 'saved_contact', publicKey: VALID_DESTINATION_G, name: false },
+      { kind: 'saved_contact', publicKey: VALID_DESTINATION_G, memo: {} },
+      { kind: 'saved_contact', publicKey: VALID_DESTINATION_G, metadata: [] },
+      { kind: 'destination', address: 42 },
+      { kind: 'destination', address: VALID_DESTINATION_G, label: [] },
+      { kind: 'destination', address: VALID_DESTINATION_G, memo: 7 },
+      { kind: 'destination', address: VALID_DESTINATION_G, metadata: null },
+    ];
+
+    for (const recipient of malformedRecipients) {
+      expect(validateRecipient(recipient)).toMatchObject({
+        valid: false,
+        status: 'invalid_shape',
+        code: 'INVALID_RECIPIENT',
+      });
+    }
+  });
+
   it('throws a typed PocketPayError from normalizeRecipient on invalid input', () => {
     expect(() => normalizeRecipient('bad-address')).toThrow(PocketPayError);
 

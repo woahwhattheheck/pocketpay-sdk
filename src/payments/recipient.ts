@@ -58,7 +58,34 @@ function trimmedOptional(value: unknown): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
-function candidateFromInput(input: unknown): RecipientCandidate | RecipientValidationResult {
+function invalidRecipientShape(message: string): RecipientValidationResult {
+  return {
+    valid: false,
+    status: 'invalid_shape',
+    code: 'INVALID_RECIPIENT',
+    message,
+  };
+}
+
+function hasInvalidOptionalString(
+  descriptor: Record<string, unknown>,
+  field: string,
+): boolean {
+  const value = descriptor[field];
+  return value !== undefined && typeof value !== 'string';
+}
+
+function hasInvalidMetadata(descriptor: Record<string, unknown>): boolean {
+  const value = descriptor.metadata;
+  return (
+    value !== undefined &&
+    (value === null || typeof value !== 'object' || Array.isArray(value))
+  );
+}
+
+function candidateFromInput(
+  input: unknown,
+): RecipientCandidate | RecipientValidationResult {
   if (typeof input === 'string') {
     const publicKey = input.trim();
     if (!publicKey) {
@@ -84,6 +111,25 @@ function candidateFromInput(input: unknown): RecipientCandidate | RecipientValid
   const descriptor = input as Record<string, unknown>;
 
   if (descriptor.kind === 'saved_contact') {
+    if (
+      descriptor.publicKey !== undefined &&
+      typeof descriptor.publicKey !== 'string'
+    ) {
+      return invalidRecipientShape('Saved contact public key must be a string');
+    }
+    if (
+      ['contactId', 'name', 'memo'].some((field) =>
+        hasInvalidOptionalString(descriptor, field),
+      )
+    ) {
+      return invalidRecipientShape(
+        'Saved contact optional fields must be strings',
+      );
+    }
+    if (hasInvalidMetadata(descriptor)) {
+      return invalidRecipientShape('Saved contact metadata must be an object');
+    }
+
     const publicKey = trimmedOptional(descriptor.publicKey);
     if (!publicKey) {
       return {
@@ -108,6 +154,25 @@ function candidateFromInput(input: unknown): RecipientCandidate | RecipientValid
   }
 
   if (descriptor.kind === 'destination') {
+    if (
+      descriptor.address !== undefined &&
+      typeof descriptor.address !== 'string'
+    ) {
+      return invalidRecipientShape('Payment destination address must be a string');
+    }
+    if (
+      ['label', 'memo'].some((field) =>
+        hasInvalidOptionalString(descriptor, field),
+      )
+    ) {
+      return invalidRecipientShape(
+        'Payment destination optional fields must be strings',
+      );
+    }
+    if (hasInvalidMetadata(descriptor)) {
+      return invalidRecipientShape('Payment destination metadata must be an object');
+    }
+
     const publicKey = trimmedOptional(descriptor.address);
     if (!publicKey) {
       return {
