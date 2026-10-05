@@ -143,6 +143,32 @@ describe('account activity normalization', () => {
       .toEqual(['tx-new', 'tx-1', 'tx-old']);
   });
 
+  it('keeps valid timestamps chronological when invalid timestamps are present', () => {
+    const records = normalizeAccountActivity({
+      account: ACCOUNT,
+      transactions: [
+        {
+          hash: 'tx-old',
+          createdAt: '2026-10-05T09:00:00.000Z',
+          successful: true,
+        },
+        {
+          hash: 'tx-invalid',
+          createdAt: 'not-a-date',
+          successful: true,
+        },
+        {
+          hash: 'tx-new',
+          createdAt: '2026-10-05T15:00:00.000Z',
+          successful: true,
+        },
+      ],
+    });
+
+    expect(records.map((record) => record.transactionHash))
+      .toEqual(['tx-new', 'tx-old', 'tx-invalid']);
+  });
+
   it('filters normalized history by status/kind/direction/asset', () => {
     const records = normalizeAccountActivity({
       account: ACCOUNT,
