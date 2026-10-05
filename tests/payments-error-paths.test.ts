@@ -74,6 +74,40 @@ describe('payment error classification', () => {
       category: PaymentFailureCategory.Account,
     },
     {
+      name: 'account operation result',
+      error: () => ({
+        response: {
+          status: 400,
+          data: {
+            extras: {
+              result_codes: {
+                transaction: 'tx_failed',
+                operations: ['op_underfunded'],
+              },
+            },
+          },
+        },
+      }),
+      category: PaymentFailureCategory.Account,
+    },
+    {
+      name: 'account transaction result',
+      error: () => ({
+        response: {
+          status: 400,
+          data: {
+            extras: {
+              result_codes: {
+                transaction: 'tx_no_source_account',
+                operations: [],
+              },
+            },
+          },
+        },
+      }),
+      category: PaymentFailureCategory.Account,
+    },
+    {
       name: 'asset',
       error: () => ({
         response: {
@@ -115,8 +149,8 @@ describe('payment error classification', () => {
           data: {
             extras: {
               result_codes: {
-                transaction: 'tx_failed',
-                operations: ['op_underfunded'],
+                transaction: 'tx_bad_seq',
+                operations: [],
               },
             },
           },
