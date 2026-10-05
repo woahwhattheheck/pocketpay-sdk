@@ -49,6 +49,28 @@ describe('vault operation preview', () => {
     );
   });
 
+  it('returns a typed validation error for an unknown runtime operation', () => {
+    let thrown: unknown;
+    try {
+      buildVaultOperationPreview({
+        operation: 'not-a-vault-operation' as never,
+        wallet,
+      });
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_OPERATION',
+      validation: {
+        field: 'operation',
+        reason: 'unsupported_value',
+        value: 'not-a-vault-operation',
+      },
+    });
+  });
+
   it('returns the SDK typed validation error for a malformed public key', () => {
     expect(() =>
       buildVaultOperationPreview({ operation: 'deposit', wallet: 'GINVALID', amount: '1' }),
