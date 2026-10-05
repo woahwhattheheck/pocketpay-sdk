@@ -8,8 +8,12 @@ It returns one of three states:
 - `unfunded`: Horizon reports that the account is not activated.
 - `unavailable`: the account state could not be determined.
 
-The default lookup always uses `network: "testnet"`. The helper does not create
-accounts, call Friendbot, sign transactions, or submit ledger changes.
+The default lookup always uses Stellar's canonical Testnet Horizon endpoint and
+`network: "testnet"`. Caller or environment Horizon URL overrides are ignored
+for this helper so a testnet-only diagnostic cannot accidentally query Mainnet.
+Other safe settings such as timeouts may still be provided through `config`.
+The helper does not create accounts, call Friendbot, sign transactions, or submit
+ledger changes.
 
 For deterministic unit tests, inject a lookup:
 
