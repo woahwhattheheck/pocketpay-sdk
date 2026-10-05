@@ -258,7 +258,9 @@ function vaultDirection(result: VaultMappedResult): AccountActivityDirection {
 export function mapVaultResultToActivity(input: VaultActivityInput): AccountActivityRecord {
   const { result, createdAt } = input;
   const activity: AccountActivityRecord = {
-    id: stableId('vault', result.hash, result.operation, createdAt),
+    id: result.hash
+      ? stableId('vault', result.hash)
+      : `vault:${result.operation}:${createdAt}`,
     kind: 'vault',
     status: vaultStatus(result),
     direction: vaultDirection(result),
