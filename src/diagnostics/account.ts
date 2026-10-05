@@ -12,27 +12,23 @@ import { redactDiagnosticsValue } from './redact';
 import type {
   AccountDiagnosticsReport,
   AccountDiagnosticsSnapshot,
+  BuildAccountDiagnosticsOptions,
   PaymentReadinessSnapshot,
 } from './types';
 
 function normalizeAccountError(error: unknown): { code: string; message: string } {
-  if (error && typeof error === 'object') {
-    const candidate = error as { code?: unknown; message?: unknown };
-    return {
-      code:
-        typeof candidate.code === 'string'
-          ? candidate.code
-          : 'ACCOUNT_DIAGNOSTICS_ERROR',
-      message:
-        typeof candidate.message === 'string'
-          ? candidate.message
-          : 'Account state could not be loaded',
-    };
+  let code = 'ACCOUNT_DIAGNOSTICS_ERROR';
+  if (error && typeof error === 'object' && 'code' in error) {
+    const candidate = (error as { code?: unknown }).code;
+    if (typeof candidate === 'string') code = candidate;
   }
 
+  // Do not forward provider messages into a shareable support report. They may
+  // contain URLs, headers, account material, or other context the SDK cannot
+  // classify safely.
   return {
-    code: 'ACCOUNT_DIAGNOSTICS_ERROR',
-    message: 'Account state could not be loaded',
+    code,
+    message: 'Account state could not be loaded.',
   };
 }
 
@@ -81,16 +77,22 @@ function paymentReadiness(
  * balance for fees, and the configured network is recognized. Callers must
  * still perform normal per-payment validation for destination, amount,
  * trustlines, sequence and operation-specific requirements.
+ *
+ * Tests and offline consumers can inject `lookup` to avoid network I/O.
  */
 export async function buildAccountDiagnosticsReport(
   publicKey: string,
-  overrides?: Partial<SDKConfig>,
+  options: BuildAccountDiagnosticsOptions = {},
 ): Promise<AccountDiagnosticsReport> {
+  const overrides: Partial<SDKConfig> | undefined = options.config;
   const base = buildDiagnosticsReport(overrides);
 
   let account: AccountDiagnosticsSnapshot;
   try {
-    const result = await getBalanceOrUnfunded(publicKey, overrides);
+    const result = options.lookup
+      ? await options.lookup(publicKey, overrides)
+      : await getBalanceOrUnfunded(publicKey, overrides);
+
     account =
       result.status === 'unfunded'
         ? {
