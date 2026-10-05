@@ -1,0 +1,14 @@
+{
+  "source_repository": "woahwhattheheck/pocketpay-sdk",
+  "branch": "fix/179-wallet-secret-redaction",
+  "source_commit": "959b572f3cc0e23b303e8c8ffda26aeac180816d",
+  "source_tree": "78a01979f742198990ba7a7a19903296b73d9bcd",
+  "sole_parent": "b7edca4fe5385653539def21916b20102db5e19e",
+  "expected_head_guard": "b7edca4fe5385653539def21916b20102db5e19e",
+  "force": false,
+  "source_ref_readback": "959b572f3cc0e23b303e8c8ffda26aeac180816d",
+  "sponsor_pr": "https://github.com/Stellar-PocketPay/pocketpay-sdk/pull/459",
+  "validation_pin_statement": "Tests executed against the exact locally materialized tree78a01979f742198990ba7a7a19903296b73d9bcd, subsequently published as source commit959b572f3cc0e23b303e8c8ffda26aeac180816d.",
+  "frozen_local_receipt_sha256": "84b7d0cf395f9802c889ce4d86564ca74cad1126cffaf5f810e5fea7b5aa3a7f",
+  "publication_recorded_at_utc": "2026-10-05T22:14:00.360594+00:00"
+}

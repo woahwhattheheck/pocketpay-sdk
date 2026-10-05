@@ -1,0 +1,54 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> stellar-pocketpay-sdk@1.0.0 test
+> vitest run tests/wallet-secret-redaction.test.ts
+
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk179-validation-b7
+
+ ❯ tests/wallet-secret-redaction.test.ts (6 tests | 1 failed) 15ms
+   ✓ wallet secret redaction boundaries > does not expose a rejected import secret in thrown errors 6ms
+   ✓ wallet secret redaction boundaries > does not expose a rejected import secret in safe-result metadata 1ms
+   ✓ wallet secret redaction boundaries > does not expose a rejected signing secret 1ms
+   ✓ wallet secret redaction boundaries > redacts transaction failure messages, stacks, and returned causes 1ms
+   × wallet secret redaction boundaries > redacts a secret in a non-enumerable error name before returning metadata 5ms
+     → expected 'Failed to submit transaction: Transac…' not to contain 'SABCDEFGHJKLMNPQRSTUVWXYZ234567ABCDEF…'
+   ✓ wallet secret redaction boundaries > preserves an ordinary cause name, message, stack, and wrapper code 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/wallet-secret-redaction.test.ts > wallet secret redaction boundaries > redacts a secret in a non-enumerable error name before returning metadata
+AssertionError: expected 'Failed to submit transaction: Transac…' not to contain 'SABCDEFGHJKLMNPQRSTUVWXYZ234567ABCDEF…'
+
+- Expected
++ Received
+
+- [REDACTED_SYNTHETIC_CANARY]
++ Failed to submit transaction: Transaction rejected
++ PocketPayError: Failed to submit transaction: Transaction rejected
++     at wrapError (/workspace/scratch/ea8baa184658/sdk179-validation-b7/src/utils/index.ts:464:10)
++     at toResult (/workspace/scratch/ea8baa184658/sdk179-validation-b7/src/utils/index.ts:500:11)
++     at processTicksAndRejections (node:internal/process/task_queues:104:5)
++     at /workspace/scratch/ea8baa184658/sdk179-validation-b7/tests/wallet-secret-redaction.test.ts:92:20
++     at file:///workspace/scratch/ea8baa184658/sdk179-validation-b7/node_modules/@vitest/runner/dist/chunk-hooks.js:752:20
++ Transaction rejected
++ Error: Transaction rejected
++ {"name":"PocketPayError","code":"TX_SUBMISSION_ERROR","cause":{"name":"HorizonError [REDACTED_SYNTHETIC_CANARY]"}}
+
+ ❯ expectSecretAbsent tests/wallet-secret-redaction.test.ts:23:27
+     21|     .join('\n');
+     22| 
+     23|   expect(exposedText).not.toContain(secret);
+       |                           ^
+     24| }
+     25| 
+ ❯ tests/wallet-secret-redaction.test.ts:100:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 5 passed (6)
+   Start at  18:03:52
+   Duration  620ms (transform 200ms, setup 0ms, collect 399ms, tests 15ms, environment 0ms, prepare 51ms)
+

@@ -1,0 +1,15 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> stellar-pocketpay-sdk@1.0.0 test
+> vitest run tests/wallet-secret-redaction.test.ts
+
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk179-validation-b7
+
+ ✓ tests/wallet-secret-redaction.test.ts (6 tests) 10ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  18:06:24
+   Duration  947ms (transform 346ms, setup 0ms, collect 644ms, tests 10ms, environment 0ms, prepare 86ms)
+

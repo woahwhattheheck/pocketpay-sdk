@@ -1,0 +1,53 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> stellar-pocketpay-sdk@1.0.0 test
+> vitest run tests/qrParser.test.ts
+
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk179-validation-base
+
+ ❯ tests/qrParser.test.ts (2 tests | 2 failed) 7ms
+   × QR Parser > parses valid QR payload 6ms
+     → expected undefined to be 'GABCDEF1234567890' // Object.is equality
+   × QR Parser > throws on malformed URL 1ms
+     → expected function to throw an error, but it didn't
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload
+AssertionError: expected undefined to be 'GABCDEF1234567890' // Object.is equality
+
+- Expected: 
+"GABCDEF1234567890"
+
++ Received: 
+undefined
+
+ ❯ tests/qrParser.test.ts:8:28
+      6|     const url = 'pocketpay://pay?address=GABCDEF1234567890&amount=10.5…
+      7|     const result = parseQRPayload(url);
+      8|     expect(result.address).toBe('GABCDEF1234567890');
+       |                            ^
+      9|     expect(result.amount).toBe('10.5');
+     10|     expect(result.asset).toEqual({ code: 'USD', issuer: 'ISSUER' });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/qrParser.test.ts:17:42
+     15|   test('throws on malformed URL', () => {
+     16|     const badUrl = 'pocketpay://pay?address=invalid&amount=abc';
+     17|     expect(() => parseQRPayload(badUrl)).toThrow(PaymentParseError);
+       |                                          ^
+     18|   });
+     19| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed (2)
+   Start at  18:03:11
+   Duration  568ms (transform 167ms, setup 0ms, collect 356ms, tests 7ms, environment 0ms, prepare 65ms)
+

@@ -1,0 +1,121 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> stellar-pocketpay-sdk@1.0.0 test
+> vitest run --exclude **/*.integration.test.ts
+
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk179-validation-b7
+
+ ❯ tests/qrParser.test.ts (2 tests | 2 failed) 10ms
+   × QR Parser > parses valid QR payload 8ms
+     → expected undefined to be 'GABCDEF1234567890' // Object.is equality
+   × QR Parser > throws on malformed URL 1ms
+     → expected function to throw an error, but it didn't
+ ✓ tests/polling.test.ts (5 tests) 77ms
+ ✓ tests/sequence-safety.test.ts (31 tests) 131ms
+ ✓ tests/payments.test.ts (31 tests) 65ms
+ ✓ tests/payments-error-paths.test.ts (30 tests) 83ms
+ ✓ tests/idempotency.test.ts (9 tests) 48ms
+ ✓ tests/transaction-authorization.test.ts (24 tests) 49ms
+ ✓ tests/signed-transaction-inspection.test.ts (29 tests) 60ms
+ ✓ tests/destination-validation.test.ts (43 tests) 48ms
+ ✓ tests/transaction-lifecycle.test.ts (12 tests) 58ms
+ ✓ tests/auth-requirements.test.ts (23 tests) 44ms
+ ✓ tests/signer-capability.test.ts (20 tests) 66ms
+ ✓ tests/balance.test.ts (24 tests) 33ms
+ ✓ tests/timeout-classification.test.ts (17 tests) 31ms
+ ✓ tests/config.test.ts (73 tests) 23ms
+ ✓ tests/account.test.ts (32 tests) 34ms
+ ✓ tests/fund.test.ts (23 tests) 29ms
+ ✓ tests/vault.test.ts (13 tests) 29ms
+ ✓ tests/transactions.test.ts (14 tests) 26ms
+ ✓ tests/utils.test.ts (77 tests) 19ms
+ ✓ tests/network-client.test.ts (12 tests) 21ms
+ ✓ tests/result.test.ts (38 tests) 26ms
+ ✓ tests/enhanced-result.test.ts (38 tests) 18ms
+ ✓ tests/feature-flags.test.ts (17 tests) 16ms
+ ✓ tests/payments-validation.test.ts (14 tests) 15ms
+ ✓ tests/build-validation.test.ts (22 tests) 12ms
+ ✓ tests/vault-capabilities.test.ts (17 tests) 11ms
+ ✓ tests/feature-flag-registry.test.ts (7 tests) 13ms
+ ✓ tests/transaction-test-fixtures.test.ts (8 tests) 13ms
+ ✓ tests/mockHorizon.test.ts (4 tests) 17ms
+ ✓ tests/wallet.test.ts (20 tests) 15ms
+ ✓ tests/contract-client-factory.test.ts (8 tests) 15ms
+ ✓ tests/trustline.test.ts (17 tests) 17ms
+ ✓ tests/error-standard.test.ts (12 tests) 9ms
+ ✓ tests/payment-receipt.test.ts (23 tests) 11ms
+ ✓ tests/multi-asset-balance.test.ts (14 tests) 14ms
+ ✓ tests/network-fee.test.ts (3 tests) 9ms
+ ✓ tests/memo-validation.test.ts (29 tests) 14ms
+ ✓ tests/wallet-secret-redaction.test.ts (6 tests) 15ms
+ ✓ tests/diagnostics.test.ts (10 tests) 11ms
+ ✓ tests/safe-amount.test.ts (37 tests) 14ms
+ ✓ tests/types/asset.test.ts (18 tests) 8ms
+ ✓ tests/config-validation.test.ts (14 tests) 13ms
+ ✓ tests/exports.test.ts (9 tests) 7ms
+ ✓ tests/filterTransactions.test.ts (23 tests) 7ms
+ ✓ tests/payments-preview.test.ts (5 tests) 7ms
+ ✓ tests/sorobanMapper.test.ts (19 tests) 9ms
+ ✓ tests/multi-asset-payment-intent.test.ts (13 tests) 17ms
+ ✓ tests/transactions/mapper.test.ts (11 tests) 8ms
+ ✓ tests/simulation-mapper.test.ts (10 tests) 6ms
+ ✓ tests/verify-acceptance.test.ts (4 tests) 7ms
+ ✓ tests/endpoint-diagnostics.test.ts (3 tests) 5ms
+ ✓ tests/env.test.ts (7 tests) 4ms
+ ✓ tests/explorer.test.ts (9 tests) 7ms
+ ✓ tests/assets.test.ts (8 tests) 4ms
+ ✓ tests/vaultParams.test.ts (3 tests) 3ms
+ ✓ tests/sortTransactionsByDate.test.ts (7 tests) 5ms
+ ✓ tests/external_signer.test.ts (1 test) 4ms
+ ✓ tests/transactionFixtures.test.ts (5 tests) 4ms
+ ✓ tests/unsupported-feature.test.ts (34 tests) 7866ms
+   ✓ vault capability gating (regression for the reported bug) > accepts SDKConfig.contractId — the path the registry documents  5033ms
+   ✓ vault capability gating (regression for the reported bug) > still honours the VAULT_CONTRACT_ID env var (backwards compatible)  2525ms
+ ✓ tests/retry-policy.test.ts (34 tests) 66143ms
+   ✓ withRetryPolicy > retries on 429 rate-limit and succeeds on a later attempt  4010ms
+   ✓ withRetryPolicy > does not blindly resubmit after a timeout — throws with unknown_status after polling fails  18022ms
+   ✓ withRetryPolicy > unknown_status exhausted result has finalOutcome === unknown_status  18019ms
+   ✓ withRetryPolicy > exhausts retries and reports retryable_failure when transient error persists  4019ms
+   ✓ withRetryPolicy > calls onAttempt for every failed attempt  4010ms
+   ✓ withRetryPolicy > never resubmits to Horizon after an unknown_status — no duplicate risk  18021ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload
+AssertionError: expected undefined to be 'GABCDEF1234567890' // Object.is equality
+
+- Expected: 
+"GABCDEF1234567890"
+
++ Received: 
+undefined
+
+ ❯ tests/qrParser.test.ts:8:28
+      6|     const url = 'pocketpay://pay?address=GABCDEF1234567890&amount=10.5…
+      7|     const result = parseQRPayload(url);
+      8|     expect(result.address).toBe('GABCDEF1234567890');
+       |                            ^
+      9|     expect(result.amount).toBe('10.5');
+     10|     expect(result.asset).toEqual({ code: 'USD', issuer: 'ISSUER' });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/qrParser.test.ts:17:42
+     15|   test('throws on malformed URL', () => {
+     16|     const badUrl = 'pocketpay://pay?address=invalid&amount=abc';
+     17|     expect(() => parseQRPayload(badUrl)).toThrow(PaymentParseError);
+       |                                          ^
+     18|   });
+     19| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 60 passed (61)
+      Tests  2 failed | 1123 passed (1125)
+   Start at  18:06:35
+   Duration  67.14s (transform 2.32s, setup 0ms, collect 17.35s, tests 75.40s, environment 16ms, prepare 4.05s)
+

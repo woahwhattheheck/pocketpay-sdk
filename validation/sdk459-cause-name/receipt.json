@@ -1,0 +1,787 @@
+{
+  "schema": "sdk459-local-validation-receipt-v1",
+  "frozen_at_utc": "2026-10-05T22:10:52.844138+00:00",
+  "source_pins": {
+    "repo": "Stellar-PocketPay/pocketpay-sdk",
+    "pr": 459,
+    "fork": "woahwhattheheck/pocketpay-sdk",
+    "branch": "fix/179-wallet-secret-redaction",
+    "expected_parent": "b7edca4fe5385653539def21916b20102db5e19e",
+    "original_tree": "047041e4569068c6a11fb5ebdae09f4522ea2b0e",
+    "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb",
+    "proposed_tree": "78a01979f742198990ba7a7a19903296b73d9bcd",
+    "diff_stat": "src/utils/index.ts                    |  2 +-\n tests/wallet-secret-redaction.test.ts | 46 +++++++++++++++++++++++++++++++++++\n 2 files changed, 47 insertions(+), 1 deletion(-)",
+    "scope": [
+      "src/utils/index.ts",
+      "tests/wallet-secret-redaction.test.ts"
+    ],
+    "package_lock_git_blob": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+    "package_lock_sha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9",
+    "patch_sha256": "824881427b71fbc43e5b2d655e886f993c76af120721376654259918ed4e53f7",
+    "files": [
+      {
+        "path": "src/utils/index.ts",
+        "mode": "100644",
+        "type": "blob",
+        "git_blob": "d98ff63c2d2d5c2bc098046875930d65b40f6ee2",
+        "sha256": "4dabe42ea4955a393984c38b1ede2142265146c77e440000acf79a5f26ce3461"
+      },
+      {
+        "path": "tests/wallet-secret-redaction.test.ts",
+        "mode": "100644",
+        "type": "blob",
+        "git_blob": "126c2772f8ca21c4c88f0edd06850a3ff5461c49",
+        "sha256": "edc9103ac5efe575c553c9f6d0a35df2eaf2d156f6c68892f9d349e6da60e55a"
+      }
+    ]
+  },
+  "local_toolchain": {
+    "node": "v24.19.0",
+    "vitest": "3.2.7",
+    "typescript": "5.9.3",
+    "stellar_sdk": "13.3.0"
+  },
+  "concrete_defect": "b7 sanitizer copies Error.name unredacted into an enumerable cause.name, leaking an invalid synthetic secret-shaped name through returned error JSON despite an original non-enumerable name.",
+  "repair": "Existing redactSensitive helper now sanitizes Error.name; two real toResult cases cover tainted non-enumerable name and ordinary TypeError code/message/stack/name/cause cloning. Original raw error remains unchanged.",
+  "actual_results": {
+    "new_regression_before": {
+      "passed": 5,
+      "failed": 1,
+      "total": 6,
+      "exit": 1
+    },
+    "repaired_focused": {
+      "passed": 6,
+      "failed": 0,
+      "total": 6,
+      "exit": 0
+    },
+    "repaired_strict_types_exit": 0,
+    "whole_source_types_exit": 2,
+    "whole_source_types_preexisting_errors": 8,
+    "original_b7_full_units": {
+      "passed": 1121,
+      "failed": 2,
+      "total": 1123,
+      "files_passed": 60,
+      "files_failed": 1,
+      "exit": 1
+    },
+    "repaired_final_full_units": {
+      "passed": 1123,
+      "failed": 2,
+      "total": 1125,
+      "files_passed": 60,
+      "files_failed": 1,
+      "exit": 1
+    }
+  },
+  "preexisting_failures": {
+    "types": "8 QR-parser ValidationErrorField/ValidationErrorCode mismatches are identical on ddd, b7, and repaired tree.",
+    "unit_tests": [
+      "tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+      "tests/qrParser.test.ts > QR Parser > throws on malformed URL"
+    ],
+    "base_confirmation": "Both failing QR cases directly reproduced on ddd. QR parser source, QR tests, and package lock are byte-identical across ddd, b7, repaired tree.",
+    "qr_parser_git_blob": "57759a3e4c2166bfd8bb9225af0d982dbbdba745",
+    "qr_tests_git_blob": "e63c0b525436c334ac5f3b36f828ced9516f7054"
+  },
+  "limits": [
+    "Only invalid runtime-built synthetic canaries are used; no usable signing material.",
+    "Final whole-unit run excluded the one opt-in friendbot.integration.test.ts file and set RUN_INTEGRATION=0; no integration, live signing, hosted-CI, coverage, or all-green claim.",
+    "npm ci used the committed lock and --ignore-scripts; dependency/lock/public API unchanged.",
+    "First transport guard v1 missed Node normalized connect arguments; its real test results remain retained but are not proof of an external-host block. The unchanged repaired source was rerun under v2.",
+    "v2 smoke check proved three direct/normalized outside-host shapes are rejected before the underlying socket function, with localhost allowed. Final whole-unit run uses v2.",
+    "name-canary.log is an earlier tsx CLI bootstrap EPERM IPC failure, not a product assertion; the real six-case failing-before/passing-after Vitest regression supersedes it."
+  ],
+  "peer_review": {
+    "reviewer": "root",
+    "status": "CLEAR",
+    "evidence": "Root independently recomputed Git/SHA256 postimages and expected tree 78a01979f742198990ba7a7a19903296b73d9bcd; agreed meaningful cause.name leak and ordinary Error contracts."
+  },
+  "gates": [
+    {
+      "gate": "b7-full-unit",
+      "command": "RUN_INTEGRATION=0 NODE_OPTIONS='--require=/tmp/sdk179-validation-evidence/no-external-network.cjs' npm test -- --exclude '**/*.integration.test.ts'",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+        "FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL",
+        "Test Files  1 failed | 60 passed (61)",
+        "Tests  2 failed | 1121 passed (1123)",
+        "Duration  67.10s (transform 1.99s, setup 0ms, collect 16.07s, tests 78.61s, environment 18ms, prepare 3.66s)"
+      ],
+      "stdout_file": "b7-full-unit.log",
+      "exit_file": "b7-full-unit.exit.json"
+    },
+    {
+      "gate": "b7-new-regression-before",
+      "command": "npm test -- tests/wallet-secret-redaction.test.ts (production source byte-exact b7, same new six-case test as repaired tree)",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/wallet-secret-redaction.test.ts > wallet secret redaction boundaries > redacts a secret in a non-enumerable error name before returning metadata",
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 5 passed (6)",
+        "Duration  620ms (transform 200ms, setup 0ms, collect 399ms, tests 15ms, environment 0ms, prepare 51ms)"
+      ],
+      "stdout_file": "b7-new-regression-before.log",
+      "exit_file": "b7-new-regression-before.exit.json"
+    },
+    {
+      "gate": "b7-repaired-focused",
+      "command": "npm test -- tests/wallet-secret-redaction.test.ts",
+      "exit_code": 0,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  6 passed (6)",
+        "Duration  947ms (transform 346ms, setup 0ms, collect 644ms, tests 10ms, environment 0ms, prepare 86ms)"
+      ],
+      "stdout_file": "b7-repaired-focused.log",
+      "exit_file": "b7-repaired-focused.exit.json"
+    },
+    {
+      "gate": "b7-repaired-full-unit-guard-v2",
+      "command": "RUN_INTEGRATION=0 NODE_OPTIONS='--require=/tmp/sdk179-validation-evidence/no-external-network-v2.cjs' npm test -- --exclude '**/*.integration.test.ts'",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+        "FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL",
+        "Test Files  1 failed | 60 passed (61)",
+        "Tests  2 failed | 1123 passed (1125)",
+        "Duration  67.19s (transform 2.12s, setup 0ms, collect 15.99s, tests 77.57s, environment 10ms, prepare 3.64s)"
+      ],
+      "stdout_file": "b7-repaired-full-unit-guard-v2.log",
+      "exit_file": "b7-repaired-full-unit-guard-v2.exit.json"
+    },
+    {
+      "gate": "b7-repaired-full-unit",
+      "command": "RUN_INTEGRATION=0 NODE_OPTIONS='--require=/tmp/sdk179-validation-evidence/no-external-network.cjs' npm test -- --exclude '**/*.integration.test.ts'",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+        "FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL",
+        "Test Files  1 failed | 60 passed (61)",
+        "Tests  2 failed | 1123 passed (1125)",
+        "Duration  67.14s (transform 2.32s, setup 0ms, collect 17.35s, tests 75.40s, environment 16ms, prepare 4.05s)"
+      ],
+      "stdout_file": "b7-repaired-full-unit.log",
+      "exit_file": "b7-repaired-full-unit.exit.json"
+    },
+    {
+      "gate": "b7-repaired-lint",
+      "command": "npm run lint",
+      "exit_code": 2,
+      "summary": [],
+      "stdout_file": "b7-repaired-lint.log",
+      "exit_file": "b7-repaired-lint.exit.json"
+    },
+    {
+      "gate": "b7-repaired-strict-test-types",
+      "command": "npx --no-install tsc --noEmit --strict --noUncheckedIndexedAccess --noImplicitReturns --noFallthroughCasesInSwitch --esModuleInterop --skipLibCheck --target ES2020 --module commonjs --moduleResolution node --types node tests/wallet-secret-redaction.test.ts",
+      "exit_code": 0,
+      "summary": [],
+      "stdout_file": "b7-repaired-strict-test-types.log",
+      "exit_file": "b7-repaired-strict-test-types.exit.json"
+    },
+    {
+      "gate": "base-focused",
+      "command": "npm test -- tests/wallet-secret-redaction.test.ts (b7 four-case regression fixture copied into untouched ddd base)",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/wallet-secret-redaction.test.ts > wallet secret redaction boundaries > redacts transaction failure messages, stacks, and returned causes",
+        "Test Files  1 failed (1)",
+        "Tests  1 failed | 3 passed (4)",
+        "Duration  702ms (transform 251ms, setup 0ms, collect 476ms, tests 15ms, environment 0ms, prepare 73ms)"
+      ],
+      "stdout_file": "base-focused.log",
+      "exit_file": "base-focused.exit.json"
+    },
+    {
+      "gate": "base-lint",
+      "command": "npm run lint (untouched ddd base)",
+      "exit_code": 2,
+      "summary": [],
+      "stdout_file": "base-lint.log",
+      "exit_file": "base-lint.exit.json"
+    },
+    {
+      "gate": "base-qr-parser",
+      "command": "RUN_INTEGRATION=0 NODE_OPTIONS='--require=/tmp/sdk179-validation-evidence/no-external-network.cjs' npm test -- tests/qrParser.test.ts (untouched ddd base)",
+      "exit_code": 1,
+      "summary": [
+        "FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+        "FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL",
+        "Test Files  1 failed (1)",
+        "Tests  2 failed (2)",
+        "Duration  568ms (transform 167ms, setup 0ms, collect 356ms, tests 7ms, environment 0ms, prepare 65ms)"
+      ],
+      "stdout_file": "base-qr-parser.log",
+      "exit_file": "base-qr-parser.exit.json"
+    },
+    {
+      "gate": "focused",
+      "command": "npm test -- tests/wallet-secret-redaction.test.ts",
+      "exit_code": 0,
+      "summary": [
+        "Test Files  1 passed (1)",
+        "Tests  4 passed (4)",
+        "Duration  934ms (transform 357ms, setup 0ms, collect 642ms, tests 15ms, environment 0ms, prepare 104ms)"
+      ],
+      "stdout_file": "focused.log",
+      "exit_file": "focused.exit.json"
+    },
+    {
+      "gate": "lint",
+      "command": "npm run lint",
+      "exit_code": 2,
+      "summary": [],
+      "stdout_file": "lint.log",
+      "exit_file": "lint.exit.json"
+    },
+    {
+      "gate": "name-canary",
+      "command": null,
+      "exit_code": 1,
+      "summary": [],
+      "stdout_file": "name-canary.log",
+      "exit_file": "name-canary.exit.json"
+    },
+    {
+      "gate": "npm-ci",
+      "command": "npm ci --ignore-scripts --no-audit --no-fund",
+      "exit_code": 0,
+      "summary": [],
+      "stdout_file": "npm-ci.log",
+      "exit_file": "npm-ci.exit.json"
+    },
+    {
+      "gate": "strict-test-types",
+      "command": "npx --no-install tsc --noEmit --strict --noUncheckedIndexedAccess --noImplicitReturns --noFallthroughCasesInSwitch --esModuleInterop --skipLibCheck --target ES2020 --module commonjs --moduleResolution node --types node tests/wallet-secret-redaction.test.ts",
+      "exit_code": 0,
+      "summary": [],
+      "stdout_file": "strict-test-types.log",
+      "exit_file": "strict-test-types.exit.json"
+    },
+    {
+      "gate": "transport-guard-v2-smoke",
+      "command": null,
+      "exit_code": 0,
+      "summary": [],
+      "stdout_file": "transport-guard-v2-smoke.log",
+      "exit_file": "transport-guard-v2-smoke.exit.json"
+    }
+  ],
+  "raw_file_hashes": [
+    {
+      "file": "b7-full-unit.exit.json",
+      "bytes": 16,
+      "sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb"
+    },
+    {
+      "file": "b7-full-unit.log",
+      "bytes": 6057,
+      "sha256": "9393d3fc6dbf583c089ae5680b10516f554474d8ce2815fa6e7acb2b9ce5e08b"
+    },
+    {
+      "file": "b7-new-regression-before.exit.json",
+      "bytes": 16,
+      "sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb"
+    },
+    {
+      "file": "b7-new-regression-before.log",
+      "bytes": 2899,
+      "sha256": "61352aa63d80d2af15c743ad1c345c49f4bd4e70468c86d1b3e27fdf115554d6"
+    },
+    {
+      "file": "b7-repaired-focused.exit.json",
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    {
+      "file": "b7-repaired-focused.log",
+      "bytes": 495,
+      "sha256": "0cbf15f3844e1931c18adafebd1d553d162b86ddb44fe095b89fca16e7e6ffe1"
+    },
+    {
+      "file": "b7-repaired-full-unit-guard-v2.exit.json",
+      "bytes": 17,
+      "sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392"
+    },
+    {
+      "file": "b7-repaired-full-unit-guard-v2.log",
+      "bytes": 5929,
+      "sha256": "481b55c1f09d59fcd4be7b12cb9b696319d309d3556a7590111dcb794e68463a"
+    },
+    {
+      "file": "b7-repaired-full-unit.exit.json",
+      "bytes": 17,
+      "sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392"
+    },
+    {
+      "file": "b7-repaired-full-unit.log",
+      "bytes": 5926,
+      "sha256": "1925894096a792318a2d0123e892d290e1a54951049d359544e84ffa74b378e3"
+    },
+    {
+      "file": "b7-repaired-lint.exit.json",
+      "bytes": 17,
+      "sha256": "0c0f888bbcfbebb60db029d9de74401c5105787fce727f52bdff37bcbcbdf33e"
+    },
+    {
+      "file": "b7-repaired-lint.log",
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "file": "b7-repaired-strict-test-types.exit.json",
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    {
+      "file": "b7-repaired-strict-test-types.log",
+      "bytes": 99,
+      "sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f"
+    },
+    {
+      "file": "base-focused.exit.json",
+      "bytes": 16,
+      "sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb"
+    },
+    {
+      "file": "base-focused.log",
+      "bytes": 2859,
+      "sha256": "bc180d8baf1076af2504d68d7b314221c2b6ebe71ca3fd3d4ddb6f8641f69d49"
+    },
+    {
+      "file": "base-lint.exit.json",
+      "bytes": 16,
+      "sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e"
+    },
+    {
+      "file": "base-lint.log",
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "file": "base-qr-parser.exit.json",
+      "bytes": 16,
+      "sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb"
+    },
+    {
+      "file": "base-qr-parser.log",
+      "bytes": 1986,
+      "sha256": "0054916fd7c41d4ab039368ff2f24753c7a84003937b86e174622c35e5af3757"
+    },
+    {
+      "file": "focused.exit.json",
+      "bytes": 16,
+      "sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01"
+    },
+    {
+      "file": "focused.log",
+      "bytes": 496,
+      "sha256": "b6a04ba9b01f6a989f1b10a013b4508c0b67bb849df8e27fa7783fa766975c73"
+    },
+    {
+      "file": "lint.exit.json",
+      "bytes": 16,
+      "sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e"
+    },
+    {
+      "file": "lint.log",
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "file": "name-canary.exit.json",
+      "bytes": 16,
+      "sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb"
+    },
+    {
+      "file": "name-canary.log",
+      "bytes": 916,
+      "sha256": "93c46c064d79be01df3c71f6e325a3f427c25d8b86df7e9b2fb7843b45ec7128"
+    },
+    {
+      "file": "no-external-network-v1.cjs",
+      "bytes": 844,
+      "sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147"
+    },
+    {
+      "file": "no-external-network-v2.cjs",
+      "bytes": 907,
+      "sha256": "5f75742b08986ef0cbb1ec85b2cae567e06be1595c72fa86e8d85d5149933d74"
+    },
+    {
+      "file": "no-external-network.cjs",
+      "bytes": 844,
+      "sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147"
+    },
+    {
+      "file": "npm-ci.exit.json",
+      "bytes": 16,
+      "sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01"
+    },
+    {
+      "file": "npm-ci.log",
+      "bytes": 581,
+      "sha256": "40dab213ca6f78c770ff697ec57427d2ee6f53a4f395fcf7a0f7ed2912a471d2"
+    },
+    {
+      "file": "postimages.json",
+      "bytes": 25484,
+      "sha256": "b9af1bc43e9e718a386b82120fbad39355364ecb93ea7ce460d2d4e1e6fbf8d0"
+    },
+    {
+      "file": "sdk459-cause-name.patch",
+      "bytes": 2769,
+      "sha256": "824881427b71fbc43e5b2d655e886f993c76af120721376654259918ed4e53f7"
+    },
+    {
+      "file": "source-pins.json",
+      "bytes": 1446,
+      "sha256": "d298071fce614467ccdade7095ee790e567448aebc0fbf9ff41544c162056738"
+    },
+    {
+      "file": "strict-test-types.exit.json",
+      "bytes": 16,
+      "sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01"
+    },
+    {
+      "file": "strict-test-types.log",
+      "bytes": 99,
+      "sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f"
+    },
+    {
+      "file": "transport-guard-v2-smoke.exit.json",
+      "bytes": 17,
+      "sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17"
+    },
+    {
+      "file": "transport-guard-v2-smoke.log",
+      "bytes": 82,
+      "sha256": "85399527711086dd5cd0560cd5ced129013e40145b546d587f2ce180575ff83d"
+    }
+  ],
+  "published_source": {
+    "source_repository": "woahwhattheheck/pocketpay-sdk",
+    "branch": "fix/179-wallet-secret-redaction",
+    "source_commit": "959b572f3cc0e23b303e8c8ffda26aeac180816d",
+    "source_tree": "78a01979f742198990ba7a7a19903296b73d9bcd",
+    "sole_parent": "b7edca4fe5385653539def21916b20102db5e19e",
+    "expected_head_guard": "b7edca4fe5385653539def21916b20102db5e19e",
+    "force": false,
+    "source_ref_readback": "959b572f3cc0e23b303e8c8ffda26aeac180816d",
+    "sponsor_pr": "https://github.com/Stellar-PocketPay/pocketpay-sdk/pull/459",
+    "validation_pin_statement": "Tests executed against the exact locally materialized tree78a01979f742198990ba7a7a19903296b73d9bcd, subsequently published as source commit959b572f3cc0e23b303e8c8ffda26aeac180816d.",
+    "frozen_local_receipt_sha256": "84b7d0cf395f9802c889ce4d86564ca74cad1126cffaf5f810e5fea7b5aa3a7f",
+    "publication_recorded_at_utc": "2026-10-05T22:14:00.360594+00:00"
+  },
+  "public_artifact_handling": {
+    "signing_seed_scan": "All detected full secret-shaped strings decode as invalid Stellar StrKey seeds; zero valid signing seeds.",
+    "credential_field_review": "The one lexical field match in local postimages.json is the public source function parameter declaration secretKey: unknown, not a credential value. No credential-valued field detected in public files.",
+    "public_log_handling": "All full secret-shaped synthetic canary values are replaced in the two failing-before public derived logs; raw stdout and hashes remain local and raw hashes are recorded. Full-unit logs are verbatim.",
+    "file_derivations": [
+      {
+        "file": "b7-full-unit.exit.json",
+        "raw_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "public_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-full-unit.log",
+        "raw_sha256": "9393d3fc6dbf583c089ae5680b10516f554474d8ce2815fa6e7acb2b9ce5e08b",
+        "public_sha256": "9393d3fc6dbf583c089ae5680b10516f554474d8ce2815fa6e7acb2b9ce5e08b",
+        "bytes": 6057,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-new-regression-before.exit.json",
+        "raw_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "public_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-new-regression-before.log",
+        "raw_sha256": "61352aa63d80d2af15c743ad1c345c49f4bd4e70468c86d1b3e27fdf115554d6",
+        "public_sha256": "1c8bf10c64eb7ed7707455ded9a56567fdef1ca10d1b2e973db8510ab955a41f",
+        "bytes": 2841,
+        "synthetic_canary_replacements": 2,
+        "verbatim": false
+      },
+      {
+        "file": "b7-repaired-focused.exit.json",
+        "raw_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "public_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-focused.log",
+        "raw_sha256": "0cbf15f3844e1931c18adafebd1d553d162b86ddb44fe095b89fca16e7e6ffe1",
+        "public_sha256": "0cbf15f3844e1931c18adafebd1d553d162b86ddb44fe095b89fca16e7e6ffe1",
+        "bytes": 495,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-full-unit-guard-v2.exit.json",
+        "raw_sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392",
+        "public_sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-full-unit-guard-v2.log",
+        "raw_sha256": "481b55c1f09d59fcd4be7b12cb9b696319d309d3556a7590111dcb794e68463a",
+        "public_sha256": "481b55c1f09d59fcd4be7b12cb9b696319d309d3556a7590111dcb794e68463a",
+        "bytes": 5929,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-full-unit.exit.json",
+        "raw_sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392",
+        "public_sha256": "5cc319f54b05a38799195a491c303aa686eab7caccfdbbf1e8b8c07405cb7392",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-full-unit.log",
+        "raw_sha256": "1925894096a792318a2d0123e892d290e1a54951049d359544e84ffa74b378e3",
+        "public_sha256": "1925894096a792318a2d0123e892d290e1a54951049d359544e84ffa74b378e3",
+        "bytes": 5926,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-lint.exit.json",
+        "raw_sha256": "0c0f888bbcfbebb60db029d9de74401c5105787fce727f52bdff37bcbcbdf33e",
+        "public_sha256": "0c0f888bbcfbebb60db029d9de74401c5105787fce727f52bdff37bcbcbdf33e",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-lint.log",
+        "raw_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "public_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "bytes": 1077,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-strict-test-types.exit.json",
+        "raw_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "public_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "b7-repaired-strict-test-types.log",
+        "raw_sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f",
+        "public_sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f",
+        "bytes": 99,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "base-focused.exit.json",
+        "raw_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "public_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "base-focused.log",
+        "raw_sha256": "bc180d8baf1076af2504d68d7b314221c2b6ebe71ca3fd3d4ddb6f8641f69d49",
+        "public_sha256": "b434cf63660c9966e37293673966e6d513f4c9176950fa2a796f7b21fcea610b",
+        "bytes": 2714,
+        "synthetic_canary_replacements": 5,
+        "verbatim": false
+      },
+      {
+        "file": "base-lint.exit.json",
+        "raw_sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e",
+        "public_sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "base-lint.log",
+        "raw_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "public_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "bytes": 1077,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "base-qr-parser.exit.json",
+        "raw_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "public_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "base-qr-parser.log",
+        "raw_sha256": "0054916fd7c41d4ab039368ff2f24753c7a84003937b86e174622c35e5af3757",
+        "public_sha256": "0054916fd7c41d4ab039368ff2f24753c7a84003937b86e174622c35e5af3757",
+        "bytes": 1986,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "focused.exit.json",
+        "raw_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "public_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "focused.log",
+        "raw_sha256": "b6a04ba9b01f6a989f1b10a013b4508c0b67bb849df8e27fa7783fa766975c73",
+        "public_sha256": "b6a04ba9b01f6a989f1b10a013b4508c0b67bb849df8e27fa7783fa766975c73",
+        "bytes": 496,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "lint.exit.json",
+        "raw_sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e",
+        "public_sha256": "d26b0745a1a2f3d452def2624b3b0bcc425124b18690dbf694f4de0ff91cb07e",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "lint.log",
+        "raw_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "public_sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+        "bytes": 1077,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "name-canary.exit.json",
+        "raw_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "public_sha256": "2618b95f1f6be6bfde8537756f85b83845d039001563135b9d59d817446733eb",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "name-canary.log",
+        "raw_sha256": "93c46c064d79be01df3c71f6e325a3f427c25d8b86df7e9b2fb7843b45ec7128",
+        "public_sha256": "93c46c064d79be01df3c71f6e325a3f427c25d8b86df7e9b2fb7843b45ec7128",
+        "bytes": 916,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "no-external-network-v1.cjs",
+        "raw_sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147",
+        "public_sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147",
+        "bytes": 844,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "no-external-network-v2.cjs",
+        "raw_sha256": "5f75742b08986ef0cbb1ec85b2cae567e06be1595c72fa86e8d85d5149933d74",
+        "public_sha256": "5f75742b08986ef0cbb1ec85b2cae567e06be1595c72fa86e8d85d5149933d74",
+        "bytes": 907,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "no-external-network.cjs",
+        "raw_sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147",
+        "public_sha256": "689744d6d8b4d3a804f1bf143eed5485571c66bde84137da6062fb09eda4e147",
+        "bytes": 844,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "npm-ci.exit.json",
+        "raw_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "public_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "npm-ci.log",
+        "raw_sha256": "40dab213ca6f78c770ff697ec57427d2ee6f53a4f395fcf7a0f7ed2912a471d2",
+        "public_sha256": "40dab213ca6f78c770ff697ec57427d2ee6f53a4f395fcf7a0f7ed2912a471d2",
+        "bytes": 581,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "sdk459-cause-name.patch",
+        "raw_sha256": "824881427b71fbc43e5b2d655e886f993c76af120721376654259918ed4e53f7",
+        "public_sha256": "824881427b71fbc43e5b2d655e886f993c76af120721376654259918ed4e53f7",
+        "bytes": 2769,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "source-pins.json",
+        "raw_sha256": "d298071fce614467ccdade7095ee790e567448aebc0fbf9ff41544c162056738",
+        "public_sha256": "d298071fce614467ccdade7095ee790e567448aebc0fbf9ff41544c162056738",
+        "bytes": 1446,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "strict-test-types.exit.json",
+        "raw_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "public_sha256": "124fd50cb6d223cdd18fedc166d00af7254199b6e6dedf9be82f71db87af6d01",
+        "bytes": 16,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "strict-test-types.log",
+        "raw_sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f",
+        "public_sha256": "7125f194612fcff2f454c05d848e7cb71facc1967b4d5017e25b34fdee3ba74f",
+        "bytes": 99,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "transport-guard-v2-smoke.exit.json",
+        "raw_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "public_sha256": "e89df0eae5ec7db81135aed16463968955c578bcc4f2ec43172eff351f080c17",
+        "bytes": 17,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      },
+      {
+        "file": "transport-guard-v2-smoke.log",
+        "raw_sha256": "85399527711086dd5cd0560cd5ced129013e40145b546d587f2ce180575ff83d",
+        "public_sha256": "85399527711086dd5cd0560cd5ced129013e40145b546d587f2ce180575ff83d",
+        "bytes": 82,
+        "synthetic_canary_replacements": 0,
+        "verbatim": true
+      }
+    ],
+    "local_only_files": {
+      "postimages.json": "Exact source content is already preserved by source commit959b572f3cc0e23b303e8c8ffda26aeac180816d; local payload hash retained in frozen receipt.",
+      "private-publication-scan-candidates.json": "Local scan working data, never published."
+    }
+  }
+}

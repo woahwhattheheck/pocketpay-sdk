@@ -1,0 +1,34 @@
+{
+  "repo": "Stellar-PocketPay/pocketpay-sdk",
+  "pr": 459,
+  "fork": "woahwhattheheck/pocketpay-sdk",
+  "branch": "fix/179-wallet-secret-redaction",
+  "expected_parent": "b7edca4fe5385653539def21916b20102db5e19e",
+  "original_tree": "047041e4569068c6a11fb5ebdae09f4522ea2b0e",
+  "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb",
+  "proposed_tree": "78a01979f742198990ba7a7a19903296b73d9bcd",
+  "diff_stat": "src/utils/index.ts                    |  2 +-\n tests/wallet-secret-redaction.test.ts | 46 +++++++++++++++++++++++++++++++++++\n 2 files changed, 47 insertions(+), 1 deletion(-)",
+  "scope": [
+    "src/utils/index.ts",
+    "tests/wallet-secret-redaction.test.ts"
+  ],
+  "package_lock_git_blob": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+  "package_lock_sha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9",
+  "patch_sha256": "824881427b71fbc43e5b2d655e886f993c76af120721376654259918ed4e53f7",
+  "files": [
+    {
+      "path": "src/utils/index.ts",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob": "d98ff63c2d2d5c2bc098046875930d65b40f6ee2",
+      "sha256": "4dabe42ea4955a393984c38b1ede2142265146c77e440000acf79a5f26ce3461"
+    },
+    {
+      "path": "tests/wallet-secret-redaction.test.ts",
+      "mode": "100644",
+      "type": "blob",
+      "git_blob": "126c2772f8ca21c4c88f0edd06850a3ff5461c49",
+      "sha256": "edc9103ac5efe575c553c9f6d0a35df2eaf2d156f6c68892f9d349e6da60e55a"
+    }
+  ]
+}
