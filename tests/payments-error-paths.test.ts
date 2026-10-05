@@ -12,6 +12,9 @@ import {
   safeSendAsset,
   createWallet,
   PocketPayError,
+  PaymentError,
+  PaymentFailureCategory,
+  classifyPaymentError,
 } from '../src';
 import {
   makeHorizon404Error,
@@ -39,15 +42,109 @@ vi.mock('@stellar/stellar-sdk', async (importActual) => {
 async function expectPocketPayError(
   promise: Promise<unknown>,
   expected: { code: string; validation?: Record<string, unknown>; timeout?: { stage: string } },
-) {
+): Promise<PocketPayError> {
   try {
     await promise;
     throw new Error('expected promise to reject');
   } catch (error) {
     expect(error).toBeInstanceOf(PocketPayError);
     expect(error).toMatchObject(expected);
+    return error as PocketPayError;
   }
 }
+
+describe('payment error classification', () => {
+  it.each([
+    {
+      name: 'validation',
+      error: () =>
+        new PocketPayError('Invalid amount', 'INVALID_AMOUNT', {
+          validation: { field: 'amount', reason: 'invalid_format' },
+        }),
+      category: PaymentFailureCategory.Validation,
+    },
+    {
+      name: 'network',
+      error: () => Object.assign(new Error('Connection reset'), { code: 'ECONNRESET' }),
+      category: PaymentFailureCategory.Network,
+    },
+    {
+      name: 'account',
+      error: () => ({ response: { status: 404 } }),
+      category: PaymentFailureCategory.Account,
+    },
+    {
+      name: 'asset',
+      error: () => ({
+        response: {
+          status: 400,
+          data: {
+            extras: {
+              result_codes: {
+                transaction: 'tx_failed',
+                operations: ['op_no_trust'],
+              },
+            },
+          },
+        },
+      }),
+      category: PaymentFailureCategory.Asset,
+    },
+    {
+      name: 'fee',
+      error: () => ({
+        response: {
+          status: 400,
+          data: {
+            extras: {
+              result_codes: {
+                transaction: 'tx_insufficient_fee',
+                operations: [],
+              },
+            },
+          },
+        },
+      }),
+      category: PaymentFailureCategory.Fee,
+    },
+    {
+      name: 'submission',
+      error: () => ({
+        response: {
+          status: 400,
+          data: {
+            extras: {
+              result_codes: {
+                transaction: 'tx_failed',
+                operations: ['op_underfunded'],
+              },
+            },
+          },
+        },
+      }),
+      category: PaymentFailureCategory.Submission,
+    },
+  ])('classifies $name failures without message parsing by callers', ({ error, category }) => {
+    const classified = classifyPaymentError(error(), 'Failed to send payment');
+
+    expect(classified).toBeInstanceOf(PaymentError);
+    expect(classified.paymentCategory).toBe(category);
+    expect(classified.safeMessage).toBeTruthy();
+  });
+
+  it('redacts secret-shaped material from payment error messages and causes', () => {
+    const secret = `S${'A'.repeat(55)}`;
+    const raw = Object.assign(new Error(`Connection reset for ${secret}`), {
+      code: 'ECONNRESET',
+    });
+
+    const classified = classifyPaymentError(raw);
+
+    expect(classified.paymentCategory).toBe(PaymentFailureCategory.Network);
+    expect(classified.message).not.toContain(secret);
+    expect(classified.cause?.message).not.toContain(secret);
+  });
+});
 
 async function sourceAccountFor(publicKey: string, sequence = '100') {
   const { Account } = await import('@stellar/stellar-sdk');
@@ -223,7 +320,7 @@ describe('sendXLM — network and submission errors', () => {
   it('maps an unfunded source account to ACCOUNT_NOT_FOUND', async () => {
     mockLoadAccount.mockRejectedValue(makeHorizon404Error(sender.publicKey));
 
-    await expectPocketPayError(
+    const error = await expectPocketPayError(
       sendXLM({
         sourceSecret: sender.secretKey,
         destination: receiver.publicKey,
@@ -231,6 +328,9 @@ describe('sendXLM — network and submission errors', () => {
       }),
       { code: 'ACCOUNT_NOT_FOUND' },
     );
+
+    expect(error).toBeInstanceOf(PaymentError);
+    expect((error as PaymentError).paymentCategory).toBe(PaymentFailureCategory.Account);
   });
 
   it('maps a slow source account lookup to REQUEST_TIMEOUT (preparation stage)', async () => {
@@ -569,8 +669,9 @@ describe('sendAsset — network and submission errors', () => {
       throw new Error('expected sendAsset to throw');
     } catch (error) {
       expect(error).toBeInstanceOf(PocketPayError);
-      const err = error as PocketPayError;
+      const err = error as PaymentError;
       expect(err.code).toBe('PAYMENT_FAILED');
+      expect(err.paymentCategory).toBe(PaymentFailureCategory.Asset);
       expect(err.message).toContain('tx_failed');
       expect(err.message).not.toContain('op_no_trust');
     }
@@ -582,7 +683,7 @@ describe('sendAsset — network and submission errors', () => {
       .mockResolvedValueOnce(await sourceAccountFor(sender.publicKey));
     mockSubmitTransaction.mockRejectedValue(new Error('Connection reset'));
 
-    await expectPocketPayError(
+    const error = await expectPocketPayError(
       sendAsset({
         sourceSecret: sender.secretKey,
         destination: receiver.publicKey,
@@ -591,6 +692,9 @@ describe('sendAsset — network and submission errors', () => {
       }),
       { code: 'SEND_ERROR' },
     );
+
+    expect(error).toBeInstanceOf(PaymentError);
+    expect((error as PaymentError).paymentCategory).toBe(PaymentFailureCategory.Network);
   });
 
   it('safeSendAsset returns typed SEND_ERROR without throwing on network failure', async () => {
@@ -606,8 +710,11 @@ describe('sendAsset — network and submission errors', () => {
 
     expect(result.ok).toBe(false);
     if (!result.ok) {
-      expect(result.error).toBeInstanceOf(PocketPayError);
+      expect(result.error).toBeInstanceOf(PaymentError);
       expect(result.error.code).toBe('SEND_ERROR');
+      expect((result.error as PaymentError).paymentCategory).toBe(
+        PaymentFailureCategory.Network,
+      );
     }
   });
 });
