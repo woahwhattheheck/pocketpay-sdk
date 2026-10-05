@@ -20,13 +20,28 @@ import { DisabledFeatureError, FeatureContext } from '../errors';
 import { redactSensitive } from '../utils';
 import { emitDiagnosticsEvent } from '../diagnostics/hooks';
 // ─── Default URLs ───────────────────────────────────────────────────────────
+export const NETWORK_PRESETS = {
+  testnet: {
+    horizonUrl: 'https://horizon-testnet.stellar.org',
+    sorobanRpcUrl: 'https://soroban-testnet.stellar.org',
+    networkPassphrase: StellarSDK.Networks.TESTNET,
+  },
+  mainnet: {
+    horizonUrl: 'https://horizon.stellar.org',
+    sorobanRpcUrl: 'https://soroban.stellar.org',
+    networkPassphrase: StellarSDK.Networks.PUBLIC,
+  },
+} as const satisfies Record<
+  StellarNetwork,
+  { horizonUrl: string; sorobanRpcUrl: string; networkPassphrase: string }
+>;
 const HORIZON_URLS: Record<StellarNetwork, string> = {
-  testnet: 'https://horizon-testnet.stellar.org',
-  mainnet: 'https://horizon.stellar.org',
+  testnet: NETWORK_PRESETS.testnet.horizonUrl,
+  mainnet: NETWORK_PRESETS.mainnet.horizonUrl,
 };
 const SOROBAN_RPC_URLS: Record<StellarNetwork, string> = {
-  testnet: 'https://soroban-testnet.stellar.org',
-  mainnet: 'https://soroban.stellar.org',
+  testnet: NETWORK_PRESETS.testnet.sorobanRpcUrl,
+  mainnet: NETWORK_PRESETS.mainnet.sorobanRpcUrl,
 };
 const NETWORK_PASSPHRASES: Record<StellarNetwork, string> = {
   testnet: StellarSDK.Networks.TESTNET,
@@ -52,6 +67,28 @@ export function validateNetwork(network: unknown): asserts network is StellarNet
           reason: 'unsupported',
           value: network as string
         }
+      }
+    );
+  }
+}
+
+export function validateNetworkPassphrase(
+  network: StellarNetwork,
+  networkPassphrase: unknown
+): asserts networkPassphrase is string {
+  validateNetwork(network);
+  if (
+    typeof networkPassphrase !== 'string' ||
+    networkPassphrase !== NETWORK_PASSPHRASES[network]
+  ) {
+    throw new PocketPayError(
+      `Network passphrase does not match the configured ${network} network.`,
+      'INVALID_NETWORK_PASSPHRASE',
+      {
+        validation: {
+          field: 'networkPassphrase',
+          reason: 'network_mismatch',
+        },
       }
     );
   }
@@ -336,6 +373,12 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
       : process.env.STELLAR_NETWORK ?? 'testnet';
   validateNetwork(network);
 
+  const networkPassphraseSource: ConfigSource =
+    overrides?.networkPassphrase !== undefined ? 'override' : 'default';
+  const networkPassphrase =
+    overrides?.networkPassphrase ?? NETWORK_PASSPHRASES[network];
+  validateNetworkPassphrase(network, networkPassphrase);
+
   const horizonUrlSource: ConfigSource =
     overrides?.horizonUrl !== undefined
       ? 'override'
@@ -402,6 +445,7 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
 
   const sources: ConfigSourceMetadata = {
     network: networkSource,
+    networkPassphrase: networkPassphraseSource,
     horizonUrl: horizonUrlSource,
     sorobanRpcUrl: sorobanRpcUrlSource,
     timeout: timeoutSource,
@@ -411,6 +455,7 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
 
   const resolved: ResolvedSDKConfig = {
     network,
+    networkPassphrase,
     horizonUrl,
     sorobanRpcUrl,
     timeout,
@@ -490,6 +535,23 @@ export function validatePocketPayConfig(
     });
   } else {
     network = rawNetwork;
+  }
+
+  const rawNetworkPassphrase: unknown =
+    overrides?.networkPassphrase !== undefined
+      ? overrides.networkPassphrase
+      : NETWORK_PASSPHRASES[network];
+  if (
+    typeof rawNetworkPassphrase !== 'string' ||
+    ((rawNetwork === 'testnet' || rawNetwork === 'mainnet') &&
+      rawNetworkPassphrase !== NETWORK_PASSPHRASES[network])
+  ) {
+    issues.push({
+      severity: 'error',
+      field: 'networkPassphrase',
+      code: 'INVALID_NETWORK_PASSPHRASE',
+      message: `Network passphrase does not match the configured ${network} network.`,
+    });
   }
 
   // 2. Horizon URL Validation & Warnings
