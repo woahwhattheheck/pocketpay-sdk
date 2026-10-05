@@ -119,6 +119,28 @@ describe('account activity normalization', () => {
     expect(balanceActivity.amount).toBe('9');
   });
 
+  it('gives hashless vault records stable IDs that include observation time', () => {
+    const result: VaultMappedResult = {
+      success: false,
+      status: 'pending',
+      operation: 'deposit',
+      amount: '1',
+    };
+
+    const first = mapVaultResultToActivity({
+      result,
+      createdAt: '2026-10-05T14:00:00.000Z',
+    });
+    const second = mapVaultResultToActivity({
+      result,
+      createdAt: '2026-10-05T14:01:00.000Z',
+    });
+
+    expect(first.id).toBe('vault:deposit:2026-10-05T14:00:00.000Z');
+    expect(second.id).toBe('vault:deposit:2026-10-05T14:01:00.000Z');
+    expect(first.id).not.toBe(second.id);
+  });
+
   it('combines deterministic fixtures into reverse chronological history', () => {
     const records = normalizeAccountActivity({
       account: ACCOUNT,
