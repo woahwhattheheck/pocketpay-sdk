@@ -6,6 +6,7 @@
  */
 
 import type { AccountBalance, BalanceResult, SDKConfig } from '../types';
+import { HORIZON_URLS } from '../config';
 import { validatePublicKey } from '../utils';
 import { getBalanceOrUnfunded } from '../wallet';
 
@@ -95,6 +96,9 @@ export async function diagnoseTestnetAccount(
       : await getBalanceOrUnfunded(publicKey, {
           ...options.config,
           network: 'testnet',
+          // Pin the actual account lookup boundary too. resolveConfig() otherwise
+          // preserves a caller/env Horizon override even when network is testnet.
+          horizonUrl: HORIZON_URLS.testnet,
         });
 
     if (result.status === 'funded') {
