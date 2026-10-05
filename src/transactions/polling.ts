@@ -17,34 +17,57 @@ function abortError(): Error {
   return error;
 }
 
+function pollingTimeoutError(): Error {
+  const error = new Error('Transaction polling timed out');
+  error.name = 'PollingTimeoutError';
+  return error;
+}
+
 function throwIfAborted(signal: AbortSignal | undefined): void {
   if (signal?.aborted) {
     throw abortError();
   }
 }
 
-function withAbort<T>(request: Promise<T>, signal: AbortSignal | undefined): Promise<T> {
-  if (!signal) return request;
+function withPollingBounds<T>(
+  request: Promise<T>,
+  signal: AbortSignal | undefined,
+  timeoutMs: number,
+): Promise<T> {
   throwIfAborted(signal);
+  if (timeoutMs <= 0) return Promise.reject(pollingTimeoutError());
 
   return new Promise<T>((resolve, reject) => {
-    const onAbort = () => {
-      cleanup();
-      reject(abortError());
+    let settled = false;
+    const cleanup = () => {
+      clearTimeout(timer);
+      signal?.removeEventListener('abort', onAbort);
     };
-    const cleanup = () => signal.removeEventListener('abort', onAbort);
-
-    signal.addEventListener('abort', onAbort, { once: true });
-    request.then(
-      (value) => {
-        cleanup();
-        resolve(value);
-      },
-      (error) => {
-        cleanup();
-        reject(error);
-      },
+    const resolveOnce = (value: T) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      resolve(value);
+    };
+    const rejectOnce = (error: unknown) => {
+      if (settled) return;
+      settled = true;
+      cleanup();
+      reject(error);
+    };
+    const onAbort = () => rejectOnce(abortError());
+    const timer = setTimeout(
+      () => rejectOnce(pollingTimeoutError()),
+      timeoutMs,
     );
+
+    signal?.addEventListener('abort', onAbort, { once: true });
+    if (signal?.aborted) {
+      onAbort();
+      return;
+    }
+
+    request.then(resolveOnce, rejectOnce);
   });
 }
 
@@ -65,6 +88,7 @@ function waitForNextAttempt(ms: number, signal: AbortSignal | undefined): Promis
     const cleanup = () => signal?.removeEventListener('abort', onAbort);
 
     signal?.addEventListener('abort', onAbort, { once: true });
+    if (signal?.aborted) onAbort();
   });
 }
 
@@ -96,12 +120,15 @@ export async function pollTransaction(
 
   while (attempts < maxAttempts && Date.now() - startTime < timeout) {
     throwIfAborted(config.signal);
+    const remainingMs = timeout - (Date.now() - startTime);
+    if (remainingMs <= 0) break;
     attempts += 1;
 
     try {
-      const tx = await withAbort(
+      const tx = await withPollingBounds(
         server.transactions().transaction(hash).call(),
         config.signal,
+        remainingMs,
       );
 
       const record: TransactionRecord = {
@@ -130,13 +157,18 @@ export async function pollTransaction(
       if (error?.name === 'AbortError') {
         throw error;
       }
+      if (error?.name === 'PollingTimeoutError') {
+        break;
+      }
 
       const isNotFound = error?.response?.status === 404 || error?.status === 404;
       if (isNotFound) {
         lastState = 'pending';
       } else {
         const classified = classifySubmitError(error, hash);
-        if (classified.code !== 'TX_STATUS_UNKNOWN') {
+        const retryable =
+          classified.code === 'TX_STATUS_UNKNOWN' || classified.retryable === true;
+        if (!retryable) {
           return {
             status: 'unknown',
             state: 'unknown',

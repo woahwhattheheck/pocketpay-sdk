@@ -121,6 +121,50 @@ describe('pollTransaction', () => {
     expect(mockCall.mock.calls.length).toBeGreaterThanOrEqual(1);
   });
 
+  it('applies the timeout while a Horizon lookup is still in flight', async () => {
+    const mockCall = vi.fn(() => new Promise(() => {}));
+    vi.spyOn(configModule, 'getHorizonServer').mockReturnValue(mockServerWith(mockCall) as any);
+
+    const result = await pollTransaction(MOCK_HASH, {
+      interval: 5,
+      timeout: 20,
+      maxAttempts: 4,
+    });
+
+    expect(result.status).toBe('timeout');
+    expect(result.state).toBe('unknown');
+    expect(result.attempts).toBe(1);
+    expect(result.error).toMatch(/timed out/);
+    expect(mockCall).toHaveBeenCalledTimes(1);
+  });
+
+  it('retries a retryable lookup error within the configured bounds', async () => {
+    const mockCall = vi.fn()
+      .mockRejectedValueOnce({ status: 429 })
+      .mockResolvedValueOnce({
+        hash: MOCK_HASH,
+        ledger_attr: 103,
+        created_at: '2023-01-01T00:00:02Z',
+        source_account: 'GABC',
+        fee_charged: '100',
+        operation_count: 1,
+        successful: true,
+      });
+
+    vi.spyOn(configModule, 'getHorizonServer').mockReturnValue(mockServerWith(mockCall) as any);
+
+    const result = await pollTransaction(MOCK_HASH, {
+      interval: 1,
+      timeout: 500,
+      maxAttempts: 2,
+    });
+
+    expect(result.status).toBe('success');
+    expect(result.state).toBe('confirmed');
+    expect(result.attempts).toBe(2);
+    expect(mockCall).toHaveBeenCalledTimes(2);
+  });
+
   it('returns unknown for a non-retryable status lookup error', async () => {
     const mockCall = vi.fn().mockRejectedValue({ status: 400, message: 'Bad request' });
     vi.spyOn(configModule, 'getHorizonServer').mockReturnValue(mockServerWith(mockCall) as any);
