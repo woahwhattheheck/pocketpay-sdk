@@ -101,6 +101,16 @@ const ACCOUNT_CODES = new Set([
   'WALLET_ACCOUNT_UNFUNDED',
 ]);
 
+const ACCOUNT_TRANSACTION_CODES = new Set([
+  'tx_insufficient_balance',
+  'tx_no_source_account',
+]);
+
+const ACCOUNT_OPERATION_CODES = new Set([
+  'op_underfunded',
+  'op_no_destination',
+]);
+
 const ASSET_CODES = new Set([
   'INVALID_ASSET',
   'INVALID_ASSET_CODE',
@@ -254,7 +264,12 @@ function classifyCategory(error: unknown): PaymentFailureCategory {
     return PaymentFailureCategory.Fee;
   }
 
-  if (ACCOUNT_CODES.has(code) || statusCode(error) === 404) {
+  if (
+    ACCOUNT_CODES.has(code) ||
+    (txCode !== undefined && ACCOUNT_TRANSACTION_CODES.has(txCode)) ||
+    operations.some((operation) => ACCOUNT_OPERATION_CODES.has(operation)) ||
+    statusCode(error) === 404
+  ) {
     return PaymentFailureCategory.Account;
   }
 
