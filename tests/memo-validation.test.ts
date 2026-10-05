@@ -208,6 +208,12 @@ describe('formatMemoForDisplay', () => {
     ).toBe('line1\\nline2\\t\\"quoted\\"\\\\tail');
   });
 
+  it('escapes Unicode line and paragraph separators for single-line display', () => {
+    expect(
+      formatMemoForDisplay({ type: 'text', value: 'left\u2028middle\u2029right' })
+    ).toBe('left\\u2028middle\\u2029right');
+  });
+
   it('rejects invalid values before formatting', () => {
     expect(() => formatMemoForDisplay({ type: 'hash', value: 'not-hex' })).toThrow(
       PocketPayError
