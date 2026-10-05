@@ -5,6 +5,15 @@ import {
   validatePocketPayConfig,
 } from '../src';
 
+function expectConfigError(run: () => unknown, code: string): void {
+  try {
+    run();
+    throw new Error(`Expected configuration error ${code}`);
+  } catch (error) {
+    expect(error).toMatchObject({ code });
+  }
+}
+
 describe('network configuration preset boundaries', () => {
   const originalEnv = { ...process.env };
 
@@ -19,13 +28,13 @@ describe('network configuration preset boundaries', () => {
   });
 
   it('rejects an explicit null passphrase instead of silently using a preset', () => {
-    expect(() =>
-      resolveConfig({
-        network: 'testnet',
-        networkPassphrase: null as unknown as string,
-      })
-    ).toThrow(
-      expect.objectContaining({ code: 'INVALID_NETWORK_PASSPHRASE' })
+    expectConfigError(
+      () =>
+        resolveConfig({
+          network: 'testnet',
+          networkPassphrase: null as unknown as string,
+        }),
+      'INVALID_NETWORK_PASSPHRASE'
     );
 
     expect(
@@ -45,13 +54,15 @@ describe('network configuration preset boundaries', () => {
   });
 
   it('rejects URL schemes that merely begin with http', () => {
-    expect(() =>
-      resolveConfig({ horizonUrl: 'httpx://horizon.example.com' })
-    ).toThrow(expect.objectContaining({ code: 'INVALID_HORIZON_URL' }));
+    expectConfigError(
+      () => resolveConfig({ horizonUrl: 'httpx://horizon.example.com' }),
+      'INVALID_HORIZON_URL'
+    );
 
-    expect(() =>
-      resolveConfig({ sorobanRpcUrl: 'httpsx://rpc.example.com' })
-    ).toThrow(expect.objectContaining({ code: 'INVALID_SOROBAN_RPC_URL' }));
+    expectConfigError(
+      () => resolveConfig({ sorobanRpcUrl: 'httpsx://rpc.example.com' }),
+      'INVALID_SOROBAN_RPC_URL'
+    );
 
     const result = validatePocketPayConfig({
       horizonUrl: 'httpx://horizon.example.com',
