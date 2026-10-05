@@ -69,6 +69,14 @@ describe('payment error classification', () => {
       category: PaymentFailureCategory.Network,
     },
     {
+      name: 'explicit network code with HTTP 404',
+      error: () =>
+        new PocketPayError('Horizon request failed', 'NET_HTTP', {
+          statusCode: 404,
+        }),
+      category: PaymentFailureCategory.Network,
+    },
+    {
       name: 'account',
       error: () => ({ response: { status: 404 } }),
       category: PaymentFailureCategory.Account,
