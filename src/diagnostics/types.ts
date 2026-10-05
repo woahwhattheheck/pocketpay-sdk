@@ -5,7 +5,12 @@
  * redacted first — see {@link redactDiagnosticsValue}.
  */
 
-import type { StellarNetwork, ConfigSourceMetadata } from '../types';
+import type {
+  StellarNetwork,
+  ConfigSourceMetadata,
+  SDKConfig,
+  BalanceResult,
+} from '../types';
 import type { CapabilityStatus } from '../errors';
 
 /** Domains covered by diagnostics events and report sections. */
@@ -105,6 +110,46 @@ export interface DiagnosticsReport {
   capabilities: CapabilityDiagnosticsEntry[];
   wallet: WalletCapabilitySnapshot;
   vault: VaultReadinessSnapshot;
+}
+
+/** Public account state included in an account-focused support report. */
+export interface AccountDiagnosticsSnapshot {
+  publicKey: string;
+  status: 'funded' | 'unfunded' | 'error';
+  nativeBalance?: string;
+  assetCount?: number;
+  errorCode?: string;
+  errorMessage?: string;
+}
+
+/**
+ * Coarse payment readiness derived only from account/config prerequisites.
+ * It does not replace destination, amount, trustline, sequence or operation
+ * validation for an actual payment.
+ */
+export interface PaymentReadinessSnapshot {
+  status: 'ready' | 'not_ready' | 'unknown';
+  accountFunded: boolean;
+  feeBalancePresent: boolean;
+  networkConfigured: boolean;
+  reasons: string[];
+}
+
+/** Deterministic account lookup seam for tests and offline support tooling. */
+export type AccountDiagnosticsLookup = (
+  publicKey: string,
+  config?: Partial<SDKConfig>,
+) => Promise<BalanceResult>;
+
+export interface BuildAccountDiagnosticsOptions {
+  config?: Partial<SDKConfig>;
+  lookup?: AccountDiagnosticsLookup;
+}
+
+/** Existing redacted SDK diagnostics plus account and payment-readiness state. */
+export interface AccountDiagnosticsReport extends DiagnosticsReport {
+  account: AccountDiagnosticsSnapshot;
+  paymentReadiness: PaymentReadinessSnapshot;
 }
 
 /** Lifecycle event emitted to opt-in hooks. */
