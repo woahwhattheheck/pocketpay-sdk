@@ -277,8 +277,8 @@ export function mapVaultResultToActivity(input: VaultActivityInput): AccountActi
 /**
  * Builds one reverse-chronological history from existing SDK result types.
  *
- * Equal/invalid timestamps keep insertion order, so deterministic fixture
- * arrays remain deterministic.
+ * Valid timestamps sort newest-first; equal valid timestamps preserve insertion
+ * order. Invalid timestamps are retained after valid records in insertion order.
  */
 export function normalizeAccountActivity(
   input: NormalizeAccountActivityInput,
@@ -298,10 +298,16 @@ export function normalizeAccountActivity(
     .sort((left, right) => {
       const leftTime = Date.parse(left.record.createdAt);
       const rightTime = Date.parse(right.record.createdAt);
-      if (Number.isNaN(leftTime) || Number.isNaN(rightTime) || leftTime === rightTime) {
-        return left.index - right.index;
+      const leftValid = !Number.isNaN(leftTime);
+      const rightValid = !Number.isNaN(rightTime);
+
+      if (leftValid && rightValid) {
+        if (leftTime === rightTime) return left.index - right.index;
+        return rightTime - leftTime;
       }
-      return rightTime - leftTime;
+      if (leftValid) return -1;
+      if (rightValid) return 1;
+      return left.index - right.index;
     })
     .map(({ record }) => record);
 }
