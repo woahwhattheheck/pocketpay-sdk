@@ -80,4 +80,50 @@ describe('wallet secret redaction boundaries', () => {
       expect(result.error.cause).not.toBe(raw);
     }
   });
+
+  it('redacts a secret in a non-enumerable error name before returning metadata', async () => {
+    const secret = makeSyntheticSecret();
+    const raw = new Error('Transaction rejected');
+    Object.defineProperty(raw, 'name', { value: `HorizonError ${secret}` });
+    raw.stack = 'Error: Transaction rejected';
+
+    // The original JSON has no name field; cloning must not add a secret.
+    expect(JSON.stringify(raw)).not.toContain(secret);
+    const result = await toResult(
+      async () => Promise.reject(raw),
+      'Failed to submit transaction',
+      'TX_SUBMISSION_ERROR',
+    );
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expectSecretAbsent(result.error, secret);
+      expect(result.error.cause?.name).toBe('HorizonError S[REDACTED]');
+      expect(result.error.code).toBe('TX_SUBMISSION_ERROR');
+      expect(result.error.cause).not.toBe(raw);
+    }
+    expect(raw.name).toBe(`HorizonError ${secret}`);
+    expect(raw.stack).toBe('Error: Transaction rejected');
+  });
+
+  it('preserves an ordinary cause name, message, stack, and wrapper code', async () => {
+    const raw = new TypeError('Invalid transaction shape');
+    raw.stack = 'TypeError: Invalid transaction shape';
+    const result = await toResult(
+      async () => Promise.reject(raw),
+      'Failed to submit transaction',
+      'TX_SUBMISSION_ERROR',
+    );
+
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('TX_SUBMISSION_ERROR');
+      expect(result.error.message).toBe('Failed to submit transaction: Invalid transaction shape');
+      expect(result.error.cause).toBeInstanceOf(Error);
+      expect(result.error.cause).not.toBe(raw);
+      expect(result.error.cause?.name).toBe('TypeError');
+      expect(result.error.cause?.message).toBe(raw.message);
+      expect(result.error.cause?.stack).toBe(raw.stack);
+    }
+  });
 });

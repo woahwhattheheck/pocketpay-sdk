@@ -446,7 +446,7 @@ export function redactSensitive(str: string): string {
  */
 function sanitizeErrorCause(error: Error): Error {
   const sanitized = new Error(redactSensitive(error.message));
-  sanitized.name = error.name;
+  sanitized.name = redactSensitive(error.name);
   if (error.stack) sanitized.stack = redactSensitive(error.stack);
   return sanitized;
 }
