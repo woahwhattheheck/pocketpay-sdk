@@ -264,6 +264,13 @@ function classifyCategory(error: unknown): PaymentFailureCategory {
     return PaymentFailureCategory.Fee;
   }
 
+  // Explicit SDK network codes carry stronger semantics than generic HTTP status.
+  // In particular, NET_HTTP may preserve a provider status such as 404 without
+  // turning the already-classified transport failure into an account failure.
+  if (NETWORK_CODES.has(code)) {
+    return PaymentFailureCategory.Network;
+  }
+
   if (
     ACCOUNT_CODES.has(code) ||
     (txCode !== undefined && ACCOUNT_TRANSACTION_CODES.has(txCode)) ||
