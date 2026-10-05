@@ -1,8 +1,16 @@
-import { describe, expect, it, vi } from 'vitest';
-import { diagnoseTestnetAccount } from '../src';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  diagnoseTestnetAccount,
+  resetHorizonServerFactory,
+  setHorizonServerFactory,
+} from '../src';
 import { testnetAccountFixtures } from './fixtures/testnet-accounts';
 
 describe('diagnoseTestnetAccount', () => {
+  afterEach(() => {
+    resetHorizonServerFactory();
+  });
+
   it('maps a funded Testnet lookup to a funded diagnostic', async () => {
     const lookup = vi.fn(async () => testnetAccountFixtures.funded.result);
 
@@ -84,4 +92,36 @@ describe('diagnoseTestnetAccount', () => {
 
     expect(lookup).not.toHaveBeenCalled();
   });
+  it('pins the default lookup to Testnet Horizon despite caller endpoint overrides', async () => {
+    let requestedUrl: string | undefined;
+    setHorizonServerFactory((url) => {
+      requestedUrl = url;
+      return {
+        loadAccount: async () => ({
+          balances: [
+            {
+              asset_type: 'native',
+              balance: '25.0000000',
+            },
+          ],
+        }),
+      } as any;
+    });
+
+    const result = await diagnoseTestnetAccount(
+      testnetAccountFixtures.funded.publicKey,
+      {
+        config: {
+          network: 'mainnet',
+          horizonUrl: 'https://horizon.stellar.org',
+        },
+      },
+    );
+
+    expect(requestedUrl).toBe('https://horizon-testnet.stellar.org');
+    expect(result.status).toBe('funded');
+    expect(result.network).toBe('testnet');
+    expect(result.testnetOnly).toBe(true);
+  });
+
 });
