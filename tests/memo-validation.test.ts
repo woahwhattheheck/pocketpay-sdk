@@ -14,6 +14,7 @@ import {
   validateMemoInput,
   safeValidateMemo,
   normalizeMemo,
+  formatMemoForDisplay,
   buildMemo,
   validateMemo,
   MEMO_TEXT_MAX_BYTES,
@@ -185,6 +186,35 @@ describe('safeValidateMemo', () => {
   });
 });
 
+describe('formatMemoForDisplay', () => {
+  it('returns undefined when there is no displayable memo', () => {
+    expect(formatMemoForDisplay(undefined)).toBeUndefined();
+    expect(formatMemoForDisplay('')).toBeUndefined();
+    expect(formatMemoForDisplay({ type: 'none' })).toBeUndefined();
+  });
+
+  it('preserves printable text and non-text payloads', () => {
+    expect(formatMemoForDisplay('invoice #42')).toBe('invoice #42');
+    expect(formatMemoForDisplay({ type: 'id', value: '12345' })).toBe('12345');
+    expect(formatMemoForDisplay({ type: 'hash', value: HEX64 })).toBe(HEX64);
+  });
+
+  it('escapes control characters, quotes and backslashes in text memos', () => {
+    expect(
+      formatMemoForDisplay({
+        type: 'text',
+        value: 'line1\nline2\t"quoted"\\tail',
+      })
+    ).toBe('line1\\nline2\\t\\"quoted\\"\\\\tail');
+  });
+
+  it('rejects invalid values before formatting', () => {
+    expect(() => formatMemoForDisplay({ type: 'hash', value: 'not-hex' })).toThrow(
+      PocketPayError
+    );
+  });
+});
+
 describe('buildMemo', () => {
   it('returns undefined when there is no memo', () => {
     expect(buildMemo(undefined)).toBeUndefined();
@@ -250,6 +280,18 @@ describe('payment preview reports the memo type', () => {
     });
     expect(preview.memo).toBeUndefined();
     expect(preview.memoType).toBeUndefined();
+  });
+
+  it('escapes text memo controls in the display preview', async () => {
+    const preview = await previewPayment({
+      sourceAccount: PUBLIC_KEY,
+      destination: StellarSDK.Keypair.random().publicKey(),
+      amount: '10',
+      memo: 'line1\nline2\t\\tail',
+    });
+
+    expect(preview.memo).toBe('line1\\nline2\\t\\\\tail');
+    expect(preview.memoType).toBe('text');
   });
 
   it('rejects an invalid memo before doing any other work', async () => {

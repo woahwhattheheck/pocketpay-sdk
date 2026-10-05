@@ -225,3 +225,28 @@ export function safeValidateMemo(
     throw error;
   }
 }
+
+/**
+ * Formats a validated memo for safe, single-line display.
+ *
+ * Text memos are JSON-escaped without the surrounding quotes so control
+ * characters, quotes, and backslashes cannot alter the surrounding UI/log
+ * line. Non-text memo payloads are already restricted to display-safe scalar
+ * forms by {@link validateMemoInput} and are returned unchanged as strings.
+ *
+ * @param memo - A memo string, structured memo, or undefined
+ * @returns A display-safe string, or undefined when there is no memo
+ * @throws PocketPayError with code `TX_INVALID_MEMO` when the memo is invalid
+ */
+export function formatMemoForDisplay(memo?: string | MemoInput): string | undefined {
+  const normalized = normalizeMemo(memo);
+  if (!normalized) return undefined;
+
+  validateMemoInput(normalized);
+  if (normalized.type === 'none') return undefined;
+
+  const value = String(normalized.value ?? '');
+  if (normalized.type !== 'text') return value;
+
+  return JSON.stringify(value).slice(1, -1);
+}

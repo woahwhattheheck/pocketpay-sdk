@@ -103,6 +103,18 @@ preview.memo;     // '12345'
 preview.memoType; // 'id'
 ```
 
+### Safe display formatting
+
+Use `formatMemoForDisplay(memo)` when rendering a memo in a single-line UI,
+log, or confirmation surface. It normalizes and validates the memo first.
+Text memos JSON-escape control characters, quotes, and backslashes without
+adding surrounding quotes; `id`, `hash`, and `return` payloads are returned
+as their validated string values. Missing or `none` memos return `undefined`.
+
+`previewPayment` uses this helper for its display-only `memo` field. This does
+not change the memo attached to a transaction: transaction construction still
+uses `buildMemo` and the original validated payload.
+
 ## Migration
 
 Nothing is required. Plain-string memos keep working and keep meaning `text`.
