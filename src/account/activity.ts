@@ -1,0 +1,321 @@
+/**
+ * Stellar PocketPay SDK — normalized account activity.
+ *
+ * Projects the SDK's existing transaction, payment, receipt and vault result
+ * types into one display-friendly history record without exposing raw network
+ * responses or inventing a second submission/status taxonomy.
+ */
+
+import {
+  TransactionDirection,
+  TransactionStatus,
+} from '../types';
+import type {
+  PaymentReceipt,
+  PaymentSummary,
+  TransactionSummary,
+  VaultMappedResult,
+} from '../types';
+
+export type AccountActivityKind = 'payment' | 'transaction' | 'vault';
+export type AccountActivityDirection = TransactionDirection | 'neutral';
+export type AccountActivitySource =
+  | 'payment_history'
+  | 'transaction_history'
+  | 'payment_receipt'
+  | 'vault';
+
+export interface AccountActivityRecord {
+  /** Stable identifier derived from the source record; never random. */
+  id: string;
+  /** Broad activity family for UI grouping/filtering. */
+  kind: AccountActivityKind;
+  /** Reuses the SDK transaction status taxonomy. */
+  status: TransactionStatus;
+  /** Direction relative to the account being displayed. */
+  direction: AccountActivityDirection;
+  /** ISO-8601 timestamp used for history ordering. */
+  createdAt: string;
+  /** Where this normalized record came from. */
+  source: AccountActivitySource;
+  transactionHash?: string;
+  pagingToken?: string;
+  amount?: string;
+  asset?: string;
+  assetIssuer?: string;
+  counterparty?: string;
+  memo?: string;
+  operation?: string;
+}
+
+export interface VaultActivityInput {
+  /** Existing typed vault result. */
+  result: VaultMappedResult;
+  /**
+   * Timestamp supplied by the caller because VaultMappedResult deliberately
+   * carries no clock field. Keeping it explicit makes normalization
+   * deterministic and testable.
+   */
+  createdAt: string;
+}
+
+export interface NormalizeAccountActivityInput {
+  /** Account the history is rendered for. */
+  account: string;
+  transactions?: readonly TransactionSummary[];
+  payments?: readonly PaymentSummary[];
+  receipts?: readonly PaymentReceipt[];
+  vault?: readonly VaultActivityInput[];
+}
+
+export interface AccountActivityFilter {
+  kind?: AccountActivityKind;
+  status?: TransactionStatus;
+  direction?: AccountActivityDirection;
+  asset?: string;
+}
+
+function stableId(prefix: string, ...parts: Array<string | number | undefined>): string {
+  const key = parts.find((part) => part !== undefined && String(part).length > 0);
+  return prefix + ':' + (key === undefined ? 'unknown' : String(key));
+}
+
+function transactionStatus(record: TransactionSummary): TransactionStatus {
+  if (record.status !== undefined) {
+    return record.status as TransactionStatus;
+  }
+  if (record.successful === true) return TransactionStatus.COMPLETED;
+  if (record.successful === false) return TransactionStatus.FAILED;
+  return TransactionStatus.UNKNOWN;
+}
+
+function transactionDirection(
+  record: TransactionSummary,
+  account: string,
+): AccountActivityDirection {
+  if (record.direction !== undefined) {
+    return record.direction as TransactionDirection;
+  }
+  if (record.sourceAccount === account) return TransactionDirection.OUTGOING;
+  if (record.sourceAccount) return TransactionDirection.INCOMING;
+  return 'neutral';
+}
+
+function paymentDirection(
+  record: PaymentSummary,
+  account: string,
+): AccountActivityDirection {
+  if (record.from === account && record.to === account) return TransactionDirection.SELF;
+  if (record.from === account) return TransactionDirection.OUTGOING;
+  if (record.to === account) return TransactionDirection.INCOMING;
+  return 'neutral';
+}
+
+function paymentCounterparty(
+  record: PaymentSummary,
+  account: string,
+): string | undefined {
+  if (record.from === account && record.to === account) return account;
+  if (record.from === account) return record.to || undefined;
+  if (record.to === account) return record.from || undefined;
+  return undefined;
+}
+
+function assignOptional(
+  target: AccountActivityRecord,
+  values: Partial<Omit<AccountActivityRecord, 'id' | 'kind' | 'status' | 'direction' | 'createdAt' | 'source'>>,
+): AccountActivityRecord {
+  for (const [key, value] of Object.entries(values)) {
+    if (value !== undefined && value !== '') {
+      (target as unknown as Record<string, unknown>)[key] = value;
+    }
+  }
+  return target;
+}
+
+/**
+ * Normalizes one Horizon payment operation. A returned Horizon payment record
+ * is already ledger history, so its status is completed.
+ */
+export function mapPaymentSummaryToActivity(
+  record: PaymentSummary,
+  account: string,
+): AccountActivityRecord {
+  const activity: AccountActivityRecord = {
+    id: stableId('payment', record.id, record.transactionHash, record.pagingToken),
+    kind: 'payment',
+    status: TransactionStatus.COMPLETED,
+    direction: paymentDirection(record, account),
+    createdAt: record.createdAt,
+    source: 'payment_history',
+  };
+
+  return assignOptional(activity, {
+    transactionHash: record.transactionHash,
+    pagingToken: record.pagingToken,
+    amount: record.amount,
+    asset: record.asset,
+    assetIssuer: record.assetIssuer,
+    counterparty: paymentCounterparty(record, account),
+    operation: record.type,
+  });
+}
+
+/**
+ * Normalizes one transaction-history record. Explicit mapper status/direction
+ * wins; otherwise the stable Horizon success/source fields are used.
+ */
+export function mapTransactionSummaryToActivity(
+  record: TransactionSummary,
+  account: string,
+): AccountActivityRecord {
+  const activity: AccountActivityRecord = {
+    id: stableId('transaction', record.hash, record.txHash, record.id, record.pagingToken),
+    kind: 'transaction',
+    status: transactionStatus(record),
+    direction: transactionDirection(record, account),
+    createdAt: record.createdAt,
+    source: 'transaction_history',
+  };
+
+  return assignOptional(activity, {
+    transactionHash: record.hash ?? record.txHash,
+    pagingToken: record.pagingToken,
+    amount: record.amount,
+    asset: record.asset,
+    counterparty: record.counterparty,
+    memo: record.memo,
+    operation: record.rawType,
+  });
+}
+
+/**
+ * Normalizes a submission/Soroban payment receipt. Receipt statuses are
+ * preserved exactly, including pending and unknown.
+ */
+export function mapPaymentReceiptToActivity(
+  receipt: PaymentReceipt,
+  account: string,
+): AccountActivityRecord {
+  const direction: AccountActivityDirection =
+    receipt.destination === account
+      ? TransactionDirection.SELF
+      : receipt.destination
+        ? TransactionDirection.OUTGOING
+        : 'neutral';
+
+  const activity: AccountActivityRecord = {
+    id: stableId('receipt', receipt.transactionHash, receipt.createdAt),
+    kind: 'payment',
+    status: receipt.status,
+    direction,
+    createdAt: receipt.createdAt,
+    source: 'payment_receipt',
+  };
+
+  return assignOptional(activity, {
+    transactionHash: receipt.transactionHash,
+    amount: receipt.amount,
+    asset: receipt.asset,
+    counterparty: receipt.destination,
+    memo: receipt.memo,
+    operation: receipt.operation,
+  });
+}
+
+function vaultStatus(result: VaultMappedResult): TransactionStatus {
+  switch (result.status) {
+    case 'success':
+      return TransactionStatus.COMPLETED;
+    case 'pending':
+      return TransactionStatus.PENDING;
+    case 'failed':
+    case 'error':
+    case 'simulation_error':
+      return TransactionStatus.FAILED;
+    default:
+      return TransactionStatus.UNKNOWN;
+  }
+}
+
+function vaultDirection(result: VaultMappedResult): AccountActivityDirection {
+  switch (result.operation) {
+    case 'deposit':
+      return TransactionDirection.OUTGOING;
+    case 'withdraw':
+      return TransactionDirection.INCOMING;
+    case 'get_balance':
+      return 'neutral';
+    default:
+      return 'neutral';
+  }
+}
+
+/**
+ * Normalizes a vault result. The caller supplies createdAt because the vault
+ * result intentionally contains no timestamp.
+ */
+export function mapVaultResultToActivity(input: VaultActivityInput): AccountActivityRecord {
+  const { result, createdAt } = input;
+  const activity: AccountActivityRecord = {
+    id: stableId('vault', result.hash, result.operation, createdAt),
+    kind: 'vault',
+    status: vaultStatus(result),
+    direction: vaultDirection(result),
+    createdAt,
+    source: 'vault',
+  };
+
+  return assignOptional(activity, {
+    transactionHash: result.hash,
+    amount: result.amount ?? result.balance,
+    asset: 'XLM',
+    operation: result.operation,
+  });
+}
+
+/**
+ * Builds one reverse-chronological history from existing SDK result types.
+ *
+ * Equal/invalid timestamps keep insertion order, so deterministic fixture
+ * arrays remain deterministic.
+ */
+export function normalizeAccountActivity(
+  input: NormalizeAccountActivityInput,
+): AccountActivityRecord[] {
+  const records: AccountActivityRecord[] = [
+    ...(input.transactions ?? []).map((record) =>
+      mapTransactionSummaryToActivity(record, input.account)),
+    ...(input.payments ?? []).map((record) =>
+      mapPaymentSummaryToActivity(record, input.account)),
+    ...(input.receipts ?? []).map((record) =>
+      mapPaymentReceiptToActivity(record, input.account)),
+    ...(input.vault ?? []).map(mapVaultResultToActivity),
+  ];
+
+  return records
+    .map((record, index) => ({ record, index }))
+    .sort((left, right) => {
+      const leftTime = Date.parse(left.record.createdAt);
+      const rightTime = Date.parse(right.record.createdAt);
+      if (Number.isNaN(leftTime) || Number.isNaN(rightTime) || leftTime === rightTime) {
+        return left.index - right.index;
+      }
+      return rightTime - leftTime;
+    })
+    .map(({ record }) => record);
+}
+
+/** Pure client-side filtering for an already-normalized history. */
+export function filterAccountActivity(
+  records: readonly AccountActivityRecord[],
+  filter: AccountActivityFilter,
+): AccountActivityRecord[] {
+  return records.filter((record) => {
+    if (filter.kind !== undefined && record.kind !== filter.kind) return false;
+    if (filter.status !== undefined && record.status !== filter.status) return false;
+    if (filter.direction !== undefined && record.direction !== filter.direction) return false;
+    if (filter.asset !== undefined && record.asset !== filter.asset) return false;
+    return true;
+  });
+}
