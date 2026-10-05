@@ -248,5 +248,5 @@ export function formatMemoForDisplay(memo?: string | MemoInput): string | undefi
   const value = String(normalized.value ?? '');
   if (normalized.type !== 'text') return value;
 
-  return JSON.stringify(value).slice(1, -1);
+  return JSON.stringify(value).slice(1, -1).replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
 }
