@@ -1,5 +1,6 @@
 import * as StellarSDK from '@stellar/stellar-sdk';
 import { resolveConfig } from '../config';
+import { PocketPayError } from '../types';
 import type { SDKConfig, StellarAssetSpec, StellarNetwork } from '../types';
 import { validateAmount, validatePublicKey } from '../utils';
 import {
@@ -50,6 +51,15 @@ const SOROBAN_FEE_WARNING =
 const LOCK_PREVIEW_WARNING =
   'Lock actions can be previewed, but the current SDK does not execute vault lock operations.';
 
+function isVaultPreviewAction(operation: unknown): operation is VaultPreviewAction {
+  return (
+    operation === 'deposit' ||
+    operation === 'withdraw' ||
+    operation === 'getBalance' ||
+    operation === 'createLock'
+  );
+}
+
 function operationRequiresAmount(operation: VaultPreviewAction): boolean {
   return operation === 'deposit' || operation === 'withdraw' || operation === 'createLock';
 }
@@ -65,6 +75,21 @@ export function buildVaultOperationPreview(
   params: VaultOperationPreviewParams,
   config?: Partial<SDKConfig>,
 ): VaultOperationPreview {
+  const runtimeOperation = (params as { operation?: unknown }).operation;
+  if (!isVaultPreviewAction(runtimeOperation)) {
+    const validationValue =
+      typeof runtimeOperation === 'string' || typeof runtimeOperation === 'number'
+        ? runtimeOperation
+        : undefined;
+    throw new PocketPayError('Invalid vault preview operation', 'INVALID_OPERATION', {
+      validation: {
+        field: 'operation',
+        reason: 'unsupported_value',
+        ...(validationValue !== undefined ? { value: validationValue } : {}),
+      },
+    });
+  }
+
   validatePublicKey(params.wallet);
 
   if (operationRequiresAmount(params.operation)) {
