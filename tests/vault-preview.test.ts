@@ -41,12 +41,36 @@ describe('vault operation preview', () => {
       operation: 'createLock',
       wallet,
       amount: '4',
+      unlockAt: 1_900_000_000,
     });
 
     expect(preview.supported).toBe(false);
+    expect(preview.unlockAt).toBe(1_900_000_000);
     expect(preview.warnings.join(' ')).toContain(
       'current SDK does not execute vault lock operations',
     );
+  });
+
+  it('rejects a lock preview that omits its unlock time', () => {
+    let thrown: unknown;
+    try {
+      buildVaultOperationPreview({
+        operation: 'createLock',
+        wallet,
+        amount: '4',
+      } as never);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_OPERATION',
+      validation: {
+        field: 'unlockAt',
+        reason: 'missing',
+      },
+    });
   });
 
   it('returns a typed validation error for an unknown runtime operation', () => {
