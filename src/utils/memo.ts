@@ -108,6 +108,13 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
 
   switch (type) {
     case 'none':
+      if (value !== undefined) {
+        throw memoError(
+          'unexpected_payload',
+          'A none memo must not include a value.',
+          String(value)
+        );
+      }
       return true;
 
     case 'text': {
