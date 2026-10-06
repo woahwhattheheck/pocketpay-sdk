@@ -78,12 +78,13 @@ export function parseQRPayload(input: string): QRPayload {
   if (metadataRaw) {
     const parsed: Record<string, string> = {};
     check(PaymentErrorCode.InvalidMetadata, () => {
-      const decoded = decodeURIComponent(metadataRaw);
-      for (const pair of decoded.split(',')) {
-        const [k, v] = pair.split(':');
-        if (!k || !v) {
+      for (const pair of metadataRaw.split(',')) {
+        const separator = pair.indexOf(':');
+        if (separator <= 0 || separator === pair.length - 1) {
           throw new Error('Invalid metadata pair');
         }
+        const k = pair.slice(0, separator);
+        const v = pair.slice(separator + 1);
         parsed[k] = v;
       }
     });
