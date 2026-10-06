@@ -82,7 +82,7 @@ function operationRequiresAmount(operation: VaultPreviewAction): boolean {
 }
 
 function isSecretSeedLike(value: unknown): boolean {
-  return typeof value === 'string' && /^S[A-Z2-7]{55}$/.test(value.trim());
+  return typeof value === 'string' && /^S[A-Z2-7]{55}$/i.test(value.trim());
 }
 
 function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown): void {
