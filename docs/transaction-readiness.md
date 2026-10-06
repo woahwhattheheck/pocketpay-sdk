@@ -6,14 +6,16 @@ the source **public** key alone, before you ask the user (or a signer) for
 approval.
 
 ```ts
-import { checkTransactionReadiness, sendXLM } from 'stellar-pocketpay-sdk';
+import { previewPaymentWithReadiness, sendXLM } from 'stellar-pocketpay-sdk';
 
-const readiness = await checkTransactionReadiness({
+const { preview, readiness } = await previewPaymentWithReadiness({
   sourceAccount: wallet.publicKey,
   destination,
   amount: '25',
   memo: 'invoice #42',
 });
+
+showConfirmation(preview);
 
 if (!readiness.ready) {
   for (const blocker of readiness.blockers) {
@@ -27,9 +29,14 @@ for (const warning of readiness.warnings) showNotice(warning.message);
 await sendXLM({ sourceSecret, destination, amount: '25', memo: 'invoice #42' });
 ```
 
-`sendXLM` and `sendAsset` do not call the readiness check, and their signing and
-submission paths are unchanged. The check is an optional step you add before
-them.
+`previewPaymentWithReadiness` is the confirmation-stage integration seam: it
+builds the normal local preview and then runs the shared readiness validator for
+that exact payment. The preview itself performs no Horizon lookup, so composing
+the two does not duplicate a network preflight.
+
+`sendXLM` and `sendAsset` still do not call the readiness check. Their
+construction, signing, and submission behavior remains unchanged for existing
+callers.
 
 ## Result
 
