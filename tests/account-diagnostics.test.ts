@@ -91,6 +91,25 @@ describe('buildAccountDiagnosticsReport — healthy account', () => {
     expect(report.vault).toHaveProperty('ready');
   });
 
+  it('keeps only endpoint origins in the shareable report', async () => {
+    const lookup = lookupReturning(funded('100.0000000'));
+    const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, {
+      config: {
+        network: 'testnet',
+        horizonUrl: 'https://horizon-testnet.stellar.org/private-support-path?tenant=example#local',
+        sorobanRpcUrl: 'https://soroban-testnet.stellar.org/private-support-path?tenant=example#local',
+      },
+      lookup,
+    });
+
+    expect(report.config.horizonUrl).toBe('https://horizon-testnet.stellar.org');
+    expect(report.network.horizonUrl).toBe('https://horizon-testnet.stellar.org');
+    expect(report.config.sorobanRpcUrl).toBe('https://soroban-testnet.stellar.org');
+    expect(report.network.sorobanRpcUrl).toBe('https://soroban-testnet.stellar.org');
+    expect(JSON.stringify(report)).not.toContain('private-support-path');
+    expect(JSON.stringify(report)).not.toContain('tenant=example');
+  });
+
   it('reads Horizon through the config factory seam when no lookup is injected', async () => {
     const horizon: MockHorizonHandle = installMockHorizon();
     try {
