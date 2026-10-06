@@ -13,6 +13,7 @@
 
 import * as StellarSDK from '@stellar/stellar-sdk';
 import { getHorizonServer, resolveConfig } from '../config';
+import { isKnownErrorCode } from '../errors';
 import { withTimeout } from '../network';
 import type { AssetBalance, BalanceResult, SDKConfig } from '../types';
 import { formatStroops, safeParseAmount } from '../utils/amount';
@@ -34,9 +35,6 @@ const BASE_RESERVE_STROOPS = 5_000_000n;
 
 /** Minimum per-operation network fee (100 stroops). */
 const MIN_BASE_FEE_STROOPS = 100n;
-
-/** Error codes are forwarded only when they look like an identifier. */
-const SAFE_ERROR_CODE_RE = /^[A-Za-z][A-Za-z0-9_.-]{0,63}$/;
 
 const DEFAULT_ERROR_CODE = 'ACCOUNT_DIAGNOSTICS_ERROR';
 const INVALID_PUBLIC_KEY_CODE = 'INVALID_PUBLIC_KEY';
@@ -62,7 +60,7 @@ function normalizeAccountError(error: unknown): NormalizedAccountError {
 
   if (error && typeof error === 'object') {
     const candidate = (error as { code?: unknown }).code;
-    if (typeof candidate === 'string' && SAFE_ERROR_CODE_RE.test(candidate)) {
+    if (typeof candidate === 'string' && isKnownErrorCode(candidate)) {
       code = candidate;
     }
     httpStatus = httpStatusOf(error);
