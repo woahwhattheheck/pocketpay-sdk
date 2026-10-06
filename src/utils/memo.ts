@@ -129,6 +129,13 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
       if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'bigint') {
         throw memoError('invalid_type', 'An id memo requires a string, number, or bigint value.');
       }
+      if (typeof value === 'number' && !Number.isSafeInteger(value)) {
+        throw memoError(
+          'unsafe_number',
+          'An id memo number must be a safe JavaScript integer; pass larger IDs as a decimal string or bigint.',
+          String(value)
+        );
+      }
       const raw = String(value).trim();
       if (!/^\d+$/.test(raw)) {
         throw memoError(
