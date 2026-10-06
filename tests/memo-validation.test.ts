@@ -113,6 +113,16 @@ describe('validateMemoInput — rejected input', () => {
     );
   });
 
+  it('rejects unsafe numeric ids before JavaScript rounding can change the memo', () => {
+    const err = capture(() =>
+      validateMemoInput({ type: 'id', value: Number.MAX_SAFE_INTEGER + 1 })
+    );
+    expect(err.validation?.reason).toBe('unsafe_number');
+
+    expect(validateMemoInput({ type: 'id', value: '9007199254740993' })).toBe(true);
+    expect(validateMemoInput({ type: 'id', value: 9007199254740993n })).toBe(true);
+  });
+
   it('rejects an id memo above 2^64 - 1', () => {
     const err = capture(() => validateMemoInput({ type: 'id', value: (MEMO_ID_MAX + 1n).toString() }));
     expect(err.validation?.reason).toBe('out_of_range');
