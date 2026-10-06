@@ -270,6 +270,16 @@ describe('buildAccountDiagnosticsReport — failing lookups', () => {
     expect(JSON.stringify(report)).not.toContain(secret);
   });
 
+  it('does not forward unknown identifier-shaped provider codes', async () => {
+    const providerToken = 'ghp_123456789012345678901234567890123456';
+    const lookup = lookupRejecting({ code: providerToken });
+
+    const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, { config: TESTNET, lookup });
+
+    expect(report.account.errorCode).toBe('ACCOUNT_DIAGNOSTICS_ERROR');
+    expect(JSON.stringify(report)).not.toContain(providerToken);
+  });
+
   it('handles non-Error rejections', async () => {
     const lookup = lookupRejecting('socket hang up');
     const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, { config: TESTNET, lookup });
