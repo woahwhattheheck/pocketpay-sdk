@@ -60,6 +60,72 @@ mode expectations for application loggers remain documented in
 Redaction is implemented by `redactDiagnosticsValue` using the deny-list in
 `DIAGNOSTICS_SENSITIVE_KEYS`, plus string scrubbing for embedded `S…` keys.
 
+## Account diagnostics report
+
+`buildAccountDiagnosticsReport(publicKey, options?)` adds the state of one
+public account and a coarse payment-readiness verdict to the support report
+above. It is read-only. It does one Horizon account lookup and never signs or
+submits anything.
+
+```ts
+import { buildAccountDiagnosticsReport } from 'stellar-pocketpay-sdk';
+
+const report = await buildAccountDiagnosticsReport(wallet.publicKey, {
+  config: { network: 'testnet' },
+});
+
+if (report.paymentReadiness.status !== 'ready') {
+  console.warn(report.paymentReadiness.reasons); // e.g. ['ACCOUNT_UNFUNDED']
+}
+```
+
+Account lookup failures do not throw. They are reported as
+`account.status: 'error'`. Invalid `config` overrides still throw the same
+validation error as `resolveConfig()` and `buildDiagnosticsReport()`.
+
+### Reading the report
+
+| Field | Meaning |
+| --- | --- |
+| `account.status` | `funded`, `unfunded` (Horizon 404: the account has never been funded), or `error` (the lookup failed, or the input was not a valid `G…` key) |
+| `account.nativeBalance`, `account.assetCount` | Native XLM balance and number of balance entries, native included. Funded accounts only. |
+| `account.estimatedMinimumBalance` | Lower bound of the protocol minimum balance: (2 + trustlines) × 0.5 XLM. Offers, extra signers, data entries, sponsorships and liabilities are not visible here and can raise the real minimum. |
+| `account.errorCode`, `account.errorHttpStatus` | A stable code (for example `REQUEST_TIMEOUT`, `INVALID_PUBLIC_KEY` or `ACCOUNT_DIAGNOSTICS_ERROR`) and the Horizon HTTP status when one was available. `errorMessage` is a fixed SDK string. Provider error messages are never copied into the report. |
+| `paymentReadiness.status` | `ready`, `not_ready`, or `unknown` (account state could not be loaded) |
+| `paymentReadiness.reasons` | Why the account is not ready (see below). Empty when ready. |
+
+| Reason | What it means / what to do |
+| --- | --- |
+| `INVALID_PUBLIC_KEY` | The value passed was not a valid public key. It is shown as `[REDACTED]` and never echoed, in case it was a secret key or seed phrase. Ask for the `G…` address again. |
+| `ACCOUNT_UNFUNDED` | The account does not exist on this network yet. Fund it (on testnet: `fundTestnetAccount`). Check that the app and the account are on the same network. |
+| `NO_NATIVE_XLM_FOR_FEES` | The native balance does not exceed the estimated minimum balance by at least one base fee (100 stroops). Add XLM or remove unused trustlines. |
+| `ACCOUNT_STATE_UNAVAILABLE` | The Horizon lookup failed. See `errorCode` / `errorHttpStatus` and `report.network`. `probeConfiguredEndpoints()` checks reachability. |
+| `NETWORK_CONFIGURATION_UNAVAILABLE` | The network passphrase or Horizon URL could not be resolved. |
+
+`ready` does not mean a payment will succeed. The report does not check the
+destination, amount, asset trustlines (`checkDestinationTrustline`), sequence
+freshness (`SequenceProvider`), or operation-specific rules. The normal
+payment validation still runs when you build and submit.
+
+For tests and offline tooling, inject the account source with
+`{ lookup }`. Any function returning a `BalanceResult` works, including
+`getBalanceOrUnfunded`.
+
+### Sharing the report safely
+
+- The report is built from public data: the public key, native balance,
+  counts, endpoint URLs and capability flags. The whole object passes through
+  `redactDiagnosticsValue` before it is returned.
+- Share the object exactly as returned (`JSON.stringify(report, null, 2)`).
+  Do not add wallet objects, secret keys, seed phrases, signed XDR, raw error
+  objects or stack traces to it.
+- Endpoint URLs are copied as configured. Redaction removes `S…` keys and
+  `sk_`/`pk_`/`api_` style tokens, but not every credential format. If your
+  Horizon or Soroban URL carries an API key in its path or query string, remove
+  it before sharing.
+- Balances are public on-chain, but a report still links an address to an
+  amount. Share it only with the support channel that needs it.
+
 ## Lifecycle events (when enabled)
 
 | Domain | Example `type` | Typical `data` |
@@ -73,7 +139,10 @@ Redaction is implemented by `redactDiagnosticsValue` using the deny-list in
 ## Support workflow
 
 1. Reproduce with diagnostics enabled in a **non-production** environment.
-2. Call `buildDiagnosticsReport()` and save the JSON (no secrets).
+2. Call `buildDiagnosticsReport()` and save the JSON (no secrets). For
+   account or payment problems, use `buildAccountDiagnosticsReport(publicKey)`
+   instead. It includes the same sections plus account state and payment
+   readiness.
 3. Collect redacted event traces for the failing operation (`type` + `data`).
 4. Share the report + event types with support — **never** paste wallet backups,
    seed phrases, or signed XDR.
