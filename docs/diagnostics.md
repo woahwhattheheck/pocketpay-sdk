@@ -36,8 +36,8 @@ enableDiagnostics({
 createWallet(); // emits wallet.created with publicKey only (no secretKey value)
 
 const report = buildDiagnosticsReport({ network: 'testnet' });
-// Attach `report` to a support ticket — it contains URLs, capability status,
-// and vault readiness flags, never signing material.
+// Attach `report` to a support ticket — it contains endpoint origins,
+// capability status, and vault readiness flags, never signing material.
 
 disableDiagnostics(); // clear hooks when done
 ```
@@ -51,7 +51,7 @@ mode expectations for application loggers remain documented in
 
 | Value | In events / report? |
 | --- | --- |
-| Public key (`G…`), tx hash, ledger, network name, Horizon/Soroban URLs | Yes |
+| Public key (`G…`), tx hash, ledger, network name, Horizon/Soroban endpoint origins | Yes |
 | Capability status, vault readiness, timeout | Yes |
 | Contract id (`C…`) when configured | Yes (on-chain public) |
 | Secret key, mnemonic, seed, signed XDR, signatures, `sourceSecret` | **Never** — replaced with `[REDACTED]` |
@@ -114,15 +114,14 @@ For tests and offline tooling, inject the account source with
 ### Sharing the report safely
 
 - The report is built from public data: the public key, native balance,
-  counts, endpoint URLs and capability flags. The whole object passes through
-  `redactDiagnosticsValue` before it is returned.
+  counts, endpoint origins and capability flags. Endpoint URLs are reduced to
+  their origin before the whole object passes through `redactDiagnosticsValue`.
 - Share the object exactly as returned (`JSON.stringify(report, null, 2)`).
   Do not add wallet objects, secret keys, seed phrases, signed XDR, raw error
   objects or stack traces to it.
-- Endpoint URLs are copied as configured. Redaction removes `S…` keys and
-  `sk_`/`pk_`/`api_` style tokens, but not every credential format. If your
-  Horizon or Soroban URL carries an API key in its path or query string, remove
-  it before sharing.
+- Horizon and Soroban endpoint fields expose only URL origins (scheme, host,
+  and port). Userinfo, path, query, and fragment components are removed before
+  the report is returned.
 - Balances are public on-chain, but a report still links an address to an
   amount. Share it only with the support channel that needs it.
 
