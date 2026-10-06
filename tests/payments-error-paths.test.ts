@@ -174,6 +174,17 @@ describe('payment error classification', () => {
     expect(classified.safeMessage).toBeTruthy();
   });
 
+  it('preserves published retryability for known network codes', () => {
+    const classified = classifyPaymentError(
+      new PocketPayError('Horizon request failed', 'NET_HTTP', {
+        statusCode: 404,
+      }),
+    );
+
+    expect(classified.paymentCategory).toBe(PaymentFailureCategory.Network);
+    expect(classified.retryable).toBe(false);
+  });
+
   it('redacts secret-shaped material from payment error messages and causes', () => {
     const secret = `S${'A'.repeat(55)}`;
     const raw = Object.assign(new Error(`Connection reset for ${secret}`), {

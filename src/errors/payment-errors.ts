@@ -1,6 +1,6 @@
 import { PocketPayError } from '../types';
 import { ErrorCategory } from './codes';
-import { redactSensitive } from './taxonomy';
+import { describeError, redactSensitive } from './taxonomy';
 
 /**
  * Legacy QR/parser error codes. These remain exported for compatibility with
@@ -81,12 +81,19 @@ export class PaymentError extends PocketPayError {
     if (options.validation !== undefined) details.validation = options.validation;
     if (options.timeout !== undefined) details.timeout = options.timeout;
 
+    const standard = describeError(code);
+    const retryable =
+      options.retryable ??
+      (standard.known
+        ? standard.retryable
+        : paymentCategory === PaymentFailureCategory.Network);
+
     super(
       message,
       code,
       details,
       options.transactionHash,
-      options.retryable ?? paymentCategory === PaymentFailureCategory.Network,
+      retryable,
     );
 
     this.name = 'PaymentError';
@@ -345,9 +352,10 @@ export function classifyPaymentError(
       ? { transactionHash: pocket.transactionHash }
       : {}),
     ...(pocket?.timeout ? { timeout: pocket.timeout } : {}),
-    retryable:
-      pocket?.retryable ??
-      paymentCategory === PaymentFailureCategory.Network,
+    // Preserve an explicit source value. When absent, PaymentError consults
+    // the published error-code standard before falling back to the broad
+    // payment category (important for known NETWORK codes such as NET_HTTP).
+    retryable: pocket?.retryable,
     sdkCategory:
       pocket?.category ?? sdkCategoryFor(paymentCategory),
     safeMessage:
