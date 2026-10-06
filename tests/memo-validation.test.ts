@@ -88,6 +88,13 @@ describe('validateMemoInput — supported types', () => {
 });
 
 describe('validateMemoInput — rejected input', () => {
+  it('rejects a payload-bearing none memo', () => {
+    const err = capture(() =>
+      validateMemoInput({ type: 'none', value: 'unexpected' })
+    );
+    expect(err.validation?.reason).toBe('unexpected_payload');
+  });
+
   it('rejects a text memo one byte over the limit', () => {
     const err = capture(() =>
       validateMemoInput({ type: 'text', value: 'a'.repeat(MEMO_TEXT_MAX_BYTES + 1) })
