@@ -126,7 +126,7 @@ describe('vault operation preview', () => {
 
   it('returns the SDK typed validation error when a write preview has no amount', () => {
     expect(() =>
-      buildVaultOperationPreview({ operation: 'withdraw', wallet }),
+      buildVaultOperationPreview({ operation: 'withdraw', wallet } as never),
     ).toThrow(PocketPayError);
   });
 });
