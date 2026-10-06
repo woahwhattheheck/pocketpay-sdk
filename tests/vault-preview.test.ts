@@ -77,6 +77,29 @@ describe('vault operation preview', () => {
     ).toThrow(PocketPayError);
   });
 
+  it('rejects a secret wallet without echoing it in the typed error', () => {
+    const secret = StellarSDK.Keypair.fromRawEd25519Seed(Buffer.alloc(32, 9)).secret();
+    let thrown: unknown;
+
+    try {
+      buildVaultOperationPreview({ operation: 'deposit', wallet: secret, amount: '1' });
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_PUBLIC_KEY',
+      validation: {
+        field: 'publicKey',
+        reason: 'secret_key_not_allowed',
+      },
+    });
+    expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+    expect((thrown as Error).message).not.toContain(secret);
+    expect(JSON.stringify(thrown)).not.toContain(secret);
+  });
+
   it('returns the SDK typed validation error when a write preview has no amount', () => {
     expect(() =>
       buildVaultOperationPreview({ operation: 'withdraw', wallet }),
