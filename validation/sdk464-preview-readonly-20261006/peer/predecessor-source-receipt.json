@@ -1,0 +1,20 @@
+{
+  "nativeHead": "72dd98a5d35618b08bf46ecd72c3c82c29d660cd",
+  "nativeTree": "03aaceb4ce7216e81f7e33d56b9a1a5c4b6b91d8",
+  "canonicalCommitUrl": "https://api.github.com/repos/Stellar-PocketPay/pocketpay-sdk/git/commits/72dd98a5d35618b08bf46ecd72c3c82c29d660cd",
+  "headComparisonUrl": "https://api.github.com/repos/Stellar-PocketPay/pocketpay-sdk/compare/72dd98a5d35618b08bf46ecd72c3c82c29d660cd...dfb54ea28ee789336b07df966e0c437e94fdfe98",
+  "files": {
+    "src/vault/preview.ts": {
+      "gitBlob": "d25c4f6b138acb9ba66a39308eee3428449b4855",
+      "bytes": 4579
+    },
+    "tests/vault-preview.test.ts": {
+      "gitBlob": "f732cedf3bcbd26a2855824d5e2aae06375993af",
+      "bytes": 2641
+    }
+  },
+  "onlyTwoChangesBeforeToCurrent": [
+    "src/vault/preview.ts",
+    "tests/vault-preview.test.ts"
+  ]
+}

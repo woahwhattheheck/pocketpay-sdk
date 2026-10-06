@@ -1,0 +1,287 @@
+{
+  "authenticatedActor": {
+    "id": 293286387,
+    "login": "woahwhattheheck"
+  },
+  "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb",
+  "custodyFreshRead": "Fresh_ready_intake read at01:11: no new engineering TAKE/source movement since RELEASE; metadata-only blocker persists.",
+  "custodyRelease": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791247376231819",
+  "executedSource": "dfb54ea28ee789336b07df966e0c437e94fdfe98",
+  "files": [
+    {
+      "bytes": 3268,
+      "gitBlob": "f0ceabe96f44797b3927334b5f03883545b34069",
+      "path": "validation/sdk464-preview-readonly-20261006/commands.json",
+      "sha256": "271a94e2e7116b6be50c6b4e83a56172de02679c8083a39884f9237675c7c164"
+    },
+    {
+      "bytes": 433,
+      "gitBlob": "2a156cc7a5c538fe04ca721663f51a59d5339792",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/intake/graph-receipt.json",
+      "sha256": "59d9066e8ebceb1a66b3947d8aa87068e71c276ace35dad02431d06608c6657e"
+    },
+    {
+      "bytes": 31743,
+      "gitBlob": "165df97f960b0740ed194421acdaad10c701ef2c",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/intake/native-pr-issue-commit.json",
+      "sha256": "a393543804eee75cdc1e6353fde6b2e010d4fe1e250559ef3291e2dd35ebdfdf"
+    },
+    {
+      "bytes": 100806,
+      "gitBlob": "99c9039ad94e582dd2d703db7e55b3e75afe7ff7",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/intake/native-tree.json",
+      "sha256": "92c5abd39907f57fb69f7447b1115e2b37d5fdbe3b08c102f6c1c5de5b87f6c1"
+    },
+    {
+      "bytes": 2531,
+      "gitBlob": "036f6b39728180ae001de7a37bb12d06f4fd61de",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/intake/source-receipt.json",
+      "sha256": "2e8b3d5ba56a402621da15755981de3fe17207fbbcff8f9814dcd5bc62822f26"
+    },
+    {
+      "bytes": 4579,
+      "gitBlob": "d25c4f6b138acb9ba66a39308eee3428449b4855",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-72/src/vault/preview.ts",
+      "sha256": "0416da5a3381f2aef7cfd1e61fada9100a9462fe1a17a5b43967433843cea86e"
+    },
+    {
+      "bytes": 2641,
+      "gitBlob": "f732cedf3bcbd26a2855824d5e2aae06375993af",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-72/tests/vault-preview.test.ts",
+      "sha256": "6ade867165588a0e930d1f26eaaf218c8922ab097018f70aa41ce3959b25ad7e"
+    },
+    {
+      "bytes": 1978,
+      "gitBlob": "ece2e3e27dcf3cad2948bb95674d822ed7453c00",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/docs/vault-operation-preview.md",
+      "sha256": "532ee030f9a9c5a23a798bea3fff61458dd8b8c300bcd12b03dce1828dda2cce"
+    },
+    {
+      "bytes": 113270,
+      "gitBlob": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/package-lock.json",
+      "sha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9"
+    },
+    {
+      "bytes": 2240,
+      "gitBlob": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/package.json",
+      "sha256": "66fceb4791046b18fcc67148c27fbb72a5d4096d0170f1e82bbede44d10dc506"
+    },
+    {
+      "bytes": 14839,
+      "gitBlob": "8394bd7f9bc4f4a985658b2fb9d18ebf7688e8f8",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/src/index.ts",
+      "sha256": "5e3b2912ddb34374374950f9745c0f13fe7950edca2e7f63153d7ad0d5fd7d35"
+    },
+    {
+      "bytes": 1411,
+      "gitBlob": "d3a88a78fa0dfba77de509ef6db0d7f4bff4cd2c",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/src/vault/index.ts",
+      "sha256": "64230770d6edfdd0fcbe81d462000e84d944b333cff0a99592fdd7c39d7aafb0"
+    },
+    {
+      "bytes": 5032,
+      "gitBlob": "7cf5db391dc005e554a39cdefa1fb27f3275dbb9",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/src/vault/preview.ts",
+      "sha256": "e63ec3ad9b895fee8bbc0b2e7e091fba42a8ec34670bbb813a783243689e4390"
+    },
+    {
+      "bytes": 3415,
+      "gitBlob": "18f05739f874c2b432b26240d5cf25e34d1acce8",
+      "path": "validation/sdk464-preview-readonly-20261006/inputs/native-dfb/tests/vault-preview.test.ts",
+      "sha256": "4a8d5eb9cff96028e257c27ed4bcb4f4f3b044b718a13f95b9f566d89f2de83a"
+    },
+    {
+      "bytes": 73,
+      "gitBlob": "b655c10a185ad893a13b2e7bf3eb0c4a0380add2",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/before-run-status.json",
+      "sha256": "80a4ab9203a3a32e9a6aab58bcfbada28d442cbd1016bb9ab8c9919b033cf5b3"
+    },
+    {
+      "bytes": 1004,
+      "gitBlob": "15d4e8b216f67d624809d514367a822945ded810",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/contract-before.json",
+      "sha256": "68567c14b7e1f8b03928b9b3451fc83c361384a27c4a01e7ab8eff452b1212e8"
+    },
+    {
+      "bytes": 1030,
+      "gitBlob": "8a57792f72cf2b523eb74b06728e6de668d4d0ca",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/contract-head.json",
+      "sha256": "5c34b043aa6342169f20f37b8e7516dd62e82b42bc01b96758a2d9a7ef4a0d35"
+    },
+    {
+      "bytes": 6514,
+      "gitBlob": "45e848c8323633808cb6d110ad175467b51e99ff",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/contract.test.ts",
+      "sha256": "6846316714ca2a19812716590ed7aefadb2012d12d922ed845bbf40b824711d7"
+    },
+    {
+      "bytes": 3081,
+      "gitBlob": "e96be6045e6d0f2b977d4869d531f01a2a418841",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/focused-before.log",
+      "sha256": "7558b297f0cf6489fc01cee4ab2043030d36804c4058c7ddde0ea2b70227eb16"
+    },
+    {
+      "bytes": 393,
+      "gitBlob": "617527d9d6001b545408c3fc91e583d533a7d7de",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/focused-head.log",
+      "sha256": "1afc94431681f7040400721331079c6928bd470bf629ae8222b7d3329acb224c"
+    },
+    {
+      "bytes": 142,
+      "gitBlob": "6f91c89712fb468d1be8bb921e4e3da1ef4c1a03",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/guard-before/contract.test.ts.json",
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    {
+      "bytes": 142,
+      "gitBlob": "6f91c89712fb468d1be8bb921e4e3da1ef4c1a03",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/guard-head/contract.test.ts.json",
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    {
+      "bytes": 142,
+      "gitBlob": "6f91c89712fb468d1be8bb921e4e3da1ef4c1a03",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/guard-head/observations.test.ts.json",
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    {
+      "bytes": 142,
+      "gitBlob": "6f91c89712fb468d1be8bb921e4e3da1ef4c1a03",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/guard-head/vault-preview.test.ts.json",
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    {
+      "bytes": 101,
+      "gitBlob": "2105ceaf54d0424598a94f40488e5fa9e9cb97fe",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/head-run-status.json",
+      "sha256": "fd37fe59cb7ae8bffed861c3705cfebd0ebca700d0b2007811c75d8af132c4be"
+    },
+    {
+      "bytes": 1016,
+      "gitBlob": "dfefe9ea5ae33ecfc77d20206ce74c25970eac88",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/network-deny.cjs",
+      "sha256": "6d81c4a8206ccbd8e1913740b4dd589ed90c59e3b68af85164c122947a0510d8"
+    },
+    {
+      "bytes": 1052,
+      "gitBlob": "a7e3871143d58e0768e33f6dcf7e8f4adfc1104f",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/network-setup.ts",
+      "sha256": "3c4ccf61bb2e522e41d226c10459e073b97a0ffd1ed0e1a449fb3212a4356901"
+    },
+    {
+      "bytes": 1147,
+      "gitBlob": "f92fc000a76e2997f70852cff655fffa6505bbb7",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/observations-head.json",
+      "sha256": "9d57d1695082a895a08160fadcd0551bd9d6cc2b95a222ffd6d4b9b6cf733fca"
+    },
+    {
+      "bytes": 2368,
+      "gitBlob": "ed6b9aa75134e7bec824c789f58a3a0962714273",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/observations.test.ts",
+      "sha256": "48428cba0958a46eee21466efdfe0d6aeeb12696de5531fcbfe132ee6fe8f5c4"
+    },
+    {
+      "bytes": 807,
+      "gitBlob": "8ff9c8bf169345e04c9ed71a663312a9f47cc47c",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/predecessor-source-receipt.json",
+      "sha256": "1ef90b5cde03985df12a7f8a560bad12567d5df7ccc749a4776599a6f8c02743"
+    },
+    {
+      "bytes": 72730,
+      "gitBlob": "5607f324cad4c7c90091d20b25b8b1f30bfe92cc",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/source-projection.json",
+      "sha256": "439d7187e37ee548c35d7bec93554f95b37c61a267f574be0046aa94c60fa80d"
+    },
+    {
+      "bytes": 1077,
+      "gitBlob": "88e1a73e94a04218f1221dbbfb0b5949538156f9",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/types-base-ddd.log",
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "bytes": 1077,
+      "gitBlob": "88e1a73e94a04218f1221dbbfb0b5949538156f9",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/types-before-72.log",
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "bytes": 1077,
+      "gitBlob": "88e1a73e94a04218f1221dbbfb0b5949538156f9",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/types-head-dfb.log",
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    {
+      "bytes": 0,
+      "gitBlob": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/types-scoped-head.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 408,
+      "gitBlob": "0de17b1107f05bee7144425d234d055849c00085",
+      "path": "validation/sdk464-preview-readonly-20261006/peer/vitest.config.mts",
+      "sha256": "9d996c5bf8e921bc8781287dc40fc99bea9b6c5fde79a42a91719a937a3f32cb"
+    },
+    {
+      "bytes": 11724,
+      "gitBlob": "1b54531c940c27a033bc7953466c0404a08cd45c",
+      "path": "validation/sdk464-preview-readonly-20261006/receipt.json",
+      "sha256": "0d629b7deb39a0be3882f4483466df16a031580c91d9ef93c2641d43a1b3872a"
+    }
+  ],
+  "frozenReceiptGitBlob": "1b54531c940c27a033bc7953466c0404a08cd45c",
+  "frozenReceiptSha256": "0d629b7deb39a0be3882f4483466df16a031580c91d9ef93c2641d43a1b3872a",
+  "kind": "Evidence-only publication binding; no new product execution",
+  "latestCollisionRelease": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791247525729219",
+  "metadataBlockedRelease": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791247450172419",
+  "newBranch": "validation/sdk464-preview-dfb-20261006",
+  "originalSourceTree": "265c9630c47bf86d05978e17e90ad31a1fd1955c",
+  "packetFiles": 37,
+  "packetLocks": 36,
+  "publicationPhase": {
+    "newEvidencePacketFiles": 37,
+    "newPublicationBindingFiles": 1,
+    "refAction": "Create a new evidence branch only; no existing ref update",
+    "rejectedUpstreamPATCHRetried": false,
+    "sourceBranchRefWritten": false,
+    "sourceFilesDeleted": 0,
+    "sourceFilesModified": 0,
+    "sourceFilesPreserved": 297,
+    "totalAddedFiles": 38,
+    "upstreamPRBodyOrCommentsWritten": false,
+    "validationReceiptScope": "Prior read-only validation phase; excludes this later own-fork evidence publication"
+  },
+  "repository": "woahwhattheheck/pocketpay-sdk",
+  "runtimeTests": {
+    "currentSameContract": "12 pass / 0 fail",
+    "diagnosticObservationsPassed": 4,
+    "headTotalPassed": 23,
+    "horizonFactoryCalls": 0,
+    "independentContractPassed": 12,
+    "networkTransportAttempts": 0,
+    "originalPassed": 7,
+    "preGuardSource": "72dd98a5d35618b08bf46ecd72c3c82c29d660cd",
+    "samePreGuardContract": "9 pass / 3 fail",
+    "signCalls": 0,
+    "signingSecretAccessCalls": 0,
+    "transactionBuildCalls": 0
+  },
+  "scopeLimits": [
+    "The non-disclosing wallet guard covers exact or whitespace-trimmed seed-shaped wallet strings, including invalid checksums.",
+    "Decorated wallet strings and seeds misplaced into amount or unsupported operation strings can still appear in validation errors; the four diagnostic checks record these boundaries rather than prove universal nondisclosure.",
+    "No package build, whole-unit run, signing, transaction submission or live network run is claimed.",
+    "Source branch and upstream PR body/comments remain untouched; rejected upstream body PATCH is not retried."
+  ],
+  "soleParent": "dfb54ea28ee789336b07df966e0c437e94fdfe98",
+  "sourceBlobsPreserved": 297,
+  "sourceBranch": "gf/sdk443-preview-20261005",
+  "typeChecks": {
+    "basePreGuardHeadFullLogsByteEqual": true,
+    "inheritedQRParserDiagnostics": 8,
+    "projectLintExitCode": 2,
+    "strictNewModuleExitCode": 0
+  },
+  "upstreamPR": "https://github.com/Stellar-PocketPay/pocketpay-sdk/pull/464"
+}

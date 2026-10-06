@@ -1,0 +1,103 @@
+[
+  {
+    "purpose": "Current focused runtime",
+    "argv": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "vitest.config.mts"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs",
+      "SDK464_SOURCE": "/workspace/scratch/ea8baa184658/sdk464-independent-review/head-dfb",
+      "SDK464_INCLUDE_OWNER": "1",
+      "SDK464_GUARD_DIR": "/workspace/scratch/ea8baa184658/sdk464-independent-review/guard-head",
+      "SDK464_CONTRACT_RECEIPT": "/workspace/scratch/ea8baa184658/sdk464-independent-review/contract-head.json",
+      "SDK464_OBSERVATIONS_RECEIPT": "/workspace/scratch/ea8baa184658/sdk464-independent-review/observations-head.json"
+    },
+    "exitCode": 0
+  },
+  {
+    "purpose": "Same final12 contract cases before secret-wallet guard",
+    "argv": [
+      "node",
+      "node_modules/vitest/vitest.mjs",
+      "run",
+      "--config",
+      "vitest.config.mts"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs",
+      "SDK464_SOURCE": "/workspace/scratch/ea8baa184658/sdk464-independent-review/before-72",
+      "SDK464_INCLUDE_OWNER": "0",
+      "SDK464_GUARD_DIR": "/workspace/scratch/ea8baa184658/sdk464-independent-review/guard-before",
+      "SDK464_CONTRACT_RECEIPT": "/workspace/scratch/ea8baa184658/sdk464-independent-review/contract-before.json"
+    },
+    "exitCode": 1
+  },
+  {
+    "purpose": "Actual project lint base-ddd",
+    "argv": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review/base-ddd",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs"
+    },
+    "exitCode": 2
+  },
+  {
+    "purpose": "Actual project lint before-72",
+    "argv": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review/before-72",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs"
+    },
+    "exitCode": 2
+  },
+  {
+    "purpose": "Actual project lint head-dfb",
+    "argv": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review/head-dfb",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs"
+    },
+    "exitCode": 2
+  },
+  {
+    "purpose": "Strict scoped new preview module",
+    "argv": [
+      "node",
+      "node_modules/typescript/bin/tsc",
+      "--noEmit",
+      "--strict",
+      "--target",
+      "ES2020",
+      "--module",
+      "commonjs",
+      "--moduleResolution",
+      "node",
+      "--esModuleInterop",
+      "--skipLibCheck",
+      "src/vault/preview.ts"
+    ],
+    "cwd": "/workspace/scratch/ea8baa184658/sdk464-independent-review/head-dfb",
+    "env": {
+      "NODE_OPTIONS": "--require /workspace/scratch/ea8baa184658/sdk464-independent-review/network-deny.cjs"
+    },
+    "exitCode": 0
+  }
+]

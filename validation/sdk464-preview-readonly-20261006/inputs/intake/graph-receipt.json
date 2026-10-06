@@ -1,0 +1,18 @@
+{
+  "nativeTree": "265c9630c47bf86d05978e17e90ad31a1fd1955c",
+  "recomputedTree": "265c9630c47bf86d05978e17e90ad31a1fd1955c",
+  "baseBlobCount": 294,
+  "headBlobCount": 297,
+  "changed": [
+    "src/index.ts",
+    "src/vault/index.ts"
+  ],
+  "added": [
+    "docs/vault-operation-preview.md",
+    "src/vault/preview.ts",
+    "tests/vault-preview.test.ts"
+  ],
+  "deleted": [],
+  "unchangedBlobCount": 292,
+  "sourcePacketOnly": true
+}

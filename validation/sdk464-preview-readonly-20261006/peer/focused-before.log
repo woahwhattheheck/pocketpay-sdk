@@ -1,0 +1,49 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk464-independent-review
+
+ ❯ contract.test.ts (12 tests | 3 failed) 20ms
+   ✓ independent public vault preview contract > models deposit without signing, transaction build, servers, or network 4ms
+   ✓ independent public vault preview contract > models withdraw without signing, transaction build, servers, or network 1ms
+   ✓ independent public vault preview contract > models createLock without signing, transaction build, servers, or network 1ms
+   ✓ independent public vault preview contract > models getBalance without signing, transaction build, servers, or network 1ms
+   × independent public vault preview contract > rejects exact seed-shaped wallet with a typed non-disclosing error 6ms
+     → expected true to be false // Object.is equality
+   × independent public vault preview contract > rejects trimmed seed-shaped wallet with a typed non-disclosing error 1ms
+     → expected true to be false // Object.is equality
+   × independent public vault preview contract > rejects seed-shaped wallet with invalid checksum with a typed non-disclosing error 1ms
+     → expected true to be false // Object.is equality
+   ✓ independent public vault preview contract > uses typed errors for unsupported runtime operation values 1ms
+   ✓ independent public vault preview contract > uses shared typed errors for malformed public wallet inputs 1ms
+   ✓ independent public vault preview contract > validates missing and malformed required amounts for every write intent 2ms
+   ✓ independent public vault preview contract > ignores optional balance amount and extra signing fields without copying them 1ms
+   ✓ independent public vault preview contract > keeps warning arrays independent and the canonical shared XLM asset frozen 1ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  contract.test.ts > independent public vault preview contract > rejects exact seed-shaped wallet with a typed non-disclosing error
+ FAIL  contract.test.ts > independent public vault preview contract > rejects trimmed seed-shaped wallet with a typed non-disclosing error
+ FAIL  contract.test.ts > independent public vault preview contract > rejects seed-shaped wallet with invalid checksum with a typed non-disclosing error
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ contract.test.ts:68:28
+     66|       expect(error instanceof api.PocketPayError).toBe(true);
+     67|       expect(error.code).toBe('INVALID_PUBLIC_KEY');
+     68|       expect(containsSeed).toBe(false);
+       |                            ^
+     69|       expect(error.validation?.reason).toBe('secret_key_not_allowed');
+     70|       expect(Object.hasOwn(error.validation, 'value')).toBe(false);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/3]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  3 failed | 9 passed (12)
+   Start at  21:03:11
+   Duration  819ms (transform 335ms, setup 25ms, collect 584ms, tests 20ms, environment 0ms, prepare 58ms)
+

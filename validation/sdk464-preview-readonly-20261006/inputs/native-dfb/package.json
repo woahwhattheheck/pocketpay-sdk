@@ -1,0 +1,72 @@
+{
+  "name": "stellar-pocketpay-sdk",
+  "version": "1.0.0",
+  "description": "Reusable TypeScript SDK for Stellar PocketPay — wallet management, XLM payments, transaction history, and Soroban vault interactions on Stellar Testnet.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "example:wallet": "tsx examples/create-wallet.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "test:coverage": "vitest run --coverage",
+    "coverage:baseline": "npm run test:coverage && tsx scripts/print-coverage-baseline.ts",
+    "coverage:report": "tsx scripts/print-coverage-baseline.ts",
+    "lint": "tsc --noEmit",
+    "check:circular": "tsx scripts/check-circular-deps.ts",
+    "verify": "npm run lint && npm run check:circular && npm run test && npm run test:coverage && npm run build",
+    "presubmit": "tsx scripts/presubmit.ts",
+    "verify:presubmit": "tsx scripts/presubmit.ts",
+    "verify:pr": "tsx scripts/verify-acceptance.ts",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run build",
+    "test:smoke": "npm run build && tsx scripts/smoke-test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stellar-PocketPay/stellar-pocketpay-sdk.git"
+  },
+  "keywords": [
+    "stellar",
+    "xlm",
+    "soroban",
+    "sdk",
+    "wallet",
+    "payments",
+    "testnet",
+    "pocketpay"
+  ],
+  "author": "Stellar PocketPay",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Stellar-PocketPay/stellar-pocketpay-sdk/issues"
+  },
+  "homepage": "https://github.com/Stellar-PocketPay/stellar-pocketpay-sdk#readme",
+  "dependencies": {
+    "@stellar/stellar-sdk": "^13.1.0",
+    "dotenv": "^16.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.17",
+    "@vitest/coverage-v8": "^3.1.4",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

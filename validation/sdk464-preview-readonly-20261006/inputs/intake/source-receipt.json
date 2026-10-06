@@ -1,0 +1,59 @@
+{
+  "source": {
+    "repo": "woahwhattheheck/pocketpay-sdk",
+    "sponsor": "Stellar-PocketPay/pocketpay-sdk",
+    "pr": 464,
+    "issue": 443,
+    "head": "dfb54ea28ee789336b07df966e0c437e94fdfe98",
+    "branch": "gf/sdk443-preview-20261005",
+    "tree": "265c9630c47bf86d05978e17e90ad31a1fd1955c",
+    "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb"
+  },
+  "baseTree": "f9476538ae032f1d9b3a527dd24e3bf210480f5e",
+  "files": {
+    "docs/vault-operation-preview.md": {
+      "gitBlob": "ece2e3e27dcf3cad2948bb95674d822ed7453c00",
+      "sha256": "532ee030f9a9c5a23a798bea3fff61458dd8b8c300bcd12b03dce1828dda2cce",
+      "bytes": 1978
+    },
+    "src/index.ts": {
+      "gitBlob": "8394bd7f9bc4f4a985658b2fb9d18ebf7688e8f8",
+      "sha256": "5e3b2912ddb34374374950f9745c0f13fe7950edca2e7f63153d7ad0d5fd7d35",
+      "bytes": 14839
+    },
+    "src/vault/index.ts": {
+      "gitBlob": "d3a88a78fa0dfba77de509ef6db0d7f4bff4cd2c",
+      "sha256": "64230770d6edfdd0fcbe81d462000e84d944b333cff0a99592fdd7c39d7aafb0",
+      "bytes": 1411
+    },
+    "src/vault/preview.ts": {
+      "gitBlob": "7cf5db391dc005e554a39cdefa1fb27f3275dbb9",
+      "sha256": "e63ec3ad9b895fee8bbc0b2e7e091fba42a8ec34670bbb813a783243689e4390",
+      "bytes": 5032
+    },
+    "tests/vault-preview.test.ts": {
+      "gitBlob": "18f05739f874c2b432b26240d5cf25e34d1acce8",
+      "sha256": "4a8d5eb9cff96028e257c27ed4bcb4f4f3b044b718a13f95b9f566d89f2de83a",
+      "bytes": 3415
+    },
+    "package.json": {
+      "gitBlob": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+      "sha256": "66fceb4791046b18fcc67148c27fbb72a5d4096d0170f1e82bbede44d10dc506",
+      "bytes": 2240
+    },
+    "package-lock.json": {
+      "gitBlob": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+      "sha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9",
+      "bytes": 113270
+    }
+  },
+  "installedDeps": "/workspace/scratch/ea8baa184658/sdk179-validation-b7/node_modules",
+  "dependencyFilesIdenticalToInstalledBase": true,
+  "nativeReadOnly": true,
+  "sourceRefBodyMutations": 0,
+  "testsExecutedByIntake": false,
+  "custodyRelease": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791247376231819",
+  "metadataRejectionReport": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791247450172419",
+  "metadataRejectionAction": "exact-head upstream PR464 validation body PATCH",
+  "statedRejectionReason": "stopped PRE-PROVIDER by the platform safety layer; no more specific underlying auto-review reason is present in the authorized Slack report"
+}

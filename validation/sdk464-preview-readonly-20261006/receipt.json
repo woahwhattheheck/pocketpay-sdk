@@ -1,0 +1,281 @@
+{
+  "contractCoverage": [
+    "All four deposit/withdraw/createLock/getBalance models, public wallet/asset/network/fee fields, readiness and warnings.",
+    "Read-only balance has no amount, fee0 and no warnings; extra secret fields/amount not copied.",
+    "Exact, trimmed and bad-checksum seed-shaped wallet guards reject typed without value/message/serialization leakage.",
+    "Unknown runtime operation values and malformed public-wallet/missing/invalid required amounts yield existing typed errors.",
+    "Warning arrays independent; shared native XLM asset frozen.",
+    "Public SDK entry uses actual installed Stellar cryptography/validators; no signing, transaction build, Horizon construction or network."
+  ],
+  "dependencyGraph": {
+    "installedDepsReadOnlySymlink": "/workspace/scratch/ea8baa184658/sdk179-validation-b7/node_modules",
+    "installedPackagesNotModified": true,
+    "lockGitBlob": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+    "lockSha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9",
+    "node": "24.19.0",
+    "packageGitBlob": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+    "packageSha256": "66fceb4791046b18fcc67148c27fbb72a5d4096d0170f1e82bbede44d10dc506",
+    "stellarSdk": "13.3.0",
+    "typescript": "5.9.3",
+    "unchangedAcrossBasePreGuardHead": true,
+    "vitest": "3.2.7"
+  },
+  "diagnosticInterpretation": [
+    "A decorated wallet string containing a seed still reaches unchanged public-key validation and retains that seed in error message/value/serialization.",
+    "A seed misplaced into required amount or unsupported operation string is retained by shared validation/error-value paths; these were not claimed as protected by the exact-wallet guard.",
+    "Null parameter objects throw TypeError in both new vault preview and unchanged payment preview; no distinct new acceptance-pattern regression is claimed.",
+    "No broad source repair is proposed or made. A separately authorized wallet-only hardening could reject embedded seed-shaped substrings before shared validation if the sponsor wants a broader wallet-input nondisclosure guarantee."
+  ],
+  "diagnosticsNotCoveredByExactWalletGuard": [
+    {
+      "code": "INVALID_PUBLIC_KEY",
+      "label": "decorated wallet string",
+      "seedInMessage": true,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false,
+      "typedError": true
+    },
+    {
+      "code": "INVALID_AMOUNT",
+      "label": "misplaced required amount string",
+      "seedInMessage": true,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false,
+      "typedError": true
+    },
+    {
+      "code": "INVALID_OPERATION",
+      "label": "misplaced unsupported operation string",
+      "seedInMessage": false,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false,
+      "typedError": true
+    },
+    {
+      "label": "null-params acceptance pattern",
+      "paymentTypeError": true,
+      "paymentTypedError": false,
+      "vaultTypeError": true,
+      "vaultTypedError": false
+    }
+  ],
+  "filesSha256": {
+    "commands.json": {
+      "bytes": 3268,
+      "sha256": "271a94e2e7116b6be50c6b4e83a56172de02679c8083a39884f9237675c7c164"
+    },
+    "inputs/intake/graph-receipt.json": {
+      "bytes": 433,
+      "sha256": "59d9066e8ebceb1a66b3947d8aa87068e71c276ace35dad02431d06608c6657e"
+    },
+    "inputs/intake/native-pr-issue-commit.json": {
+      "bytes": 31743,
+      "sha256": "a393543804eee75cdc1e6353fde6b2e010d4fe1e250559ef3291e2dd35ebdfdf"
+    },
+    "inputs/intake/native-tree.json": {
+      "bytes": 100806,
+      "sha256": "92c5abd39907f57fb69f7447b1115e2b37d5fdbe3b08c102f6c1c5de5b87f6c1"
+    },
+    "inputs/intake/source-receipt.json": {
+      "bytes": 2531,
+      "sha256": "2e8b3d5ba56a402621da15755981de3fe17207fbbcff8f9814dcd5bc62822f26"
+    },
+    "inputs/native-72/src/vault/preview.ts": {
+      "bytes": 4579,
+      "sha256": "0416da5a3381f2aef7cfd1e61fada9100a9462fe1a17a5b43967433843cea86e"
+    },
+    "inputs/native-72/tests/vault-preview.test.ts": {
+      "bytes": 2641,
+      "sha256": "6ade867165588a0e930d1f26eaaf218c8922ab097018f70aa41ce3959b25ad7e"
+    },
+    "inputs/native-dfb/docs/vault-operation-preview.md": {
+      "bytes": 1978,
+      "sha256": "532ee030f9a9c5a23a798bea3fff61458dd8b8c300bcd12b03dce1828dda2cce"
+    },
+    "inputs/native-dfb/package-lock.json": {
+      "bytes": 113270,
+      "sha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9"
+    },
+    "inputs/native-dfb/package.json": {
+      "bytes": 2240,
+      "sha256": "66fceb4791046b18fcc67148c27fbb72a5d4096d0170f1e82bbede44d10dc506"
+    },
+    "inputs/native-dfb/src/index.ts": {
+      "bytes": 14839,
+      "sha256": "5e3b2912ddb34374374950f9745c0f13fe7950edca2e7f63153d7ad0d5fd7d35"
+    },
+    "inputs/native-dfb/src/vault/index.ts": {
+      "bytes": 1411,
+      "sha256": "64230770d6edfdd0fcbe81d462000e84d944b333cff0a99592fdd7c39d7aafb0"
+    },
+    "inputs/native-dfb/src/vault/preview.ts": {
+      "bytes": 5032,
+      "sha256": "e63ec3ad9b895fee8bbc0b2e7e091fba42a8ec34670bbb813a783243689e4390"
+    },
+    "inputs/native-dfb/tests/vault-preview.test.ts": {
+      "bytes": 3415,
+      "sha256": "4a8d5eb9cff96028e257c27ed4bcb4f4f3b044b718a13f95b9f566d89f2de83a"
+    },
+    "peer/before-run-status.json": {
+      "bytes": 73,
+      "sha256": "80a4ab9203a3a32e9a6aab58bcfbada28d442cbd1016bb9ab8c9919b033cf5b3"
+    },
+    "peer/contract-before.json": {
+      "bytes": 1004,
+      "sha256": "68567c14b7e1f8b03928b9b3451fc83c361384a27c4a01e7ab8eff452b1212e8"
+    },
+    "peer/contract-head.json": {
+      "bytes": 1030,
+      "sha256": "5c34b043aa6342169f20f37b8e7516dd62e82b42bc01b96758a2d9a7ef4a0d35"
+    },
+    "peer/contract.test.ts": {
+      "bytes": 6514,
+      "sha256": "6846316714ca2a19812716590ed7aefadb2012d12d922ed845bbf40b824711d7"
+    },
+    "peer/focused-before.log": {
+      "bytes": 3081,
+      "sha256": "7558b297f0cf6489fc01cee4ab2043030d36804c4058c7ddde0ea2b70227eb16"
+    },
+    "peer/focused-head.log": {
+      "bytes": 393,
+      "sha256": "1afc94431681f7040400721331079c6928bd470bf629ae8222b7d3329acb224c"
+    },
+    "peer/guard-before/contract.test.ts.json": {
+      "bytes": 142,
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    "peer/guard-head/contract.test.ts.json": {
+      "bytes": 142,
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    "peer/guard-head/observations.test.ts.json": {
+      "bytes": 142,
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    "peer/guard-head/vault-preview.test.ts.json": {
+      "bytes": 142,
+      "sha256": "0e574808d3284bc6ef5002f8476b56ccba6490b99a9c5b6500d742fca6d258e9"
+    },
+    "peer/head-run-status.json": {
+      "bytes": 101,
+      "sha256": "fd37fe59cb7ae8bffed861c3705cfebd0ebca700d0b2007811c75d8af132c4be"
+    },
+    "peer/network-deny.cjs": {
+      "bytes": 1016,
+      "sha256": "6d81c4a8206ccbd8e1913740b4dd589ed90c59e3b68af85164c122947a0510d8"
+    },
+    "peer/network-setup.ts": {
+      "bytes": 1052,
+      "sha256": "3c4ccf61bb2e522e41d226c10459e073b97a0ffd1ed0e1a449fb3212a4356901"
+    },
+    "peer/observations-head.json": {
+      "bytes": 1147,
+      "sha256": "9d57d1695082a895a08160fadcd0551bd9d6cc2b95a222ffd6d4b9b6cf733fca"
+    },
+    "peer/observations.test.ts": {
+      "bytes": 2368,
+      "sha256": "48428cba0958a46eee21466efdfe0d6aeeb12696de5531fcbfe132ee6fe8f5c4"
+    },
+    "peer/predecessor-source-receipt.json": {
+      "bytes": 807,
+      "sha256": "1ef90b5cde03985df12a7f8a560bad12567d5df7ccc749a4776599a6f8c02743"
+    },
+    "peer/source-projection.json": {
+      "bytes": 72730,
+      "sha256": "439d7187e37ee548c35d7bec93554f95b37c61a267f574be0046aa94c60fa80d"
+    },
+    "peer/types-base-ddd.log": {
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    "peer/types-before-72.log": {
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    "peer/types-head-dfb.log": {
+      "bytes": 1077,
+      "sha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276"
+    },
+    "peer/types-scoped-head.log": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peer/vitest.config.mts": {
+      "bytes": 408,
+      "sha256": "9d996c5bf8e921bc8781287dc40fc99bea9b6c5fde79a42a91719a937a3f32cb"
+    }
+  },
+  "limitations": [
+    "This is focused public source-entry runtime validation using installed dependencies, not a successful package build or whole-unit run.",
+    "Diagnostic observation checks measure current retention, not universal secret-nondisclosure success.",
+    "Existing upstream body PATCH was reported rejected before provider by platform safety layer with no specific underlying reason; this review does not retry it or mutate upstream metadata."
+  ],
+  "reviewer": "/root/submitted_pr_checks",
+  "runtime": {
+    "all3Differentials": "Exact, whitespace-trimmed and invalid-checksum seed-shaped wallet error echo before guard; all three non-disclosing after guard",
+    "currentHeadDiagnosticObservationsPassed": 4,
+    "currentHeadExitCode": 0,
+    "currentHeadIndependentContractPassed": 12,
+    "currentHeadOriginalTestsPassed": 7,
+    "currentHeadTotalPassed": 23,
+    "fromSecretCalls": 0,
+    "guardWorkersVerified": 4,
+    "horizonFactoryCalls": 0,
+    "keypairSignCalls": 0,
+    "networkTransportAttempts": 0,
+    "outputSeedPatternScan": {
+      "contract-before.json": 0,
+      "contract-head.json": 0,
+      "focused-before.log": 0,
+      "focused-head.log": 0,
+      "observations-head.json": 0,
+      "types-base-ddd.log": 0,
+      "types-before-72.log": 0,
+      "types-head-dfb.log": 0,
+      "types-scoped-head.log": 0
+    },
+    "preGuardExitCode": 1,
+    "publicEntry": "src/index.ts",
+    "rawSeedValuesWrittenOrPrinted": false,
+    "sameFinalContractPreGuardFailed": 3,
+    "sameFinalContractPreGuardPassed": 9,
+    "transactionBuildCalls": 0
+  },
+  "scope": "Read-only native source and isolated public SDK source-entry runtime with actual installed locked dependencies; no source/ref/PR/body/comment/Slack/submission writes.",
+  "source": {
+    "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb",
+    "baseTrackedFiles": 294,
+    "baseTree": "f9476538ae032f1d9b3a527dd24e3bf210480f5e",
+    "deltaAdded": 3,
+    "deltaDeleted": 0,
+    "deltaModified": 2,
+    "head": "dfb54ea28ee789336b07df966e0c437e94fdfe98",
+    "head297NativeBlobsIndependentlyVerified": true,
+    "headTrackedFiles": 297,
+    "intakeSourceReceiptSha256": "2e8b3d5ba56a402621da15755981de3fe17207fbbcff8f9814dcd5bc62822f26",
+    "issue": 443,
+    "pr": 464,
+    "preGuard297BlobsProjectedToExactNativeTree": true,
+    "preGuardHead": "72dd98a5d35618b08bf46ecd72c3c82c29d660cd",
+    "preGuardTree": "03aaceb4ce7216e81f7e33d56b9a1a5c4b6b91d8",
+    "repository": "Stellar-PocketPay/pocketpay-sdk",
+    "tree": "265c9630c47bf86d05978e17e90ad31a1fd1955c"
+  },
+  "status": "CLEAR for declared vault-action preview contracts and exact/trimmed seed-shaped wallet nondisclosure; broader malformed-input diagnostics recorded separately",
+  "types": {
+    "all3CompleteLintLogsByteEqual": true,
+    "completeLintLogBytes": 1077,
+    "completeLintLogSha256": "93a969040d38203414fd7e90b3d80510fc00a273ccf44a641081fdcf3104b276",
+    "existingQRParserDiagnostics": 8,
+    "newDiagnostics": 0,
+    "projectLintBasePreGuardHeadExitCodes": [
+      2,
+      2,
+      2
+    ],
+    "strictNewPreviewModuleExitCode": 0
+  }
+}

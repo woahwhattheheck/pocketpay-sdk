@@ -1,0 +1,12 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk464-independent-review
+
+ ✓ contract.test.ts (12 tests) 14ms
+ ✓ head-dfb/tests/vault-preview.test.ts (7 tests) 7ms
+ ✓ observations.test.ts (4 tests) 3ms
+
+ Test Files  3 passed (3)
+      Tests  23 passed (23)
+   Start at  21:05:42
+   Duration  1.45s (transform 361ms, setup 38ms, collect 927ms, tests 24ms, environment 0ms, prepare 137ms)
+

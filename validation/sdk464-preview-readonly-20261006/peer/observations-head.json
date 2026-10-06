@@ -1,0 +1,40 @@
+{
+  "note": "Diagnostic observations, not claims that arbitrary misplaced secrets are covered by the exact-wallet guard.",
+  "seedValuesWritten": false,
+  "records": [
+    {
+      "label": "decorated wallet string",
+      "typedError": true,
+      "code": "INVALID_PUBLIC_KEY",
+      "seedInMessage": true,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false
+    },
+    {
+      "label": "misplaced required amount string",
+      "typedError": true,
+      "code": "INVALID_AMOUNT",
+      "seedInMessage": true,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false
+    },
+    {
+      "label": "misplaced unsupported operation string",
+      "typedError": true,
+      "code": "INVALID_OPERATION",
+      "seedInMessage": false,
+      "seedInSerializedError": true,
+      "seedInValidationValue": true,
+      "sourceValuesWritten": false
+    },
+    {
+      "label": "null-params acceptance pattern",
+      "vaultTypedError": false,
+      "paymentTypedError": false,
+      "vaultTypeError": true,
+      "paymentTypeError": true
+    }
+  ]
+}

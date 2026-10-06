@@ -1,0 +1,42 @@
+{
+  "source": "/workspace/scratch/ea8baa184658/sdk464-independent-review/head-dfb",
+  "guardInstalledBeforeSubjectImport": true,
+  "networkCounts": {
+    "socketConnect": 0,
+    "tlsConnect": 0,
+    "httpRequest": 0,
+    "httpsRequest": 0,
+    "fetch": 0,
+    "udpSend": 0
+  },
+  "sideEffectCalls": {
+    "horizonServer": 0,
+    "fromSecret": 0,
+    "sign": 0,
+    "transactionBuild": 0
+  },
+  "seedValuesWritten": false,
+  "nonDisclosure": [
+    {
+      "label": "exact seed-shaped wallet",
+      "typedError": true,
+      "code": "INVALID_PUBLIC_KEY",
+      "reason": "secret_key_not_allowed",
+      "containsSeed": false
+    },
+    {
+      "label": "trimmed seed-shaped wallet",
+      "typedError": true,
+      "code": "INVALID_PUBLIC_KEY",
+      "reason": "secret_key_not_allowed",
+      "containsSeed": false
+    },
+    {
+      "label": "seed-shaped wallet with invalid checksum",
+      "typedError": true,
+      "code": "INVALID_PUBLIC_KEY",
+      "reason": "secret_key_not_allowed",
+      "containsSeed": false
+    }
+  ]
+}
