@@ -185,7 +185,7 @@ export interface TransactionReadinessBalance {
   nativeRequired: string;
   /** Spendable XLM: balance minus the minimum reserve and selling liabilities. */
   nativeAvailable: string;
-  /** XLM held as the minimum reserve, computed with `calculateNativeReserves`. */
+  /** XLM held as the minimum reserve, using Stellar sponsorship semantics and the SDK base reserve. */
   minimumBalance: string;
   /**
    * Spendable balance of the issued asset (balance minus selling liabilities).
@@ -847,11 +847,19 @@ export async function checkTransactionReadiness(
   let balance: TransactionReadinessBalance | undefined;
   if (sourceAccount && amountStroops !== undefined && asset !== undefined && totalFee !== undefined) {
     const nativeLine = balanceLines(sourceAccount).find((line) => line.asset_type === 'native');
-    const entryCount =
-      integerOf(sourceAccount.subentry_count) +
-      integerOf(sourceAccount.num_sponsoring) -
-      integerOf(sourceAccount.num_sponsored);
-    const minimumBalance = stroopsOf(calculateNativeReserves(entryCount).minBalance);
+    // CAP-33 sponsorship can cover both subentries and the account's own
+    // two base reserves. Apply the protocol formula before flooring at zero;
+    // passing a negative effective subentry count through calculateNativeReserves
+    // would clamp too early and incorrectly restore the ordinary 1 XLM floor.
+    const reserveUnits = Math.max(
+      0,
+      2 +
+        integerOf(sourceAccount.subentry_count) +
+        integerOf(sourceAccount.num_sponsoring) -
+        integerOf(sourceAccount.num_sponsored),
+    );
+    const baseReserve = stroopsOf(calculateNativeReserves(0).baseReserve);
+    const minimumBalance = BigInt(reserveUnits) * baseReserve;
     const nativeAvailable = maxBigInt(
       0n,
       stroopsOf(nativeLine?.balance) - minimumBalance - stroopsOf(nativeLine?.selling_liabilities),

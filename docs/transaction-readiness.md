@@ -91,8 +91,12 @@ reported in the same order.
 | `fee` | `FEE_INVALID` | `fee` (when given) must be a whole number of stroops, at least 100, that fits in the 32-bit fee field |
 | `balance` | `INSUFFICIENT_BALANCE`, `INSUFFICIENT_FEE_BALANCE` | Spendable XLM, meaning balance minus the minimum reserve and minus selling liabilities, must cover amount + fee (XLM payments) or the fee alone (issued assets). For issued assets, the spendable asset balance (balance minus selling liabilities) must cover the amount |
 
-The minimum reserve comes from the SDK's `calculateNativeReserves`. Its entry
-count is `subentry_count + num_sponsoring - num_sponsored`.
+The minimum reserve follows Stellar's sponsored-reserve formula
+`(2 + subentry_count + num_sponsoring - num_sponsored) * base_reserve`, floored
+at zero. The readiness check takes `base_reserve` from the SDK's
+`calculateNativeReserves(0)` helper, but applies the sponsorship terms before
+flooring so sponsorship can cover the account's own two base reserves as well as
+subentries.
 
 ### Warnings
 

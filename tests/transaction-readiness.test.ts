@@ -472,6 +472,27 @@ describe('checkTransactionReadiness — fee and balance blockers', () => {
     expect(result.balance?.minimumBalance).toBe('2.0000000');
   });
 
+  it('allows sponsorship to cover the account base reserves', async () => {
+    // CAP-33 can sponsor both base reserves: 2 + 0 + 0 - 2 = 0 reserve units.
+    accounts.set(
+      SOURCE,
+      account(SOURCE, [nativeLine('1.0000100')], {
+        subentry_count: 0,
+        num_sponsoring: 0,
+        num_sponsored: 2,
+      }),
+    );
+
+    const result = await check({ amount: '1' });
+
+    expect(result.ready).toBe(true);
+    expect(result.balance).toMatchObject({
+      minimumBalance: '0.0000000',
+      nativeAvailable: '1.0000100',
+      nativeRequired: '1.0000100',
+    });
+  });
+
   it('INSUFFICIENT_BALANCE when the issued-asset balance (minus selling liabilities) is short', async () => {
     accounts.set(
       SOURCE,
