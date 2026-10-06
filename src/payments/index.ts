@@ -542,7 +542,8 @@ export async function safeSendAsset(
 }
 
 
-export { previewPayment } from './preview';
+export { previewPayment, previewPaymentWithReadiness } from './preview';
+export type { PaymentReadinessPreview } from './preview';
 export * from './intent';
 
 // ─── Transaction Readiness (issue #441) ─────────────────────────────────────
