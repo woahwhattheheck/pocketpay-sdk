@@ -52,10 +52,15 @@ status.
 - `interval` defaults to 2 seconds.
 - `timeout` defaults to 30 seconds and is a wall-clock bound, including time
   spent waiting for the active Horizon lookup.
+- Responses arriving after that deadline are ignored. Long timing values use
+  bounded timer chunks so Node's timer limit cannot expire them prematurely.
 - `maxAttempts` is optional. When omitted, a safe bound is derived from
   `timeout / interval`, preserving the existing time-based behaviour.
 - `signal` accepts an `AbortSignal`. Aborting rejects with an `AbortError`
   and stops scheduling further status lookups.
+- Positive finite timing and attempt values are rounded down to integers with
+  a minimum of one; other values use the documented defaults or derived bound.
 
 Cancellation only affects polling. It does not cancel, retry, or resubmit the
-original transaction.
+original transaction. A lookup already in progress may finish in the underlying
+Horizon transport, but its late result cannot restart or change the completed poll.

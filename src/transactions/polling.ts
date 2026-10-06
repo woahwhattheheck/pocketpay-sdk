@@ -4,10 +4,28 @@ import { classifySubmitError } from '../errors';
 
 const DEFAULT_INTERVAL_MS = 2000;
 const DEFAULT_TIMEOUT_MS = 30000;
+const MAX_TIMER_MS = 2147483647;
+
+function scheduleDeadline(complete: () => void, deadline: number): () => void {
+  let timer: ReturnType<typeof setTimeout>;
+  let cancelled = false;
+  const schedule = () => {
+    timer = setTimeout(() => {
+      if (cancelled) return;
+      if (Date.now() < deadline) schedule();
+      else complete();
+    }, Math.min(MAX_TIMER_MS, Math.max(0, deadline - Date.now())));
+  };
+  schedule();
+  return () => {
+    cancelled = true;
+    clearTimeout(timer);
+  };
+}
 
 function positiveInteger(value: number | undefined, fallback: number): number {
   return Number.isFinite(value) && (value as number) > 0
-    ? Math.floor(value as number)
+    ? Math.max(1, Math.floor(value as number))
     : fallback;
 }
 
@@ -30,17 +48,16 @@ function throwIfAborted(signal: AbortSignal | undefined): void {
 }
 
 function withPollingBounds<T>(
-  request: Promise<T>,
+  request: () => Promise<T>,
   signal: AbortSignal | undefined,
-  timeoutMs: number,
+  deadline: number,
 ): Promise<T> {
   throwIfAborted(signal);
-  if (timeoutMs <= 0) return Promise.reject(pollingTimeoutError());
 
   return new Promise<T>((resolve, reject) => {
     let settled = false;
     const cleanup = () => {
-      clearTimeout(timer);
+      cancelTimer();
       signal?.removeEventListener('abort', onAbort);
     };
     const resolveOnce = (value: T) => {
@@ -56,9 +73,9 @@ function withPollingBounds<T>(
       reject(error);
     };
     const onAbort = () => rejectOnce(abortError());
-    const timer = setTimeout(
+    const cancelTimer = scheduleDeadline(
       () => rejectOnce(pollingTimeoutError()),
-      timeoutMs,
+      deadline,
     );
 
     signal?.addEventListener('abort', onAbort, { once: true });
@@ -66,8 +83,26 @@ function withPollingBounds<T>(
       onAbort();
       return;
     }
+    if (Date.now() >= deadline) {
+      rejectOnce(pollingTimeoutError());
+      return;
+    }
 
-    request.then(resolveOnce, rejectOnce);
+    try {
+      request().then(
+        (value) => {
+          if (Date.now() >= deadline) rejectOnce(pollingTimeoutError());
+          else resolveOnce(value);
+        },
+        (error) => {
+          if (Date.now() >= deadline) rejectOnce(pollingTimeoutError());
+          else rejectOnce(error);
+        },
+      );
+    } catch (error) {
+      if (Date.now() >= deadline) rejectOnce(pollingTimeoutError());
+      else rejectOnce(error);
+    }
   });
 }
 
@@ -76,12 +111,12 @@ function waitForNextAttempt(ms: number, signal: AbortSignal | undefined): Promis
   throwIfAborted(signal);
 
   return new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => {
+    const cancelTimer = scheduleDeadline(() => {
       cleanup();
       resolve();
-    }, ms);
+    }, Date.now() + ms);
     const onAbort = () => {
-      clearTimeout(timer);
+      cancelTimer();
       cleanup();
       reject(abortError());
     };
@@ -114,6 +149,7 @@ export async function pollTransaction(
   const derivedMaxAttempts = Math.max(1, Math.ceil(timeout / interval));
   const maxAttempts = positiveInteger(config.maxAttempts, derivedMaxAttempts);
   const startTime = Date.now();
+  const deadline = startTime + timeout;
 
   let attempts = 0;
   let lastState: TransactionPollResult['state'] = 'unknown';
@@ -122,13 +158,15 @@ export async function pollTransaction(
     throwIfAborted(config.signal);
     const remainingMs = timeout - (Date.now() - startTime);
     if (remainingMs <= 0) break;
-    attempts += 1;
 
     try {
       const tx = await withPollingBounds(
-        server.transactions().transaction(hash).call(),
+        () => {
+          attempts += 1;
+          return server.transactions().transaction(hash).call();
+        },
         config.signal,
-        remainingMs,
+        deadline,
       );
 
       const record: TransactionRecord = {
