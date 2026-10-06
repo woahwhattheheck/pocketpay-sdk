@@ -64,6 +64,10 @@ function operationRequiresAmount(operation: VaultPreviewAction): boolean {
   return operation === 'deposit' || operation === 'withdraw' || operation === 'createLock';
 }
 
+function isSecretSeedLike(value: unknown): boolean {
+  return typeof value === 'string' && /^S[A-Z2-7]{55}$/.test(value.trim());
+}
+
 /**
  * Builds a vault confirmation model without signing, simulating, or submitting.
  *
@@ -90,6 +94,18 @@ export function buildVaultOperationPreview(
     });
   }
 
+  if (isSecretSeedLike(params.wallet)) {
+    throw new PocketPayError(
+      'Vault previews require a public Stellar address; secret keys are not accepted',
+      'INVALID_PUBLIC_KEY',
+      {
+        validation: {
+          field: 'publicKey',
+          reason: 'secret_key_not_allowed',
+        },
+      },
+    );
+  }
   validatePublicKey(params.wallet);
 
   if (operationRequiresAmount(params.operation)) {
