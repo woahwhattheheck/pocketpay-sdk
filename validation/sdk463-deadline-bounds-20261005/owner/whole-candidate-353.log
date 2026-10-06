@@ -1,0 +1,1182 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk333-validation-candidate-353
+
+ × tests/qrParser.test.ts > QR Parser > parses valid QR payload 6ms
+   → expected undefined to be 'GABCDEF1234567890' // Object.is equality
+ × tests/qrParser.test.ts > QR Parser > throws on malformed URL 1ms
+   → expected function to throw an error, but it didn't
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > returns success outcome when no error is provided 2ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > throws if no error and no txHash are provided 1ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies TX_STATUS_UNKNOWN as unknown_status 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > unknown_status falls back to caller-supplied txHash when error.transactionHash is absent 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies TX_EXPIRED as non_retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies retryable errors (retryable === true) as retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > uses 1s suggested delay for non-429 retryable errors 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies PAYMENT_FAILED (non-retryable) as non_retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies unknown code with retryable === false as non_retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > classifySubmissionOutcome > classifies unknown code with retryable === undefined as non_retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > isSafeToRetry > returns true for retryable_failure outcomes 0ms
+ ✓ tests/retry-policy.test.ts > isSafeToRetry > returns false for success outcomes 0ms
+ ✓ tests/retry-policy.test.ts > isSafeToRetry > returns false for non_retryable_failure outcomes 0ms
+ ✓ tests/retry-policy.test.ts > isSafeToRetry > returns false for unknown_status outcomes — must poll first 0ms
+ ✓ tests/retry-policy.test.ts > requiresStatusCheck > returns true only for unknown_status outcomes 0ms
+ ✓ tests/retry-policy.test.ts > requiresStatusCheck > returns false for success 0ms
+ ✓ tests/retry-policy.test.ts > requiresStatusCheck > returns false for retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > requiresStatusCheck > returns false for non_retryable_failure 0ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > returns the Horizon result immediately on first-attempt success 11ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > retries on 429 rate-limit and succeeds on a later attempt 4008ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > throws immediately on non-retryable (PAYMENT_FAILED) without further attempts 3ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > exhausted result contains finalOutcome === non_retryable_failure 2ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > does not blindly resubmit after a timeout — throws with unknown_status after polling fails 18023ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > unknown_status exhausted result has finalOutcome === unknown_status 18022ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > resolves successfully when polling finds the transaction after a timeout 2ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > exhausts retries and reports retryable_failure when transient error persists 4007ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > calls onAttempt for every failed attempt 4008ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > invokes onAttempt once with delayMs 0 for non_retryable_failure 2ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > does not retry when maxAttempts is 1 2ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > succeeds on first attempt using default policy 1ms
+ ✓ tests/retry-policy.test.ts > withRetryPolicy > never resubmits to Horizon after an unknown_status — no duplicate risk 18018ms
+ ✓ tests/retry-policy.test.ts > SubmissionOutcome type narrowing > success variant provides transactionHash 0ms
+ ✓ tests/retry-policy.test.ts > SubmissionOutcome type narrowing > retryable_failure variant provides suggestedDelayMs 0ms
+ ✓ tests/retry-policy.test.ts > SubmissionOutcome type narrowing > unknown_status variant exposes error with TX_STATUS_UNKNOWN code 0ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > uses the published SDK_NOT_IMPLEMENTED code 2ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > carries module, operation and capability metadata 0ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > sources the suggested next step from the registry 0ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > keeps its own prototype and name after super() 0ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > remains a PocketPayError so existing catch blocks still work 4ms
+ ✓ tests/unsupported-feature.test.ts > UnsupportedFeatureError > exposes a log-safe structured view via toJSON 3ms
+ ✓ tests/unsupported-feature.test.ts > CapabilityMismatchError > uses the injected registry code and matching category 0ms
+ ✓ tests/unsupported-feature.test.ts > CapabilityMismatchError > keeps its own prototype and stays a PocketPayError 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > classifies the vault contract as config-gated 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > lists capabilities by status 1ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > returns undefined for unclassified capabilities 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > distinguishes planned from supported signer capabilities 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > assertCapability raises UnsupportedFeatureError for planned capabilities 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > assertCapability is a no-op when the capability is available 1ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > assertCapability raises UnsupportedFeatureError for unsupported capabilities 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > assertCapability raises CapabilityMismatchError for gated capabilities 0ms
+ ✓ tests/unsupported-feature.test.ts > capability registry > documents 'vec' as unsupported because the Stellar SDK rejects it 1ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > throws the standard error when no contract ID is configured anywhere 2ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > reports a code the published standard recognises 1ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > attaches the module, operation and capability that failed 0ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > reports the operation that was actually attempted 1ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > stays catchable as PocketPayError for existing consumers 0ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > keeps the "contract ID" wording that mapSorobanContractError matches on 0ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > redactError keeps the error log-safe and correctly classified 1ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > accepts SDKConfig.contractId — the path the registry documents 11ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > still honours the VAULT_CONTRACT_ID env var (backwards compatible) 2ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > accepts STELLAR_CONTRACT_ID, aligning with resolveConfig 2ms
+ ✓ tests/unsupported-feature.test.ts > vault capability gating (regression for the reported bug) > gives an explicit params.contractId precedence over everything else 1ms
+ ✓ tests/unsupported-feature.test.ts > wallet testnet-funding capability > reports a published code instead of the old unregistered string 1ms
+ ✓ tests/unsupported-feature.test.ts > wallet testnet-funding capability > carries the wallet module, operation and capability 1ms
+ ✓ tests/unsupported-feature.test.ts > wallet testnet-funding capability > classifies the capability as config-gated on the network 0ms
+ ✓ tests/unsupported-feature.test.ts > messages avoid overpromising > no registry entry promises a date or a future release 4ms
+ ✓ tests/unsupported-feature.test.ts > messages avoid overpromising > no capability description promises a delivery date 0ms
+ ✓ tests/unsupported-feature.test.ts > messages avoid overpromising > unknown codes still fall back to SDK defaults 0ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout at the deadline even when the lookup never settles 5ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores a confirmation that arrives after the deadline 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > retains the last pending observation when the next lookup hangs 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels an in-flight lookup and handles its later rejection 2ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels during the retry delay and removes its timer and listener 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional attempt bound to at least one lookup 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional timeout to at least one millisecond 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional interval so retries have a real delay 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > removes deadline and abort resources after a prompt confirmation 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > polls through the public SDK export without a submission path 40ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout when a synchronous lookup failure crosses the deadline 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores confirmation after a clock advance before deadline timer delivery 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow expire a long timeout immediately 13ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow schedule a long retry delay immediately 21ms
+ ✓ tests/sequence-safety.test.ts > validateSequenceValue > accepts decimal strings, numbers and bigints 1ms
+ ✓ tests/sequence-safety.test.ts > validateSequenceValue > rejects malformed sequence values with a typed error 1ms
+ ✓ tests/sequence-safety.test.ts > isSequenceStale > treats a just-read snapshot as fresh 0ms
+ ✓ tests/sequence-safety.test.ts > isSequenceStale > treats a snapshot past the threshold as stale 0ms
+ ✓ tests/sequence-safety.test.ts > isSequenceStale > defaults to the published max age 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > reads once and serves the cached value while it is fresh 1ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > records when the sequence was read 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > refresh() bypasses the cache and returns newer state 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > invalidate() forces the next get() to re-read 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > invalidate() with no argument clears every account 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > maxAgeMs: 0 disables caching entirely 0ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > re-reads once the cached value ages out 61ms
+ ✓ tests/sequence-safety.test.ts > SequenceProvider caching > loadAccount() returns a builder-ready account at the cached sequence 2ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > without serialization, concurrent reads share one sequence 0ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > withSequence() serializes intents so each reads fresh state 1ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > withSequence() runs tasks one at a time 21ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > a failing intent does not cascade into the queued ones 1ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > does not serialize across different accounts 21ms
+ ✓ tests/sequence-safety.test.ts > concurrent intents on one account > invalidates the account after each serialized task 0ms
+ ✓ tests/sequence-safety.test.ts > stale sequence classification > maps tx_bad_seq to its own published code 1ms
+ ✓ tests/sequence-safety.test.ts > stale sequence classification > leaves every other transaction result code on TX_FAILED 0ms
+ ✓ tests/sequence-safety.test.ts > stale sequence classification > requiresRebuild is true only for a stale sequence 0ms
+ ✓ tests/sequence-safety.test.ts > stale sequence classification > never reports a stale sequence as safe to resubmit 0ms
+ ✓ tests/sequence-safety.test.ts > stale sequence classification > keeps the raw result code in the message for diagnostics 0ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > rejects a malformed manual sequence up front 1ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > reports a missing sequence with the published code 0ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > treats a manual sequence as never stale — the caller owns freshness 0ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > flags a snapshot that has aged past the threshold 0ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > builds a stale snapshot by default, preserving existing behaviour 5ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > rejects a stale snapshot when freshness is enforced 0ms
+ ✓ tests/sequence-safety.test.ts > prepared transaction sequence freshness > builds a fresh snapshot even with enforcement on 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'invalid source secret' 4ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'invalid destination public key' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'negative amount' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'zero amount' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'non-numeric amount' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'amount with too many decimal places' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'memo exceeding 28 bytes' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — typed validation errors > 'self-payment' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > returns success with transaction hash on a valid submission 7ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > maps an unfunded source account to ACCOUNT_NOT_FOUND 1ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > maps a slow source account lookup to REQUEST_TIMEOUT (preparation stage) 6ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > maps a slow submission to TX_STATUS_UNKNOWN (submission stage) 8ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > maps Horizon result codes on submission to PAYMENT_FAILED 2ms
+ ✓ tests/payments-error-paths.test.ts > sendXLM — network and submission errors > wraps unexpected submission failures as SEND_ERROR 2ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — typed validation errors > 'invalid destination' 1ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — typed validation errors > 'zero amount' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — typed validation errors > 'non-numeric amount' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — typed validation errors > 'amount with too many decimal places' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — unsupported asset errors > 'native XLM with spurious issuer' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — unsupported asset errors > 'asset code too long' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — unsupported asset errors > 'issued asset missing issuer' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — unsupported asset errors > 'issued asset with invalid issuer key' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — unsupported asset errors > 'empty asset code' 0ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — destination trustline errors > throws UNFUNDED_DESTINATION when destination account does not exist 1ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — destination trustline errors > throws MISSING_TRUSTLINE when destination has no matching balance 1ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — destination trustline errors > throws TRUSTLINE_NOT_AUTHORIZED when trustline is not authorized 1ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — destination trustline errors > throws TRUSTLINE_LIMIT_EXCEEDED when payment exceeds available capacity 1ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — network and submission errors > maps Horizon result codes on submission to PAYMENT_FAILED 6ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — network and submission errors > wraps unexpected submission failures as SEND_ERROR 2ms
+ ✓ tests/payments-error-paths.test.ts > sendAsset — network and submission errors > safeSendAsset returns typed SEND_ERROR without throwing on network failure 1ms
+ ✓ tests/polling.test.ts > pollTransaction > returns confirmed success with the number of status lookups 3ms
+ ✓ tests/polling.test.ts > pollTransaction > returns failed when Horizon confirms an unsuccessful transaction 1ms
+ ✓ tests/polling.test.ts > pollTransaction > treats Horizon 404 as pending and retries until confirmation 3ms
+ ✓ tests/polling.test.ts > pollTransaction > stops at maxAttempts and reports the last observed state as pending 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns timeout with pending state when the time bound expires 41ms
+ ✓ tests/polling.test.ts > pollTransaction > applies the timeout while a Horizon lookup is still in flight 22ms
+ ✓ tests/polling.test.ts > pollTransaction > retries a retryable lookup error within the configured bounds 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns unknown for a non-retryable status lookup error 1ms
+ ✓ tests/polling.test.ts > pollTransaction > supports AbortSignal cancellation without issuing a status request when already aborted 2ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > reports source, hash, sequence and operation count 8ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > reports the fee in stroops and as an exact decimal 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > names a well-known network 2ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > summarises each operation with its asset and destination 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > reports issued assets with their issuer 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > reports time bounds when present 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > summary includes useful metadata > counts multiple operations 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > memo reporting carries its type > reports a text memo 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > memo reporting carries its type > reports an id memo 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > memo reporting carries its type > renders a hash memo as hex rather than raw bytes 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > memo reporting carries its type > omits both fields when there is no memo 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > signature reporting > reports an unsigned transaction as unsigned 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > signature reporting > counts signatures and reports hints only 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > signature reporting > matches hints against public keys the caller already knows 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > signature reporting > ignores malformed candidate keys instead of failing 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > sensitive values are not exposed > never includes the secret key or any S-shaped value 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > sensitive values are not exposed > carries none of the keys the SDK classifies as sensitive 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > sensitive values are not exposed > exposes no raw signature bytes 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > sensitive values are not exposed > does not echo the envelope for a SignedTransaction-shaped input 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > accepts the shapes a caller actually has > accepts a Transaction 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > accepts the shapes a caller actually has > accepts a SignedTransaction-shaped wrapper 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > accepts the shapes a caller actually has > accepts a base64 XDR string with its passphrase 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > accepts the shapes a caller actually has > describes a fee-bump envelope, naming the fee payer separately 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > rejects an XDR string without a passphrase 1ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > rejects a malformed XDR string 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > does not leak envelope detail in the rejection message 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > rejects a value that is not a transaction at all 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > safeInspectSignedTransaction returns the error instead of throwing 0ms
+ ✓ tests/signed-transaction-inspection.test.ts > invalid input is rejected clearly > safeInspectSignedTransaction returns the summary when valid 0ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should reject invalid source secret 4ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should reject invalid destination 1ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should reject invalid amount 1ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should reject self-payment 1ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should reject memo exceeding 28 bytes 1ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should not touch the network when validation fails 1ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should map an unfunded source account to ACCOUNT_NOT_FOUND 2ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > should not expose sensitive operation data in payment failure errors 2ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > fixture validation > fundedAccount fixture should have XLM balance 0ms
+ ✓ tests/payments.test.ts > Payments Module - Validation > fixture validation > paymentList fixture should have records 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects invalid source secret 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects invalid destination public key 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects negative amount 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects zero amount 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects memo exceeding 28 bytes 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects issued asset with empty code 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects issued asset with missing issuer 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects issued asset with invalid issuer key format 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > rejects self-payment for issued assets 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > does not call the network when any preflight validation fails 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > accepts native XLM asset spec — no trustline check, maps ACCOUNT_NOT_FOUND 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > accepts "native" as the asset code for XLM 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > runs trustline preflight for issued assets and throws when trustline is missing 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > skips trustline preflight when skipTrustlineCheck is true 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > throws ACCOUNT_NOT_FOUND when source account does not exist (issued asset) 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > returns a PaymentResult with asset field populated on success 8ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > returns a PaymentResult with asset: { code: "XLM" } for native XLM via sendAsset 3ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > safeSendAsset returns ok:false with a PocketPayError on validation failure 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > safeSendAsset never throws even when the network errors 1ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > SendAssetParams type is correctly shaped for native XLM 0ms
+ ✓ tests/payments.test.ts > sendAsset - Preflight Validation > SendAssetParams type is correctly shaped for issued asset 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Transaction Preparation (No Signing Required) > should allow building unsigned transactions without secret keys 6ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Transaction Preparation (No Signing Required) > should allow inspecting transaction operations without secrets 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Transaction Preparation (No Signing Required) > should allow converting transactions to XDR without signatures 3ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Signing Requirements > should require a valid secret key to sign transactions 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Signing Requirements > should reject signing with an invalid secret key format 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Signing Requirements > should reject signing with a mismatched secret key 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Signing Requirements > should produce different signatures for different transactions 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Signing Requirements > should enforce network passphrase during signing 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Missing or Invalid Signer Scenarios > should reject attempts to use an empty secret key 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Missing or Invalid Signer Scenarios > should reject secret keys with incorrect format 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Missing or Invalid Signer Scenarios > should prevent read-only accounts from signing 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Missing or Invalid Signer Scenarios > should allow signing with local accounts created from secret keys 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Missing or Invalid Signer Scenarios > should not expose secret key from LocalSigner 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Unsigned Transaction Submission Prevention > should identify unsigned transactions before submission 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Unsigned Transaction Submission Prevention > should verify signed transactions have non-empty signatures 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Unsigned Transaction Submission Prevention > should prevent transaction modification after signing 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Unsigned Transaction Submission Prevention > should maintain signature count through serialization 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Multi-Signature Authorization Boundaries > should support multiple signers on a single transaction 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Multi-Signature Authorization Boundaries > should preserve signature order 2ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Security Boundary Documentation > should document that wallet creation does not persist keys 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Security Boundary Documentation > should document that transaction building requires no secrets 0ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Security Boundary Documentation > should document that signing is the authorization gate 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Security Boundary Documentation > should document that read-only accounts cannot authorize 1ms
+ ✓ tests/transaction-authorization.test.ts > Transaction Authorization Boundaries > Security Boundary Documentation > should document that signing accounts properly guard secrets 0ms
+ ✓ tests/signer-capability.test.ts > Read-only account — signing is rejected with a typed error > canSignTransaction() returns false and narrows signer to undefined 1ms
+ ✓ tests/signer-capability.test.ts > Read-only account — signing is rejected with a typed error > account.sign() rejects with PocketPayError TX_SIGNER_MISSING 7ms
+ ✓ tests/signer-capability.test.ts > Read-only account — signing is rejected with a typed error > signWithAccount() checks capability BEFORE signing and rejects read-only accounts 2ms
+ ✓ tests/signer-capability.test.ts > Read-only account — signing is rejected with a typed error > safeSignWithAccount() returns a typed failure result instead of throwing 1ms
+ ✓ tests/signer-capability.test.ts > Read-only account — signing is rejected with a typed error > createAccountWithSigner() without a signer is also read-only and rejects the same way 1ms
+ ✓ tests/signer-capability.test.ts > Local signer — compatibility with the pre-existing signing paths > canSignTransaction() narrows a local account to SigningAccount 0ms
+ ✓ tests/signer-capability.test.ts > Local signer — compatibility with the pre-existing signing paths > signWithAccount() produces the same signed XDR as the pre-existing raw-secret signTransaction() 3ms
+ ✓ tests/signer-capability.test.ts > Local signer — compatibility with the pre-existing signing paths > signWithAccount() produces the same result as calling signTransactionWithSigner() directly 2ms
+ ✓ tests/signer-capability.test.ts > Local signer — compatibility with the pre-existing signing paths > createWallet()-derived secrets keep working end-to-end through the new path 1ms
+ ✓ tests/signer-capability.test.ts > Wrong signer — signer does not correspond to the transaction source account > signWithAccount() rejects with PocketPayError TX_SIGNER_MISMATCH 1ms
+ ✓ tests/signer-capability.test.ts > Wrong signer — signer does not correspond to the transaction source account > signTransactionWithSigner() also rejects a mismatched signer directly 1ms
+ ✓ tests/signer-capability.test.ts > Wrong signer — signer does not correspond to the transaction source account > safeSignWithAccount() surfaces TX_SIGNER_MISMATCH as a typed failure result 1ms
+ ✓ tests/signer-capability.test.ts > External signer adapter contract — unsupported capability > 'signer.remote' is registered in the SDK capability registry, covering external adapters 0ms
+ ✓ tests/signer-capability.test.ts > External signer adapter contract — unsupported capability > a stub object satisfying ExternalSignerAdapter plugs into createAccountWithSigner (the extension point) 0ms
+ ✓ tests/signer-capability.test.ts > External signer adapter contract — unsupported capability > assertCapability('signer.remote', false, ...) throws UnsupportedFeatureError, per the SDK's existing capability standard 0ms
+ ✓ tests/signer-capability.test.ts > External signer adapter contract — unsupported capability > an unavailable external adapter propagates UnsupportedFeatureError through signWithAccount unchanged 1ms
+ ✓ tests/signer-capability.test.ts > Secret boundary — no public surface exposes secret material > a read-only account exposes no secret-shaped property, own key, or serialized value 1ms
+ ✓ tests/signer-capability.test.ts > Secret boundary — no public surface exposes secret material > the TX_SIGNER_MISSING error thrown for a read-only account never contains the underlying secret 1ms
+ ✓ tests/signer-capability.test.ts > Secret boundary — no public surface exposes secret material > a SigningAccount (local signer) never exposes its secret via own properties or JSON serialization 0ms
+ ✓ tests/signer-capability.test.ts > Secret boundary — no public surface exposes secret material > LocalSigner in isolation never exposes its secret via own properties or JSON serialization 0ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > reconciles a clean submission to confirmed / COMPLETED 1ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > reconciles a definitive rejection to rejected / FAILED 0ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > reconciles a gateway timeout to unresolved, NOT rejected 1ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > reconciles a socket timeout to unresolved as well 0ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > flags unresolved results as needing status resolution, and nothing else 0ms
+ ✓ tests/transaction-lifecycle.test.ts > reconcileSubmission — the four outcomes the AC names > never carries a raw error or its internal message 1ms
+ ✓ tests/transaction-lifecycle.test.ts > submitGuarded > confirms a successful submission without polling 11ms
+ ✓ tests/transaction-lifecycle.test.ts > submitGuarded > polls instead of failing when the submission times out 2ms
+ ✓ tests/transaction-lifecycle.test.ts > submitGuarded > reports unresolved — never rejected — when polling cannot settle it 2ms
+ ✓ tests/transaction-lifecycle.test.ts > submitGuarded > does not resubmit the envelope on an unknown status 3ms
+ ✓ tests/transaction-lifecycle.test.ts > payment helpers no longer submit unguarded > sendXLM polls on a submission timeout instead of reporting failure 3ms
+ ✓ tests/transaction-lifecycle.test.ts > payment helpers no longer submit unguarded > sendXLM still surfaces a definitive rejection as an error 2ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > maps a payment to the medium threshold 7ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > maps accountMerge to the high threshold 1ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > reports the strictest threshold across mixed operations 1ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > treats setOptions as high only when it changes signing control 1ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > records the operation indexes that raised each requirement 1ms
+ ✓ tests/auth-requirements.test.ts > operation thresholds > reports the transaction source account 1ms
+ ✓ tests/auth-requirements.test.ts > required signers, when account data is available > resolves the required weight and eligible signers 2ms
+ ✓ tests/auth-requirements.test.ts > required signers, when account data is available > omits weights when no account data is supplied 1ms
+ ✓ tests/auth-requirements.test.ts > satisfaction is never guessed > is satisfied when a single signer has signed 4ms
+ ✓ tests/auth-requirements.test.ts > satisfaction is never guessed > is unsatisfied when a 2-of-2 account has only one signature 1ms
+ ✓ tests/auth-requirements.test.ts > satisfaction is never guessed > becomes satisfied once the cosigner signs 1ms
+ ✓ tests/auth-requirements.test.ts > satisfaction is never guessed > ignores a signature from a key that is not an account signer 1ms
+ ✓ tests/auth-requirements.test.ts > satisfaction is never guessed > leaves satisfaction undefined rather than false when it cannot be judged 1ms
+ ✓ tests/auth-requirements.test.ts > identifyPresentSigners > finds a known signer by signature hint 1ms
+ ✓ tests/auth-requirements.test.ts > identifyPresentSigners > returns nothing for an unsigned transaction 1ms
+ ✓ tests/auth-requirements.test.ts > identifyPresentSigners > ignores malformed candidate keys instead of failing 1ms
+ ✓ tests/auth-requirements.test.ts > identifyPresentSigners > never exposes secret material 1ms
+ ✓ tests/auth-requirements.test.ts > unsupported auth cases return clear errors > records an unclassified operation rather than guessing a threshold 1ms
+ ✓ tests/auth-requirements.test.ts > unsupported auth cases return clear errors > never reports satisfied when an operation went unclassified 1ms
+ ✓ tests/auth-requirements.test.ts > unsupported auth cases return clear errors > assertAuthFullyMapped throws the standard unsupported-feature error 1ms
+ ✓ tests/auth-requirements.test.ts > unsupported auth cases return clear errors > assertAuthFullyMapped is a no-op for a fully mapped transaction 1ms
+ ✓ tests/auth-requirements.test.ts > toAuthAccountState > reads signers and thresholds from a Horizon account record 0ms
+ ✓ tests/auth-requirements.test.ts > toAuthAccountState > defaults missing thresholds to zero rather than assuming 0ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Error Classification > should pass through PocketPayError directly 1ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Error Classification > should classify final Stellar transaction results as non-retryable 1ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Error Classification > should classify rate-limiting errors as retryable 0ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Error Classification > should classify gateway timeout (504) as unknown status and non-retryable 0ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Error Classification > should classify network socket error (ETIMEDOUT) as unknown status 0ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Status Polling & Submission > should return result immediately if standard submitTransaction succeeds 10ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Status Polling & Submission > should poll Horizon and succeed if transaction is found after timeout 8ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Status Polling & Submission > should throw TX_EXPIRED if maxTime bound is exceeded during polling 3ms
+ ✓ tests/idempotency.test.ts > Idempotency Strategy - Status Polling & Submission > should throw TX_STATUS_UNKNOWN if polling attempts are exceeded without finding transaction 6ms
+ ✓ tests/account.test.ts > AccountIdentity — wallet identity is separate from signing > createReadOnlyAccount exposes only the public key — no secret material 2ms
+ ✓ tests/account.test.ts > AccountIdentity — wallet identity is separate from signing > createLocalAccount derives publicKey from secretKey — identity remains separate 1ms
+ ✓ tests/account.test.ts > AccountIdentity — wallet identity is separate from signing > identity.publicKey is readonly — publicKey and identity stay consistent 0ms
+ ✓ tests/account.test.ts > Signer Interface — pluggable signing capability > LocalSigner exposes the correct publicKey 0ms
+ ✓ tests/account.test.ts > Signer Interface — pluggable signing capability > createLocalSigner factory produces an equivalent LocalSigner 0ms
+ ✓ tests/account.test.ts > Signer Interface — pluggable signing capability > LocalSigner rejects a malformed secret key 0ms
+ ✓ tests/account.test.ts > Signer Interface — pluggable signing capability > LocalSigner.sign() returns the same transaction object (mutation model) 5ms
+ ✓ tests/account.test.ts > Signer Interface — pluggable signing capability > an external signer implementing the Signer interface works with createAccountWithSigner 2ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > returns an account with canSign = false 0ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > returns an account with signer = undefined 0ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > sign() throws a descriptive error when no signer is attached 2ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > rejects an invalid public key 0ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > publicKey shortcut matches identity.publicKey 0ms
+ ✓ tests/account.test.ts > createReadOnlyAccount() > two read-only accounts with different keys are distinct 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > returns an account with canSign = true 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > attaches a LocalSigner instance 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > signer.publicKey matches account.publicKey 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > signs a transaction without throwing 1ms
+ ✓ tests/account.test.ts > createLocalAccount() > rejects a malformed secret key 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > two accounts built from different keys are distinct 0ms
+ ✓ tests/account.test.ts > createLocalAccount() > is consistent with createWallet() — derived public key matches 1ms
+ ✓ tests/account.test.ts > createAccountWithSigner() > creates a read-only account when no signer is passed 0ms
+ ✓ tests/account.test.ts > createAccountWithSigner() > creates a signing account when a signer is passed 0ms
+ ✓ tests/account.test.ts > createAccountWithSigner() > delegates sign() to the provided signer 2ms
+ ✓ tests/account.test.ts > createAccountWithSigner() > rejects an invalid public key in the identity 0ms
+ ✓ tests/account.test.ts > Package root exports — account abstraction > createReadOnlyAccount is exported from the package root 0ms
+ ✓ tests/account.test.ts > Package root exports — account abstraction > createLocalAccount is exported from the package root 0ms
+ ✓ tests/account.test.ts > Package root exports — account abstraction > createAccountWithSigner is exported from the package root 0ms
+ ✓ tests/account.test.ts > Package root exports — account abstraction > LocalSigner class is exported from the package root 0ms
+ ✓ tests/account.test.ts > Package root exports — account abstraction > createLocalSigner factory is exported from the package root 0ms
+ ✓ tests/account.test.ts > External signer extensibility — room for future integrations > async signer is supported (simulates a remote HSM call) 2ms
+ ✓ tests/account.test.ts > External signer extensibility — room for future integrations > signer that rejects propagates the error to the caller 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should validate a correct public key 2ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should reject invalid public key format 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should detect self-payment when source is provided 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should allow payment to different account when source is provided 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should validate native XLM asset specification 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should validate native asset with "native" code 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should reject native XLM with issuer 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should validate issued asset specification 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should reject issued asset without issuer 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should reject invalid asset code format 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > validateDestinationLocal > should reject empty asset code 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > safeValidateDestinationLocal > should return success result for valid destination 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Local Validation > safeValidateDestinationLocal > should return failure result for invalid destination 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Account Existence > should validate funded account 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Account Existence > should detect unfunded account (404) 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Account Existence > should detect inactive account (zero sequence) 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Account Existence > should detect inactive account (missing sequence) 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should validate native XLM without trustline check 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should detect missing trustline for issued asset 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should detect unauthorized trustline 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should validate authorized trustline 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should detect trustline limit exceeded 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Trustline Validation > should pass when amount is within trustline capacity 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > validateDestinationNetwork - Local Validation Prerequisite > should fail local validation before network call 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > safeValidateDestinationNetwork > should return success result for valid destination 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Network Validation > safeValidateDestinationNetwork > should return failure result for network error 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationComplete > should perform complete validation by default 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationComplete > should perform local-only validation when level is local 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationComplete > should perform network validation when level is network 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationOrThrow > should return result when validation passes 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationOrThrow > should throw PocketPayError when validation fails 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > validateDestinationOrThrow > should throw with correct error code for unfunded account 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > safeValidateDestination > should return success result for valid destination 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Complete Validation > safeValidateDestination > should return failure result for validation error 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Error Handling > should handle network errors gracefully 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Error Handling > should handle timeout errors 1ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle case-insensitive asset codes 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle case-insensitive native code 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle asset code with special characters 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle asset code at maximum length (12 chars) 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle asset code at minimum length (1 char) 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle empty options object 0ms
+ ✓ tests/destination-validation.test.ts > Destination Validation - Edge Cases > should handle undefined options 0ms
+ ✓ tests/timeout-classification.test.ts > inferTimeoutStage > classifies the real operation labels used across the SDK 1ms
+ ✓ tests/timeout-classification.test.ts > inferTimeoutStage > is case-insensitive 0ms
+ ✓ tests/timeout-classification.test.ts > timeout stages are represented > attaches stage, operation and budget to every timeout 2ms
+ ✓ tests/timeout-classification.test.ts > timeout stages are represented > lets a call site state the stage explicitly, overriding inference 1ms
+ ✓ tests/timeout-classification.test.ts > timeout stages are represented > covers each of the four stages 5ms
+ ✓ tests/timeout-classification.test.ts > timeout stages are represented > keeps the operation and budget in the message 2ms
+ ✓ tests/timeout-classification.test.ts > unknown-status timeouts are separate from failures > reports a submission timeout as TX_STATUS_UNKNOWN 1ms
+ ✓ tests/timeout-classification.test.ts > unknown-status timeouts are separate from failures > reports a confirmation timeout as TX_STATUS_UNKNOWN 1ms
+ ✓ tests/timeout-classification.test.ts > unknown-status timeouts are separate from failures > leaves preparation timeouts on REQUEST_TIMEOUT 1ms
+ ✓ tests/timeout-classification.test.ts > unknown-status timeouts are separate from failures > never marks an unknown-outcome timeout as retryable 2ms
+ ✓ tests/timeout-classification.test.ts > unknown-status timeouts are separate from failures > still treats a preparation timeout as retryable guidance 0ms
+ ✓ tests/timeout-classification.test.ts > REQUEST_TIMEOUT joins the published registry > is now a known code with real guidance 0ms
+ ✓ tests/timeout-classification.test.ts > REQUEST_TIMEOUT joins the published registry > keeps the same code string existing consumers already assert 1ms
+ ✓ tests/timeout-classification.test.ts > fetchWithTimeout classification > classifies its timeouts through the same path 0ms
+ ✓ tests/timeout-classification.test.ts > backwards compatibility > leaves withTimeout resolving successful work untouched 0ms
+ ✓ tests/timeout-classification.test.ts > backwards compatibility > propagates non-timeout rejections unchanged 0ms
+ ✓ tests/timeout-classification.test.ts > backwards compatibility > still produces a PocketPayError for every timeout 2ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should return success: true 5ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should include the funded publicKey in the result 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map hash from response 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map friendbotId from response id field 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map ledger from response 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map createdAt from response created_at field 0ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map feeCharged from response fee_charged field 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should map friendbotAccount from response source_account field 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — full Friendbot response > should not include an error field on success 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — partial Friendbot response (hash only) > should still succeed when only hash is present 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > success — minimal Friendbot response (empty object) > should succeed with all optional fields undefined 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > input validation > should throw PocketPayError with INVALID_PUBLIC_KEY for an invalid public key 2ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > input validation > should throw for an empty string public key 0ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > input validation > should throw for a secret key passed as public key 0ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > testnet-only guard > should throw WALLET_TESTNET_ONLY on mainnet without making a fetch call 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > Friendbot HTTP error responses > should throw PocketPayError with FRIENDBOT_ERROR on HTTP 400 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > Friendbot HTTP error responses > should throw PocketPayError with FRIENDBOT_ERROR on HTTP 404 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > Friendbot HTTP error responses > should throw PocketPayError with FRIENDBOT_ERROR on HTTP 500 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > Friendbot HTTP error responses > should include the Friendbot error body in the message 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > network failures > should throw PocketPayError with FUND_ERROR on fetch rejection 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > network failures > should include the original error message in FUND_ERROR 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > network failures > should wrap non-Error rejections into FUND_ERROR 1ms
+ ✓ tests/fund.test.ts > fundTestnetAccount > network failures > should throw REQUEST_TIMEOUT when Friendbot does not respond in time 7ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > maps Horizon records to TransactionSummary fields 3ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > maps a missing memo to undefined 1ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > sets nextCursor to the last record paging token 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > sets nextCursor undefined for an empty page 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > rejects an invalid public key before any network call 1ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > maps a Horizon 404 to ACCOUNT_NOT_FOUND 1ms
+ ✓ tests/transactions.test.ts > Transactions Module - getTransactions > maps a slow Horizon transactions request to REQUEST_TIMEOUT 5ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > maps Horizon payment records to PaymentSummary fields 1ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > maps create_account funder/account/starting_balance correctly 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > filters out non-payment operation types 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > sets nextCursor to the last mapped record paging token 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > rejects an invalid public key before any network call 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > maps a Horizon 404 to ACCOUNT_NOT_FOUND 0ms
+ ✓ tests/transactions.test.ts > Transactions Module - getPayments > maps a slow Horizon payments request to REQUEST_TIMEOUT 6ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > depositToVault > calls the "deposit" method on the contract 7ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > depositToVault > validates input shapes (invalid secret) 2ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > depositToVault > returns expected output shape on success 2ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > depositToVault > maps simulation errors to PocketPayError / VaultResult 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > depositToVault > wraps unhandled RPC errors in PocketPayError 2ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > withdrawFromVault > calls the "withdraw" method on the contract 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > withdrawFromVault > validates input shapes (invalid amount) 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > withdrawFromVault > returns expected output shape on success 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > withdrawFromVault > maps RPC send errors correctly 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > getVaultBalance > calls the "get_balance" method on the contract 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > getVaultBalance > returns parsed XLM balance on success 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > getVaultBalance > validates missing public key 1ms
+ ✓ tests/vault.test.ts > Soroban Vault Methods Boundary Tests > getVaultBalance > wraps timeout errors in PocketPayError 1ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig > should default to testnet 2ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig > should respect environment variables 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig > should allow programmatic overrides 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig > should prioritize overrides over env vars 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Network Validation > should reject unsupported network values 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Network Validation > should reject invalid network from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Network Validation > should reject null network 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Network Validation > should reject empty string network 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Network Validation > should throw INVALID_NETWORK error code 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should reject invalid Horizon URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should reject empty Horizon URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should reject non-HTTP Horizon URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should accept valid HTTPS Horizon URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should accept valid HTTP Horizon URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should throw INVALID_HORIZON_URL error code 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Horizon URL Validation > should reject invalid Horizon URL from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should reject invalid Soroban RPC URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should reject empty Soroban RPC URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should reject non-HTTP Soroban RPC URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should accept valid HTTPS Soroban RPC URL 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should throw INVALID_SOROBAN_RPC_URL error code 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Soroban RPC URL Validation > should reject invalid Soroban RPC URL from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should reject negative timeout 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should reject zero timeout 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should reject non-numeric timeout 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should reject Infinity timeout 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should accept valid positive timeout 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should throw INVALID_TIMEOUT error code 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should parse timeout from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should reject invalid timeout from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Timeout Validation > should use the default timeout when omitted 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should reject invalid contract ID (wrong length) 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should reject contract ID not starting with C 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should reject contract ID with invalid characters 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should accept valid 56-character contract ID 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should throw INVALID_CONTRACT_ID error code 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should parse contract ID from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should reject invalid contract ID from env var 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should allow undefined contract ID 0ms
+ ✓ tests/config.test.ts > Config Module > resolveConfig - Contract ID Validation > should allow empty string contract ID 0ms
+ ✓ tests/config.test.ts > Config Module > validateNetwork > should accept testnet 1ms
+ ✓ tests/config.test.ts > Config Module > validateNetwork > should accept mainnet 0ms
+ ✓ tests/config.test.ts > Config Module > validateNetwork > should reject invalid network 0ms
+ ✓ tests/config.test.ts > Config Module > validateHorizonUrl > should accept valid HTTPS URL 0ms
+ ✓ tests/config.test.ts > Config Module > validateHorizonUrl > should accept valid HTTP URL 0ms
+ ✓ tests/config.test.ts > Config Module > validateHorizonUrl > should reject invalid URL format 0ms
+ ✓ tests/config.test.ts > Config Module > validateHorizonUrl > should reject non-HTTP protocol 0ms
+ ✓ tests/config.test.ts > Config Module > validateSorobanRpcUrl > should accept valid HTTPS URL 0ms
+ ✓ tests/config.test.ts > Config Module > validateSorobanRpcUrl > should accept valid HTTP URL 0ms
+ ✓ tests/config.test.ts > Config Module > validateSorobanRpcUrl > should reject invalid URL format 0ms
+ ✓ tests/config.test.ts > Config Module > validateSorobanRpcUrl > should reject non-HTTP protocol 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should accept positive number 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should accept small positive number 1ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should reject zero 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should reject negative number 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should reject string 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should reject Infinity 0ms
+ ✓ tests/config.test.ts > Config Module > validateTimeout > should reject NaN 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should accept valid 56-character contract ID 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should accept contract ID with base32 characters 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should reject contract ID with wrong length 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should reject contract ID not starting with C 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should reject contract ID with invalid characters 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should reject empty string 0ms
+ ✓ tests/config.test.ts > Config Module > validateContractId > should reject non-string 0ms
+ ✓ tests/config.test.ts > Config Module > getNetworkPassphrase > should return testnet passphrase by default 0ms
+ ✓ tests/config.test.ts > Config Module > getNetworkPassphrase > should return mainnet passphrase 0ms
+ ✓ tests/config.test.ts > Config Module > getNetworkPassphrase > should throw for invalid network 0ms
+ ✓ tests/config.test.ts > Config Module > getFriendbotUrl > should return the friendbot URL 0ms
+ ✓ tests/config.test.ts > Config Module > getSorobanRpcUrl > should return the testnet Soroban RPC URL by default 0ms
+ ✓ tests/config.test.ts > Config Module > getSorobanRpcUrl > should return the mainnet Soroban RPC URL for mainnet 0ms
+ ✓ tests/config.test.ts > Config Module > getSorobanRpcUrl > should respect an explicit sorobanRpcUrl override 0ms
+ ✓ tests/config.test.ts > Config Module > getSorobanRpcUrl > should respect the STELLAR_SOROBAN_RPC_URL env var 0ms
+ ✓ tests/result.test.ts > toSuccessResult > returns an object with ok === true 1ms
+ ✓ tests/result.test.ts > toSuccessResult > wraps the given value 0ms
+ ✓ tests/result.test.ts > toSuccessResult > works with primitives 0ms
+ ✓ tests/result.test.ts > toSuccessResult > works with objects 1ms
+ ✓ tests/result.test.ts > toSuccessResult > satisfies the SuccessResult<T> interface shape 0ms
+ ✓ tests/result.test.ts > toFailureResult > returns an object with ok === false 0ms
+ ✓ tests/result.test.ts > toFailureResult > preserves the PocketPayError reference 0ms
+ ✓ tests/result.test.ts > toFailureResult > preserves error code 0ms
+ ✓ tests/result.test.ts > toFailureResult > preserves error message 0ms
+ ✓ tests/result.test.ts > toFailureResult > preserves optional statusCode 0ms
+ ✓ tests/result.test.ts > toFailureResult > satisfies the FailureResult interface shape 0ms
+ ✓ tests/result.test.ts > PocketPayResult discriminated union > narrows to SuccessResult when ok is true 0ms
+ ✓ tests/result.test.ts > PocketPayResult discriminated union > narrows to FailureResult when ok is false 0ms
+ ✓ tests/result.test.ts > PocketPayResult discriminated union > success result does not have an error property 0ms
+ ✓ tests/result.test.ts > PocketPayResult discriminated union > failure result does not have a value property 0ms
+ ✓ tests/result.test.ts > toResult > returns SuccessResult when the async function resolves 0ms
+ ✓ tests/result.test.ts > toResult > returns FailureResult when the function throws a PocketPayError 0ms
+ ✓ tests/result.test.ts > toResult > converts a plain Error into a PocketPayError on failure 1ms
+ ✓ tests/result.test.ts > toResult > uses UNKNOWN_ERROR code when no errorCode is supplied 0ms
+ ✓ tests/result.test.ts > toResult > wraps a non-Error throw (e.g. a string) into a PocketPayError 0ms
+ ✓ tests/result.test.ts > toResult > passes through the resolved value untouched 0ms
+ ✓ tests/result.test.ts > toResult > handles a synchronous error inside an async wrapper 0ms
+ ✓ tests/result.test.ts > safeGetBalance > returns FailureResult for an invalid public key (no network) 0ms
+ ✓ tests/result.test.ts > safeGetBalance > never throws even when given a bad key 1ms
+ ✓ tests/result.test.ts > safeGetBalance > returns a PocketPayResult shape on failure 0ms
+ ✓ tests/result.test.ts > safeFundTestnetAccount > returns FailureResult for an invalid public key 0ms
+ ✓ tests/result.test.ts > safeFundTestnetAccount > never throws even for an invalid key 0ms
+ ✓ tests/result.test.ts > safeSendXLM > returns FailureResult when source secret is invalid 1ms
+ ✓ tests/result.test.ts > safeSendXLM > returns FailureResult when destination is invalid 1ms
+ ✓ tests/result.test.ts > safeSendXLM > returns FailureResult when amount is invalid 1ms
+ ✓ tests/result.test.ts > safeSendXLM > returns FailureResult for self-payment 0ms
+ ✓ tests/result.test.ts > safeSendXLM > never throws even for invalid inputs 1ms
+ ✓ tests/result.test.ts > safeGetTransactions > returns FailureResult for an invalid public key 0ms
+ ✓ tests/result.test.ts > safeGetTransactions > never throws for invalid input 0ms
+ ✓ tests/result.test.ts > safeGetPayments > returns FailureResult for an invalid public key 0ms
+ ✓ tests/result.test.ts > safeGetPayments > never throws for invalid input 0ms
+ ✓ tests/result.test.ts > existing throwing APIs are unaffected > getBalance still throws PocketPayError for invalid key 0ms
+ ✓ tests/result.test.ts > existing throwing APIs are unaffected > validatePublicKey still throws for an invalid key 0ms
+ ✓ tests/enhanced-result.test.ts > ResultWarning shape > has code and message 1ms
+ ✓ tests/enhanced-result.test.ts > ResultWarning shape > allows optional metadata 1ms
+ ✓ tests/enhanced-result.test.ts > RecoveryHint shape > has action and message 0ms
+ ✓ tests/enhanced-result.test.ts > RecoveryHint shape > allows optional retryable and suggestedDelayMs 0ms
+ ✓ tests/enhanced-result.test.ts > RecoveryHint shape > allows optional metadata 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > returns ok: true with value 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > omits warnings and recoveryHints when not provided 1ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > includes warnings when provided 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > includes recoveryHints when provided 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > omits warnings when empty array 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > satisfies EnhancedSuccessResult<T> interface 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedSuccessResult > is backward-compatible with PocketPayResult narrowing 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > returns ok: false with error 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > omits warnings and recoveryHints when not provided 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > includes warnings when provided 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > includes recoveryHints when provided 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > includes both warnings and recoveryHints 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > omits warnings when empty array 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > satisfies EnhancedFailureResult interface 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedFailureResult > is backward-compatible with PocketPayResult narrowing 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedResult > returns EnhancedSuccessResult on resolution 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedResult > returns EnhancedFailureResult on throw 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedResult > attaches warnings on success 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedResult > attaches recovery hints on failure 0ms
+ ✓ tests/enhanced-result.test.ts > toEnhancedResult > wraps plain errors into PocketPayError 0ms
+ ✓ tests/enhanced-result.test.ts > enhancedSendXLM > returns FailureResult for invalid secret key (no network) 1ms
+ ✓ tests/enhanced-result.test.ts > enhancedSendXLM > returns FailureResult with recovery hint for invalid secret 0ms
+ ✓ tests/enhanced-result.test.ts > enhancedSendXLM > returns FailureResult for self-payment 1ms
+ ✓ tests/enhanced-result.test.ts > enhancedSendXLM > never throws for invalid inputs 1ms
+ ✓ tests/enhanced-result.test.ts > safeEnhancedSendXLM > returns EnhancedFailureResult for invalid inputs 0ms
+ ✓ tests/enhanced-result.test.ts > safeEnhancedSendXLM > never throws 0ms
+ ✓ tests/enhanced-result.test.ts > enhancedGetBalance > returns FailureResult for invalid public key 0ms
+ ✓ tests/enhanced-result.test.ts > enhancedGetBalance > returns FailureResult with recovery hint for invalid key 0ms
+ ✓ tests/enhanced-result.test.ts > enhancedGetBalance > never throws for invalid input 0ms
+ ✓ tests/enhanced-result.test.ts > safeEnhancedGetBalance > returns EnhancedFailureResult for invalid key 0ms
+ ✓ tests/enhanced-result.test.ts > safeEnhancedGetBalance > never throws 0ms
+ ✓ tests/enhanced-result.test.ts > backward compatibility > existing PocketPayResult still works 0ms
+ ✓ tests/enhanced-result.test.ts > backward compatibility > existing throwing APIs still throw PocketPayError 0ms
+ ✓ tests/utils.test.ts > Utils Module > validatePublicKey > should accept a valid public key 2ms
+ ✓ tests/utils.test.ts > Utils Module > validatePublicKey > should throw for an invalid public key 0ms
+ ✓ tests/utils.test.ts > Utils Module > validatePublicKey > should throw for a secret key passed as public key 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateSecretKey > should accept a valid secret key 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateSecretKey > should throw for an invalid secret key 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateSecretKey > should never include secret key value in error metadata 1ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should accept valid amounts 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should accept the smallest valid amount (7 decimals) 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should accept a normal valid amount 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject zero 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject negative amounts 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject non-numeric strings 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject empty string 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject whitespace-only 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject numbers with trailing garbage 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject scientific notation 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject Infinity 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject amounts with leading/trailing whitespace 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should reject amounts with too many decimals 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateAmount > should throw INVALID_AMOUNT_PRECISION for over-precision 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should accept an undefined memo 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should accept an empty string memo 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should accept a valid short memo 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should accept a memo exactly at the 28-byte limit 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should reject a memo exceeding 28 bytes 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should reject a memo one byte over the limit 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should measure Unicode memos by byte length, not character length 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateMemo > should reject accented/multi-byte Unicode memos that exceed the byte limit 0ms
+ ✓ tests/utils.test.ts > Utils Module > stroopsToXLM > should convert stroops to XLM 0ms
+ ✓ tests/utils.test.ts > Utils Module > xlmToStroops > should convert XLM to stroops 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should redact a valid Stellar secret key 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should never expose the full secret key 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should return "(empty)" for an empty string 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should return "(empty)" for whitespace-only string 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should return string as-is if already redacted (idempotent) 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should return short strings (≤8 chars) as-is 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should redact non-secret-key strings consistently 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSecretKey > should handle a secret key with the same prefix/suffix pattern as a real one 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should redact with default 4…4 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should redact with custom showFirst/showLast 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should return "(empty)" for empty string 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should return "(empty)" for whitespace-only 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should return as-is if already redacted (idempotent) 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should return short values as-is 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitiveValue > should not throw on any input 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Valid Stellar public keys > should truncate a valid Stellar public key with default params (4...4) 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Valid Stellar public keys > should truncate a valid Stellar public key with custom params 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Valid Stellar public keys > should maintain consistency across multiple calls 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Valid Stellar public keys > should preserve the ellipsis separator in output 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Short strings > should return string as-is when equal to startChars + endChars 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Short strings > should return short strings unchanged 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Short strings > should handle strings shorter than default threshold 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Short strings > should return string as-is when shorter than requested char count 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Empty and edge case values > should handle empty string 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Empty and edge case values > should handle single character 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Empty and edge case values > should handle exactly 8 characters with default params 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Empty and edge case values > should truncate when string length exceeds startChars + endChars 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Custom truncation lengths > should support custom start char count 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Custom truncation lengths > should support custom end char count 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Custom truncation lengths > should support custom start and end char counts 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Custom truncation lengths > should respect asymmetric char counts 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Custom truncation lengths > should handle large custom char counts 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Consistency in mobile UI display > should produce consistent format for repeated display 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Consistency in mobile UI display > should produce visually distinct prefixes for different addresses 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Consistency in mobile UI display > should preserve start of address which is most identifying 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Documentation of expected output > should format output as "PREFIX...SUFFIX" with ellipsis 0ms
+ ✓ tests/utils.test.ts > Utils Module > truncateAddress > Documentation of expected output > should not double-truncate consecutive calls 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateTransactionHash > should accept a valid 64-character hexadecimal hash 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateTransactionHash > should reject hashes with invalid length 0ms
+ ✓ tests/utils.test.ts > Utils Module > validateTransactionHash > should reject non-hexadecimal values 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should redact Stellar secret keys (S...) 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should redact secret keys embedded in error messages 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should redact multiple secret keys in a single string 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should not redact public keys (G...) 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should not redact non-secret strings 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should handle empty strings 0ms
+ ✓ tests/utils.test.ts > Utils Module > redactSensitive > should handle strings without secret keys 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > calculateNativeReserves > calculates minimum reserve for 0 subentries (1.0 XLM) 2ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > calculateNativeReserves > calculates minimum reserve for 3 subentries (2.5 XLM) 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > calculateNativeReserves > handles negative or undefined subentries gracefully 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > parseMultiAssetBalance > parses native XLM balance with subentry reserve deduction 1ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > parseMultiAssetBalance > parses issued assets with authorized and unauthorized states 2ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > parseMultiAssetBalance > handles unknown or unparseable asset types gracefully 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > parseMultiAssetBalance > returns clean unfunded model when account data is missing (404) 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > parseMultiAssetBalance > returns unavailable model when account state is unavailable 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > getMultiAssetBalance & safeGetMultiAssetBalance > fetches and parses multi-asset balance from Horizon 2ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > getMultiAssetBalance & safeGetMultiAssetBalance > returns unfunded status for 404 response without throwing 3ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > getMultiAssetBalance & safeGetMultiAssetBalance > safeGetMultiAssetBalance returns SuccessResult when successful 1ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > getMultiAssetBalance & safeGetMultiAssetBalance > safeGetMultiAssetBalance returns FailureResult for invalid public key 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > formatAssetBalanceDisplay & findAssetInMultiBalance > formats native and issued assets properly with custom decimals 0ms
+ ✓ tests/multi-asset-balance.test.ts > Multi-Asset Balance Model > formatAssetBalanceDisplay & findAssetInMultiBalance > finds XLM and issued assets accurately within MultiAssetBalance 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > input validation > should throw INVALID_PUBLIC_KEY for an invalid public key 2ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > input validation > should throw INVALID_PUBLIC_KEY for an empty string 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > input validation > should throw INVALID_PUBLIC_KEY for a secret key passed as public key 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > input validation > should NOT call loadAccount if the public key is invalid 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should return status "funded" when the account exists 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should include the queried publicKey in the result 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should populate balance.publicKey 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should populate nativeBalance from the XLM balance entry 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should populate balances array with XLM entry 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should map multiple assets correctly 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > funded account > should not have a balance property when status is "unfunded" (type narrowing check) 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unfunded account (Horizon 404) > should return status "unfunded" when Horizon returns 404 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unfunded account (Horizon 404) > should include the queried publicKey in the unfunded result 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unfunded account (Horizon 404) > should NOT throw for a 404 — unfunded is a normal state 1ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unfunded account (Horizon 404) > should not have a balance field when status is "unfunded" 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unexpected Horizon failures (non-404) > should throw PocketPayError with BALANCE_ERROR on non-404 HTTP errors 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unexpected Horizon failures (non-404) > should throw PocketPayError with BALANCE_ERROR on network errors 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unexpected Horizon failures (non-404) > should include the original error message in BALANCE_ERROR 0ms
+ ✓ tests/balance.test.ts > getBalanceOrUnfunded > unexpected Horizon failures (non-404) > should throw PocketPayError (not a raw Error) for unexpected failures 0ms
+ ✓ tests/balance.test.ts > getBalance > should return AccountBalance for a funded account 0ms
+ ✓ tests/balance.test.ts > getBalance > should throw ACCOUNT_NOT_FOUND with statusCode 404 for an unfunded account 0ms
+ ✓ tests/balance.test.ts > getBalance > should throw BALANCE_ERROR for unexpected Horizon failures 0ms
+ ✓ tests/balance.test.ts > getBalance > should throw INVALID_PUBLIC_KEY for invalid input 0ms
+ ✓ tests/balance.test.ts > getBalance > error message should mention the public key for ACCOUNT_NOT_FOUND 1ms
+ ✓ tests/network-client.test.ts > NetworkClient > returns parsed JSON on a successful GET 3ms
+ ✓ tests/network-client.test.ts > NetworkClient > classifies HTTP 429 as the typed NET_RATE_LIMITED code 1ms
+ ✓ tests/network-client.test.ts > NetworkClient > classifies HTTP 503 as the typed NET_UNREACHABLE code 0ms
+ ✓ tests/network-client.test.ts > NetworkClient > keeps the legacy HTTP_ERROR_<status> code for other 4xx statuses 0ms
+ ✓ tests/network-client.test.ts > NetworkClient > classifies a connection-refused rejection as NET_UNREACHABLE 1ms
+ ✓ tests/network-client.test.ts > NetworkClient > classifies a DNS lookup failure (ENOTFOUND) as NET_UNREACHABLE 0ms
+ ✓ tests/network-client.test.ts > NetworkClient > falls back to NETWORK_ERROR for unrecognized fetch rejections 0ms
+ ✓ tests/network-client.test.ts > NetworkClient > surfaces a REQUEST_TIMEOUT when the request exceeds its budget 6ms
+ ✓ tests/network-client.test.ts > NetworkClient > does not retry on its own — callers own retry behaviour 1ms
+ ✓ tests/network-client.test.ts > checkEndpointReachability > reports reachable:true for any HTTP response, including error statuses 1ms
+ ✓ tests/network-client.test.ts > checkEndpointReachability > reports reachable:false with a NET_UNREACHABLE code on connection failure 0ms
+ ✓ tests/network-client.test.ts > checkEndpointReachability > never includes response bodies or headers in the result 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > accepts native XLM asset spec 3ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > rejects native XLM asset spec with an issuer 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > accepts valid issued asset spec 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > rejects empty or missing asset code 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > rejects invalid asset code format (too long or non-alphanumeric) 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > rejects issued asset missing an issuer key 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > validateAssetSpec (Local Validation) > rejects issued asset with malformed issuer key 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns native_xlm status without calling network for XLM 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns account_not_found status when destination does not exist (404) 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns missing_trustline status when destination has no matching balance 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns not_authorized status when trustline is not authorized by issuer 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns limit_exceeded status when payment amount exceeds available capacity 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > checkDestinationTrustline (Network Queries) > returns valid status when destination has valid trustline and sufficient capacity 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > safeCheckDestinationTrustline > returns PocketPayResult success when valid 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > safeCheckDestinationTrustline > never throws for invalid destination public key 0ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > verifyPaymentTrustlineOrThrow > throws PocketPayError when trustline check fails 1ms
+ ✓ tests/trustline.test.ts > Trustline Validation Module > verifyPaymentTrustlineOrThrow > resolves cleanly when trustline check passes 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports a malformed source secret 2ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports a malformed destination 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports self-payment on the destination stage 2ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports a bad amount 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports a bad asset spec 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports an over-long memo 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > reports an account that cannot sign 0ms
+ ✓ tests/build-validation.test.ts > stage coverage — one invalid input per stage > skips the signer stage when no account is supplied 0ms
+ ✓ tests/build-validation.test.ts > ordering > publishes the documented order, source account first and signer last 0ms
+ ✓ tests/build-validation.test.ts > ordering > reports issues in stage order, not input order 0ms
+ ✓ tests/build-validation.test.ts > ordering > does not short-circuit — three bad fields produce three issues 1ms
+ ✓ tests/build-validation.test.ts > ordering > does not derive the source key when the secret is already invalid 0ms
+ ✓ tests/build-validation.test.ts > valid input > returns valid with no issues 1ms
+ ✓ tests/build-validation.test.ts > valid input > never echoes the source secret into an issue 0ms
+ ✓ tests/build-validation.test.ts > taxonomies are transported, not merged > keeps each validator’s own code in the same result 0ms
+ ✓ tests/build-validation.test.ts > assertTransactionBuildValid > throws the originating PocketPayError of the first failing stage 0ms
+ ✓ tests/build-validation.test.ts > assertTransactionBuildValid > does not throw for valid input 1ms
+ ✓ tests/build-validation.test.ts > adoption is not a breaking change — published codes are unchanged > sendXLM still reports INVALID_SECRET_KEY 1ms
+ ✓ tests/build-validation.test.ts > adoption is not a breaking change — published codes are unchanged > sendXLM still reports INVALID_AMOUNT 0ms
+ ✓ tests/build-validation.test.ts > adoption is not a breaking change — published codes are unchanged > sendXLM keeps its own self-payment wording 0ms
+ ✓ tests/build-validation.test.ts > adoption is not a breaking change — published codes are unchanged > sendAsset keeps its own, different self-payment wording 1ms
+ ✓ tests/build-validation.test.ts > adoption is not a breaking change — published codes are unchanged > sendAsset still validates the asset spec 0ms
+ ✓ tests/diagnostics.test.ts > diagnostics redaction > redacts deny-listed object keys 4ms
+ ✓ tests/diagnostics.test.ts > diagnostics redaction > scrubs Stellar secret keys embedded in free-form strings 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics redaction > exposes the documented sensitive key set 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > does not emit events when diagnostics are disabled 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > emits redacted lifecycle events only after enableDiagnostics 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > createWallet emits a secret-free event when enabled 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > resolveConfig emits config.resolved when enabled 2ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > disableDiagnostics stops further emits 0ms
+ ✓ tests/diagnostics.test.ts > diagnostics hooks (opt-in) > hook exceptions do not throw to the caller 1ms
+ ✓ tests/diagnostics.test.ts > diagnostics report > builds a support-safe report without secrets 2ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Configuration Source Metadata > accurately identifies default config sources 2ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Configuration Source Metadata > identifies environment variable sources 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Configuration Source Metadata > identifies explicit override sources with highest precedence 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Configuration Source Metadata > includes config source metadata in validatePocketPayConfig output 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Defaults & Resolution > disables all experimental features by default 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Defaults & Resolution > enables feature flags via POCKETPAY_FEATURE_FLAGS env variable 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Defaults & Resolution > enables feature flags via individual env variable 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Defaults & Resolution > enables feature flags via explicit SDKConfig override 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Query & Assertion Helpers > correctly queries isFeatureEnabled 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Query & Assertion Helpers > assertFeatureEnabled succeeds when feature is enabled 1ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Feature Flag Query & Assertion Helpers > assertFeatureEnabled throws DisabledFeatureError when feature is disabled 1ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Diagnostics Integration > includes non-sensitive config sources and feature flags in diagnostics event 2ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Diagnostics Integration > includes non-sensitive sources and feature flags in buildDiagnosticsReport 1ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Gated Experimental Feature Paths > throws DisabledFeatureError when calling executeExperimentalVaultBatch with feature disabled 1ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Gated Experimental Feature Paths > allows executing executeExperimentalVaultBatch when feature is enabled 1ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Gated Experimental Feature Paths > throws DisabledFeatureError when calling querySorobanEvents with feature disabled 0ms
+ ✓ tests/feature-flags.test.ts > Feature Flags and Config Source Framework > Gated Experimental Feature Paths > allows executing querySorobanEvents when feature is enabled 0ms
+ ✓ tests/vault-capabilities.test.ts > readiness model > models all six actions the issue names 2ms
+ ✓ tests/vault-capabilities.test.ts > readiness model > marks exactly the three implemented actions as supported 1ms
+ ✓ tests/vault-capabilities.test.ts > readiness model > gates the three lock actions on the published vault.lock capability 0ms
+ ✓ tests/vault-capabilities.test.ts > readiness model > keeps the contract requirement on the existing vault.contract key 0ms
+ ✓ tests/vault-capabilities.test.ts > readiness model > promises no delivery dates anywhere in the readiness copy 1ms
+ ✓ tests/vault-capabilities.test.ts > supported actions > routes a deposit intent to depositToVault 2ms
+ ✓ tests/vault-capabilities.test.ts > supported actions > routes a withdraw intent to withdrawFromVault 0ms
+ ✓ tests/vault-capabilities.test.ts > supported actions > routes a getBalance intent to getVaultBalance 0ms
+ ✓ tests/vault-capabilities.test.ts > unconfigured contract > raises a capability mismatch, not an unsupported error 1ms
+ ✓ tests/vault-capabilities.test.ts > unconfigured contract > checks configuration before feature support, so the fixable error wins 0ms
+ ✓ tests/vault-capabilities.test.ts > lock actions > raises DisabledFeatureError when the flag is off 1ms
+ ✓ tests/vault-capabilities.test.ts > lock actions > raises DisabledFeatureError for listLocks and withdrawMaturedLock too 1ms
+ ✓ tests/vault-capabilities.test.ts > lock actions > still raises UnsupportedFeatureError once the flag is enabled 1ms
+ ✓ tests/vault-capabilities.test.ts > lock actions > never reaches a Soroban helper for a lock action 1ms
+ ✓ tests/vault-capabilities.test.ts > input validation and secret handling > rejects a malformed amount before any capability check 1ms
+ ✓ tests/vault-capabilities.test.ts > input validation and secret handling > rejects a malformed public key 0ms
+ ✓ tests/vault-capabilities.test.ts > input validation and secret handling > never echoes the source secret into an error 0ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > returns { ok: true } for valid input with no memo 3ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > returns { ok: true } for valid input with a memo 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects invalid destination 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects invalid amount (non-numeric) 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects invalid amount (zero) 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects invalid amount (too many decimals) 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects memo that exceeds the 28-byte limit 0ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects multi-byte memo that exceeds 28 bytes 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects self-payment when destination equals derived source public key 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > detects invalid secret key 0ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > collects every failing check in a single result 0ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > skips the self-payment check when the secret key is invalid 0ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > does not throw for any input shape 1ms
+ ✓ tests/payments-validation.test.ts > validateSendXLMParams > returns a stable code SDK consumers can branch on without message parsing 0ms
+ ✓ tests/mockHorizon.test.ts > Mockable Horizon seam (#12) > routes getBalance through the injected mock Horizon (offline) 3ms
+ ✓ tests/mockHorizon.test.ts > Mockable Horizon seam (#12) > surfaces an injected 404 as ACCOUNT_NOT_FOUND 2ms
+ ✓ tests/mockHorizon.test.ts > Mockable Horizon seam (#12) > surfaces slow Horizon account lookups as REQUEST_TIMEOUT 6ms
+ ✓ tests/mockHorizon.test.ts > Mockable Horizon seam (#12) > is deterministic — no live network dependency 1ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createPreparedTransactionFixture > should generate a deterministic prepared transaction 2ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createPreparedTransactionFixture > should allow overrides 0ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createUnsignedTransactionFixture > should generate a deterministic unsigned transaction with a real Stellar transaction object 5ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createUnsignedTransactionFixture > should apply overrides to the transaction builder inputs 1ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createSignedTransactionFixture > should generate a deterministic signed transaction with signatures 2ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createSubmissionResultFixture > should generate a success result 0ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createSubmissionResultFixture > should generate a failure result 0ms
+ ✓ tests/transaction-test-fixtures.test.ts > Transaction Fixture Generators > createSubmissionResultFixture > should generate an unknown result 0ms
+ ✓ tests/feature-flag-registry.test.ts > registry completeness > registers every experimental flag the source code references 4ms
+ ✓ tests/feature-flag-registry.test.ts > registry completeness > includes the vault lock flag that previously drifted 2ms
+ ✓ tests/feature-flag-registry.test.ts > safe defaults > defaults every registered flag to false 0ms
+ ✓ tests/feature-flag-registry.test.ts > safe defaults > reports an unregistered flag as disabled rather than throwing 1ms
+ ✓ tests/feature-flag-registry.test.ts > safe defaults > resolves a registered flag as disabled unless enabled explicitly 0ms
+ ✓ tests/feature-flag-registry.test.ts > documentation matches the registry > documents every registered flag in docs/feature-flags.md 0ms
+ ✓ tests/feature-flag-registry.test.ts > registered flags that gate nothing are declared as reserved > lists which registered flags have no reference in src/ 2ms
+ ✓ tests/error-standard.test.ts > error code standard > exposes a stable, non-empty registry 3ms
+ ✓ tests/error-standard.test.ts > error code standard > classifies codes into the expected categories 0ms
+ ✓ tests/error-standard.test.ts > error code standard > reports retryability per the standard 0ms
+ ✓ tests/error-standard.test.ts > error code standard > safe messages never contain secret keys 1ms
+ ✓ tests/error-standard.test.ts > error code standard > describeError returns SDK defaults for unknown codes 0ms
+ ✓ tests/error-standard.test.ts > error code standard > isKnownErrorCode discriminates known vs unknown 0ms
+ ✓ tests/error-standard.test.ts > redaction > redacts Stellar secret keys 0ms
+ ✓ tests/error-standard.test.ts > redaction > redactError strips secrets from a PocketPayError message 0ms
+ ✓ tests/error-standard.test.ts > redaction > redactError works on non-PocketPayError values 0ms
+ ✓ tests/error-standard.test.ts > classifySubmitError taxonomy wiring > maps a 429 to NET_RATE_LIMITED and marks it retryable 0ms
+ ✓ tests/error-standard.test.ts > classifySubmitError taxonomy wiring > maps a timeout to TX_STATUS_UNKNOWN 0ms
+ ✓ tests/error-standard.test.ts > classifySubmitError taxonomy wiring > redacts secrets leaking from raw submission errors 0ms
+ ✓ tests/memo-validation.test.ts > normalizeMemo > treats a plain string as a text memo 2ms
+ ✓ tests/memo-validation.test.ts > normalizeMemo > treats undefined and the empty string as no memo 0ms
+ ✓ tests/memo-validation.test.ts > normalizeMemo > passes a structured memo through unchanged 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — supported types > accepts no memo 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — supported types > accepts a text memo at exactly the byte limit 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — supported types > accepts id memos as string, number and bigint 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — supported types > accepts hash and return memos of 64 hex characters 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — supported types > exposes every Stellar memo type as supported 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > rejects a text memo one byte over the limit 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > measures text memos in bytes, not characters 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > rejects negative, fractional and non-numeric id memos 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > rejects an id memo above 2^64 - 1 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > rejects hash and return memos of the wrong length 0ms
+ ✓ tests/memo-validation.test.ts > validateMemoInput — rejected input > rejects non-hexadecimal hash memos of the right length 0ms
+ ✓ tests/memo-validation.test.ts > unsupported formats report the right problem > names the unsupported type instead of a length problem 0ms
+ ✓ tests/memo-validation.test.ts > unsupported formats report the right problem > reports a hash-shaped memo as a length problem for its own type, not as text 1ms
+ ✓ tests/memo-validation.test.ts > typed errors use the published standard > reports TX_INVALID_MEMO, which the registry recognises 0ms
+ ✓ tests/memo-validation.test.ts > typed errors use the published standard > attaches validation metadata naming the memo field 0ms
+ ✓ tests/memo-validation.test.ts > safeValidateMemo > returns valid:true for an acceptable memo 0ms
+ ✓ tests/memo-validation.test.ts > safeValidateMemo > returns the typed error instead of throwing 0ms
+ ✓ tests/memo-validation.test.ts > buildMemo > returns undefined when there is no memo 0ms
+ ✓ tests/memo-validation.test.ts > buildMemo > builds the matching Stellar memo for each type 1ms
+ ✓ tests/memo-validation.test.ts > buildMemo > validates before building 0ms
+ ✓ tests/memo-validation.test.ts > backwards compatibility > leaves the original validateMemo behaviour untouched 0ms
+ ✓ tests/memo-validation.test.ts > backwards compatibility > accepts a plain string memo wherever a memo is taken 0ms
+ ✓ tests/memo-validation.test.ts > payment preview reports the memo type > describes a plain string memo as text 2ms
+ ✓ tests/memo-validation.test.ts > payment preview reports the memo type > describes a typed memo with its own type 0ms
+ ✓ tests/memo-validation.test.ts > payment preview reports the memo type > omits both fields when there is no memo 0ms
+ ✓ tests/memo-validation.test.ts > payment preview reports the memo type > rejects an invalid memo before doing any other work 1ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSubmission — one per SubmissionOutcome variant > maps success to COMPLETED with nothing left to do 2ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSubmission — one per SubmissionOutcome variant > maps non_retryable_failure to FAILED and asks for a rebuild 1ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSubmission — one per SubmissionOutcome variant > maps retryable_failure to PENDING, not FAILED 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSubmission — one per SubmissionOutcome variant > maps unknown_status to UNKNOWN and asks the caller to poll 0ms
+ ✓ tests/payment-receipt.test.ts > unknown_status is never rendered as a failure — regression guard > never yields FAILED for unknown_status, with or without a hash 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > maps success to COMPLETED 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > maps pending to PENDING and asks the caller to poll 1ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > maps failed to FAILED 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > maps error to FAILED 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > maps simulation_error to FAILED 0ms
+ ✓ tests/payment-receipt.test.ts > buildReceiptFromSoroban — one per SorobanInvocationStatus value > falls back to a stable code when the RPC gave none 0ms
+ ✓ tests/payment-receipt.test.ts > explorer links > builds a testnet link containing the hash 0ms
+ ✓ tests/payment-receipt.test.ts > explorer links > builds a mainnet link on the public network segment 0ms
+ ✓ tests/payment-receipt.test.ts > explorer links > omits the link when no hash was ever observed, without throwing 0ms
+ ✓ tests/payment-receipt.test.ts > explorer links > omits the link rather than throwing when the hash is malformed 0ms
+ ✓ tests/payment-receipt.test.ts > no sensitive data reaches the receipt > carries no key that DIAGNOSTICS_SENSITIVE_KEYS classifies as sensitive 1ms
+ ✓ tests/payment-receipt.test.ts > no sensitive data reaches the receipt > does not propagate the raw error object or its internal message 0ms
+ ✓ tests/payment-receipt.test.ts > no sensitive data reaches the receipt > does not copy the Soroban rawResponse into the receipt 0ms
+ ✓ tests/payment-receipt.test.ts > buildPaymentReceipt — single entry point > routes a SubmissionOutcome to the submission builder 0ms
+ ✓ tests/payment-receipt.test.ts > buildPaymentReceipt — single entry point > routes a SorobanInvocationResult to the Soroban builder 0ms
+ ✓ tests/payment-receipt.test.ts > display context and determinism > records the requested context verbatim 0ms
+ ✓ tests/payment-receipt.test.ts > display context and determinism > uses the injected clock so createdAt is deterministic 0ms
+ ✓ tests/payment-receipt.test.ts > display context and determinism > still produces a receipt when no network is supplied 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > createWallet > should generate a valid keypair 2ms
+ ✓ tests/wallet.test.ts > Wallet Module > createWallet > should generate unique keypairs each time 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should return true for a valid secret key 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should throw typed PocketPayError with reason "not_a_string" for non-string inputs 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should throw typed PocketPayError with reason "missing" for empty or whitespace strings 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should throw typed PocketPayError with reason "invalid_prefix" for key not starting with S 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should throw typed PocketPayError with reason "invalid_length" for key with incorrect length 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > validateSecretKey > should throw typed PocketPayError with reason "invalid_format" for 56-char string starting with S but bad strkey checksum 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > importWallet > should import a wallet from a valid secret key 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > importWallet > should trim surrounding whitespace on import 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > importWallet > should throw PocketPayError for invalid secret key without leaking secret data 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > importWallet > should throw for empty string 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > safeImportWallet > should return success result for valid secret key 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > safeImportWallet > should return failure result with INVALID_SECRET_KEY error for invalid secret key without throwing 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > enhancedImportWallet & safeEnhancedImportWallet > should return enhanced success result for valid secret key 1ms
+ ✓ tests/wallet.test.ts > Wallet Module > enhancedImportWallet & safeEnhancedImportWallet > should return enhanced failure result with recovery hints for invalid secret key 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > enhancedImportWallet & safeEnhancedImportWallet > safeEnhancedImportWallet should never throw and return enhanced result 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > getPublicKey > should derive the correct public key from a secret key 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > getPublicKey > should throw for invalid secret key 0ms
+ ✓ tests/wallet.test.ts > Wallet Module > fixture validation > fundedAccount fixture should have valid structure 0ms
+ ✓ tests/safe-amount.test.ts > constants match the protocol > uses 7 decimals and 10,000,000 stroops per unit 1ms
+ ✓ tests/safe-amount.test.ts > constants match the protocol > caps at the int64 maximum 0ms
+ ✓ tests/safe-amount.test.ts > constants match the protocol > covers the range a JavaScript number cannot 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — zero and small decimals > accepts zero in every spelling 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — zero and small decimals > accepts the smallest representable amount 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — zero and small decimals > parses ordinary decimals exactly 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — trailing zeros preserve intent > keeps the caller input verbatim 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — trailing zeros preserve intent > treats trailing-zero spellings as equal values 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — trailing zeros preserve intent > canonicalises to seven decimals on output 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — large values > parses the protocol maximum exactly 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — large values > rejects anything above the protocol maximum 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — large values > is exact where float arithmetic was not 1ms
+ ✓ tests/safe-amount.test.ts > parseAmount — large values > stays exact across the whole range, unlike a number 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — invalid input is rejected > rejects non-decimal strings 1ms
+ ✓ tests/safe-amount.test.ts > parseAmount — invalid input is rejected > rejects non-string input 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — invalid input is rejected > rejects more than seven decimal places 0ms
+ ✓ tests/safe-amount.test.ts > parseAmount — invalid input is rejected > reports a code the published registry recognises 0ms
+ ✓ tests/safe-amount.test.ts > parsePositiveAmount > accepts a payable amount 0ms
+ ✓ tests/safe-amount.test.ts > parsePositiveAmount > rejects zero 0ms
+ ✓ tests/safe-amount.test.ts > safeParseAmount > returns the amount when valid 0ms
+ ✓ tests/safe-amount.test.ts > safeParseAmount > returns the typed error instead of throwing 0ms
+ ✓ tests/safe-amount.test.ts > formatStroops and fromStroops round-trip > formats without dividing through a float 0ms
+ ✓ tests/safe-amount.test.ts > formatStroops and fromStroops round-trip > round-trips every boundary exactly 0ms
+ ✓ tests/safe-amount.test.ts > formatStroops and fromStroops round-trip > builds from bigint or decimal string stroops 0ms
+ ✓ tests/safe-amount.test.ts > formatStroops and fromStroops round-trip > rejects malformed or out-of-range stroop values 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > adds without float error 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > subtracts exactly 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > rejects a negative result 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > rejects a sum beyond the protocol maximum 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > compares by value, not by spelling 0ms
+ ✓ tests/safe-amount.test.ts > SafeAmount arithmetic is exact > is immutable and serialises to its canonical form 0ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > keeps validateAmount behaviour unchanged 1ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > keeps xlmToStroops returning a number for representable amounts 0ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > throws instead of returning a wrong number beyond the safe range 0ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > keeps stroopsToXLM output identical for existing inputs 0ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > makes stroopsToXLM exact for large stroop strings 0ms
+ ✓ tests/safe-amount.test.ts > legacy helpers no longer lose precision silently > refuses an unsafe integer rather than rounding it 0ms
+ ✓ tests/payments-preview.test.ts > Payment Preview Helper > should preview a native XLM payment correctly 3ms
+ ✓ tests/payments-preview.test.ts > Payment Preview Helper > should preview an issued asset payment correctly 1ms
+ ✓ tests/payments-preview.test.ts > Payment Preview Helper > should reject invalid amount 1ms
+ ✓ tests/payments-preview.test.ts > Payment Preview Helper > should reject invalid source account 0ms
+ ✓ tests/payments-preview.test.ts > Payment Preview Helper > should reject invalid memo length 1ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset Representation & Equality > distinctly represents native XLM asset 1ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset Representation & Equality > distinctly represents issued asset (USDC) 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset Representation & Equality > correctly compares asset equality via areAssetsEqual 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset State Evaluation > evaluates native XLM as supported 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset State Evaluation > evaluates valid issued asset as supported 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset State Evaluation > evaluates restricted asset as restricted 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Asset State Evaluation > evaluates malformed assets as unsupported 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Payment Intent Creation & Metadata > creates a valid Native XLM payment intent 2ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Payment Intent Creation & Metadata > creates a valid Issued Asset payment intent with metadata 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Validation & Malformed Input Handling > flags invalid destination address in preflight validation 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Validation & Malformed Input Handling > flags invalid amount precision or negative amount 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Validation & Malformed Input Handling > flags malformed asset (issued XLM) 0ms
+ ✓ tests/multi-asset-payment-intent.test.ts > Multi-Asset Payment Intent Model > Trustline Check Strategy > returns hasTrustline = true for Native XLM without network lookup 0ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > validates the contract ID before constructing an RPC client 2ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > maps a successful read-only simulation without signing or submitting 2ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > maps a successful state-changing invocation to an SDK result 1ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > maps contract-specific simulation failures consistently 1ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > maps restore-required simulations as unsupported without signing 1ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > rejects unsupported methods before account lookup or simulation 1ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > does not allow a read-only method through the signing path 1ms
+ ✓ tests/contract-client-factory.test.ts > Soroban contract client factory > uses the signer public key as the vault contract address parameter 2ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Valid Configuration > returns valid result with default testnet config when called with no arguments 3ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Valid Configuration > returns valid result for explicit valid testnet overrides 1ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Valid Configuration > returns valid result for explicit valid mainnet config 1ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for unsupported network name 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for invalid Horizon URL format and protocol 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for invalid Soroban RPC URL format and protocol 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for negative or zero timeout 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for non-numeric or NaN timeout 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Malformed & Invalid Inputs (Errors) > reports error for malformed contract ID 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Advisory Warnings > warns when unencrypted HTTP protocol is used for remote host 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Advisory Warnings > does not warn for http protocol on localhost 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Advisory Warnings > warns when endpoint network does not match configured network 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Advisory Warnings > warns when extreme timeout values are configured 0ms
+ ✓ tests/config-validation.test.ts > validatePocketPayConfig > Security & Sensitive Data Redaction > does not expose secret key material in issue outputs 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Native XLM Asset > correctly identifies native XLM asset 1ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Native XLM Asset > passes validation for native XLM 1ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Native XLM Asset > fails validation if native asset code is not XLM 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > validates AlphaNum4 issued asset 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > validates AlphaNum12 issued asset 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > fails validation if issued asset code is empty or > 12 characters 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > fails validation if issued asset code is XLM 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > fails validation if issuer public key is invalid 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Issued Asset Validation > throws when assertValidAsset receives an invalid asset 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Formatting and Parsing > formats native asset as XLM 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Formatting and Parsing > formats issued asset as CODE:ISSUER 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Formatting and Parsing > parses XLM and native string representations 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Formatting and Parsing > parses CODE:ISSUER string representation 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Formatting and Parsing > throws error when parsing malformed strings 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Asset Equality > returns true for two native assets 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Asset Equality > returns true for matching issued assets 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Asset Equality > returns false when code or issuer differs 0ms
+ ✓ tests/types/asset.test.ts > Typed Asset Model > Asset Equality > returns false when comparing native vs issued asset 0ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps a successful simulation response 2ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps success-with-advisories as warning 1ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps simulation errors as failed with typed code 0ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps restore preamble as unsupported 0ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps unclassifiable payloads as unknown 0ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > maps null/undefined as unknown safely 0ms
+ ✓ tests/simulation-mapper.test.ts > mapSimulationResult > applies custom mapError for contract-specific codes 0ms
+ ✓ tests/simulation-mapper.test.ts > pocketPayErrorFromSimulation > builds a typed PocketPayError for failed simulations 0ms
+ ✓ tests/simulation-mapper.test.ts > pocketPayErrorFromSimulation > uses unsupported / unknown codes by status 0ms
+ ✓ tests/simulation-mapper.test.ts > simulationStatusToInvocationStatus > maps simulation states onto invocation statuses 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > handles null or undefined input safely 1ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps primitive boolean values 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps primitive numeric and string return values 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps simulation errors correctly 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps explicit simulation error strings 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps sendTransaction ERROR responses 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps getTransaction FAILED or NOT_FOUND status 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps successful simulation containing retval 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps completed status SUCCESS transactions 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps ContractInvokeResult value and preserves its error code 1ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanInvocationResult > maps pending transaction status 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapVaultInvocationResult > maps get_balance operation with XLM formatted string 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapVaultInvocationResult > maps get_balance operation with raw stroops integer/bigint 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapVaultInvocationResult > maps successful deposit operation 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapVaultInvocationResult > maps failed withdrawal simulation 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanContractError > handles PocketPayError instances 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanContractError > classifies simulation and missing contract ID errors from Error objects 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanContractError > handles custom object error representations 0ms
+ ✓ tests/sorobanMapper.test.ts > Soroban Invocation Result Mapper > mapSorobanContractError > handles primitive string errors 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (transactions) > keeps outgoing txs when account is the source 1ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (transactions) > keeps incoming txs when account is not the source 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (transactions) > returns an empty array when nothing matches 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (payments) > keeps outgoing payments (from === account) 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (payments) > keeps incoming payments (to === account) 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (payments) > keeps self payments (from === to === account) 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDirection (payments) > excludes records where account is not a party 1ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByAsset > filters by asset code 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByAsset > filters by asset code and issuer 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByAsset > excludes records that have no asset field (transactions) 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByAsset > returns empty when no asset matches 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDateRange > keeps records within an inclusive range 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDateRange > supports a one-sided (start-only) range 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDateRange > supports a one-sided (end-only) range 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByDateRange > drops records with unparseable dates 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByCounterparty > matches the destination for outgoing payments 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByCounterparty > matches the source for incoming payments 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterByCounterparty > matches the source account for transactions 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterTransactions (combined) > applies multiple filters together 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterTransactions (combined) > treats asset-only filter without account 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterTransactions (combined) > skips direction/counterparty when account is missing 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterTransactions (combined) > returns the original input when no options provided 0ms
+ ✓ tests/filterTransactions.test.ts > Transaction filtering helpers > filterTransactions (combined) > does not mutate the input array 0ms
+ ✓ tests/network-fee.test.ts > Network Fee Estimation > should parse fee stats correctly and determine surge pricing 2ms
+ ✓ tests/network-fee.test.ts > Network Fee Estimation > should identify normal network conditions 0ms
+ ✓ tests/network-fee.test.ts > Network Fee Estimation > should fallback to defaults when Horizon request fails 1ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should map incoming transaction correctly 2ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should map outgoing transaction correctly 1ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should mark failed transactions correctly 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should handle create_account operations 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should handle non-native assets 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should format amount display correctly 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionToSummary > should handle missing operations gracefully 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionsToSummaries > should map multiple transactions 1ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > mapTransactionsToSummaries > should handle empty array 0ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > timeAgo > should return "Just now" for recent transactions 1ms
+ ✓ tests/transactions/mapper.test.ts > Transaction Mapper > timeAgo > should return minutes ago for recent transactions 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getAccountExplorerLink > builds testnet account links 2ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getAccountExplorerLink > builds mainnet account links using "public" 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getAccountExplorerLink > throws on invalid public key 1ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getTransactionExplorerLink > builds testnet transaction links 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getTransactionExplorerLink > builds mainnet transaction links 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getTransactionExplorerLink > throws on invalid transaction hash 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getOperationExplorerLink > builds testnet operation links 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getOperationExplorerLink > builds mainnet operation links 0ms
+ ✓ tests/explorer.test.ts > Explorer Link Builders (Issue #140) > getOperationExplorerLink > throws on invalid operation ID 0ms
+ ✓ tests/exports.test.ts > Package root exports > exports wallet helpers from the package root 2ms
+ ✓ tests/exports.test.ts > Package root exports > exports payment helpers from the package root 0ms
+ ✓ tests/exports.test.ts > Package root exports > exports transaction helpers from the package root 1ms
+ ✓ tests/exports.test.ts > Package root exports > exports Soroban helper exports from the package root 0ms
+ ✓ tests/exports.test.ts > Package root exports > exports config and validation utilities from the package root 2ms
+ ✓ tests/exports.test.ts > Package root exports > exports diagnostics helpers from the package root 0ms
+ ✓ tests/exports.test.ts > Package root exports > exports the network resilience layer from the package root 0ms
+ ✓ tests/exports.test.ts > Package root exports > exports errors and public types from the package root 0ms
+ ✓ tests/exports.test.ts > Package root exports > does not expose internal-only helpers from the package root 0ms
+ ✓ tests/endpoint-diagnostics.test.ts > probeConfiguredEndpoints > reports both configured endpoints as reachable 3ms
+ ✓ tests/endpoint-diagnostics.test.ts > probeConfiguredEndpoints > rejects malformed config before making any network calls 1ms
+ ✓ tests/endpoint-diagnostics.test.ts > probeConfiguredEndpoints > never includes secrets or response bodies in the report 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns native XLM balance when searching for "XLM" 2ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns undefined when XLM is not present 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > finds an issued asset by code and issuer 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > finds an issued asset by code only (first match) 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns undefined for a non-existent asset code 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns undefined when asset code exists but issuer does not match 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns undefined for empty balances array 0ms
+ ✓ tests/assets.test.ts > findAssetBalance > returns the correct balance amount for EURT 0ms
+ ✓ tests/verify-acceptance.test.ts > acceptance checklist helpers > parses unchecked and checked markdown items 4ms
+ ✓ tests/verify-acceptance.test.ts > acceptance checklist helpers > extracts only items under an Acceptance Criteria heading 1ms
+ ✓ tests/verify-acceptance.test.ts > acceptance checklist helpers > formats a checklist report for terminal output 0ms
+ ✓ tests/verify-acceptance.test.ts > acceptance checklist helpers > generates a contributor checklist markdown file 0ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > sorts newest-first by default 2ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > sorts oldest-first when requested 0ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > supports Date values 0ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > places missing and invalid dates at the end in their original order 0ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > preserves the original order for equal timestamps 0ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > does not mutate the input array 1ms
+ ✓ tests/sortTransactionsByDate.test.ts > sortTransactionsByDate > rejects unsupported runtime order values 0ms
+ ✓ tests/vaultParams.test.ts > Soroban Vault Request Models (Issue #88) > allows VaultDepositParams with optional contractId and shared fields 1ms
+ ✓ tests/vaultParams.test.ts > Soroban Vault Request Models (Issue #88) > allows VaultWithdrawParams with explicit contractId 0ms
+ ✓ tests/vaultParams.test.ts > Soroban Vault Request Models (Issue #88) > allows VaultBalanceParams with optional contractId 0ms
+ ✓ tests/transactionFixtures.test.ts > Transaction Summary Fixtures > should provide a valid successful payment summary fixture 1ms
+ ✓ tests/transactionFixtures.test.ts > Transaction Summary Fixtures > should provide a valid failed payment summary fixture 0ms
+ ✓ tests/transactionFixtures.test.ts > Transaction Summary Fixtures > should provide a valid pending transaction summary fixture 0ms
+ ✓ tests/transactionFixtures.test.ts > Transaction Summary Fixtures > should provide a valid unknown transaction state fixture 0ms
+ ✓ tests/transactionFixtures.test.ts > Transaction Summary Fixtures > should bundle all fixtures into transactionSummaryFixtures object 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isNode > returns true in standard Node.js environments 1ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isNode > returns false when process is undefined 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isNode > returns false when process.versions.node is missing 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isBrowser > returns false in a pure Node environment without DOM 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isBrowser > returns true when window and document exist 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isReactNative > returns false in standard environments 0ms
+ ✓ tests/env.test.ts > Environment Detection Utility (Issue #128) > isReactNative > returns true when navigator.product is ReactNative 0ms
+ ✓ tests/external_signer.test.ts > LocalSigner satisfies ExternalSignerAdapter 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload
+AssertionError: expected undefined to be 'GABCDEF1234567890' // Object.is equality
+
+- Expected: 
+"GABCDEF1234567890"
+
++ Received: 
+undefined
+
+ ❯ tests/qrParser.test.ts:8:28
+      6|     const url = 'pocketpay://pay?address=GABCDEF1234567890&amount=10.5…
+      7|     const result = parseQRPayload(url);
+      8|     expect(result.address).toBe('GABCDEF1234567890');
+       |                            ^
+      9|     expect(result.amount).toBe('10.5');
+     10|     expect(result.asset).toEqual({ code: 'USD', issuer: 'ISSUER' });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/qrParser.test.ts:17:42
+     15|   test('throws on malformed URL', () => {
+     16|     const badUrl = 'pocketpay://pay?address=invalid&amount=abc';
+     17|     expect(() => parseQRPayload(badUrl)).toThrow(PaymentParseError);
+       |                                          ^
+     18|   });
+     19| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 60 passed (61)
+      Tests  2 failed | 1135 passed (1137)
+   Start at  19:51:33
+   Duration  89.50s (transform 1.06s, setup 700ms, collect 11.36s, tests 67.26s, environment 9ms, prepare 3.16s)
+

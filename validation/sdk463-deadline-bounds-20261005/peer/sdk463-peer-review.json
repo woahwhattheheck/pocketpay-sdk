@@ -1,0 +1,209 @@
+{
+  "schema": "sdk463-independent-polling-review-v1",
+  "result": "CLEAR",
+  "source_or_ref_or_pr_mutations_performed": false,
+  "pr": "https://github.com/Stellar-PocketPay/pocketpay-sdk/pull/463",
+  "expected_product_parent": {
+    "commit": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+    "tree": "2e45e9920d314a0fe594f3033512b26a22cf1b81",
+    "sole_parent": "4de3f74cadd173baba7c46b4831077b712b45401",
+    "source_blobs_independently_verified": 294,
+    "native_tree_complete": true
+  },
+  "candidate": {
+    "tree": "850c620f5ba11057a822ead10cc24c637d300959",
+    "verified_tracked_files": 295,
+    "changed_files": 2,
+    "added_files": 1,
+    "deleted_files": 0,
+    "delta": [
+      {
+        "path": "docs/polling.md",
+        "status": "changed",
+        "before_git_blob": "4d3c132a6373f88bc6d26d99500c0e3821131277",
+        "after_git_blob": "d87fc2486e5a162f4050f9e19f3cbabb5d8343a6",
+        "sha256": "9161918a19eed4bce156b5dbc9815111fb3e17b17f034a879e9ace9c2247be44",
+        "bytes": 2705
+      },
+      {
+        "path": "src/transactions/polling.ts",
+        "status": "changed",
+        "before_git_blob": "60cc2e6181ff610de3100b9333bbde59cb1329ef",
+        "after_git_blob": "99eadc11b262b5af49d7f2a567757a442ea31625",
+        "sha256": "25c92662f6542b2144ffc5632c99acab4aa980ff195d0f08ab1f7ec4bc6b64e1",
+        "bytes": 7192
+      },
+      {
+        "path": "tests/polling-lifecycle.test.ts",
+        "status": "added",
+        "after_git_blob": "2001a40f1bb8bd2b228946f98b3ce68a58ebc094",
+        "sha256": "1c9046e79460fbe121c3aa760502f09585b8ceef4022ef318ea6284bfb6d4c8e",
+        "bytes": 9576
+      }
+    ],
+    "existing_polling_tests_git_blob_preserved": "9ef51c36335da9512d5f9f2b37fa5e25a3e393c4",
+    "package_json_git_blob_preserved": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+    "package_lock_git_blob_preserved": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+    "outside_429_retry_predicate_preserved": true,
+    "outside_429_docs_preserved": true,
+    "outside_post_registration_abort_guard_preserved": true
+  },
+  "independent_differential": {
+    "frozen-353": {
+      "passed": 8,
+      "failed": 5,
+      "total": 13,
+      "network": {
+        "pid": 35,
+        "source": "/workspace/scratch/ea8baa184658/sdk333-validation-frozen-353",
+        "guardLoadedBeforeSubjectImport": true,
+        "counts": {
+          "socketConnect": 0,
+          "tlsConnect": 0,
+          "httpRequest": 0,
+          "httpsRequest": 0,
+          "fetch": 0,
+          "udpSend": 0
+        }
+      },
+      "log_sha256": "b8bac0c0fb053a2fc21aae1dfc4677516d9fc777e4287eeda031ef089634bdef"
+    },
+    "candidate-353": {
+      "passed": 13,
+      "failed": 0,
+      "total": 13,
+      "network": {
+        "pid": 35,
+        "source": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+        "guardLoadedBeforeSubjectImport": true,
+        "counts": {
+          "socketConnect": 0,
+          "tlsConnect": 0,
+          "httpRequest": 0,
+          "httpsRequest": 0,
+          "fetch": 0,
+          "udpSend": 0
+        }
+      },
+      "log_sha256": "6ba36505c66fff388d4015f5edee6c3fd4ef78d4dc3a7d9117d0315d2a4c3ccc"
+    }
+  },
+  "test_scope": [
+    "epoch-zero hung read deadline and listener cleanup",
+    "pending state retained after completed timeout and later success or failure",
+    "synchronous lookup failure after deadline",
+    "async success and nonretryable failure after deadline before timer callback delivery",
+    "fractional attempt-budget rounding and exact lookup counts",
+    "strictly serial reads with no post-deadline scheduling",
+    "preexisting pre-abort and in-flight abort remain functional",
+    "real Node timeout beyond signed-int32 timer range",
+    "long retry interval across timer chunks with exact call timing",
+    "prompt unsuccessful ledger record remains failure"
+  ],
+  "fix_review": {
+    "deadlines": "absolute deadline installed before invoking request; checked on synchronous throw and async resolution/rejection",
+    "timers": "both active-lookup deadlines and retry delays use cancellable chunks no larger than 2147483647ms and recheck the deadline",
+    "cleanup": "single-settle paths clear timers and remove abort listeners; late responses have handlers and cannot restart a poll",
+    "attempt_counts": "increment only when actual lookup factory is invoked; at most one in-flight lookup per poll",
+    "callable_bounds": "positive finite values floor to at least one; existing invalid/default fallback unchanged",
+    "status_lookups_only": "all peer servers expose reads and record forbidden writes; write count zero; all unmocked transports denied before SDK import"
+  },
+  "runtime": {
+    "node": "24.19.0",
+    "vitest": "3.2.7",
+    "typescript": "5.9.3",
+    "stellar_sdk": "13.3.0",
+    "tsx": "4.23.1",
+    "installed_dependencies_reused_without_modification": true
+  },
+  "owner_freeze": {
+    "path": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353/source-freeze.json",
+    "sha256": "80c2fea12bce00c96f47ec136ca4564891287e2ee3c2b783662c4c699e344109",
+    "candidate_tree_agrees": true
+  },
+  "historical_probes": {
+    "original_4de_same_10_cases": {
+      "failed": 4,
+      "passed": 6
+    },
+    "initial_4de_candidate_same_10_cases": {
+      "failed": 2,
+      "passed": 8
+    },
+    "revised_4de_same_10_cases": {
+      "failed": 0,
+      "passed": 10
+    },
+    "final_acceptance_basis": "exact353-based13-case differential above; hung lookups and abort already work on353 so no new abort/hung defect claim"
+  },
+  "limits": {
+    "no_live_horizon_or_chain": true,
+    "no_payment_submission_or_resubmission": true,
+    "no_full_sdk_suite_claim_from_peer": true,
+    "no_current_hosted_ci_or_human_review_claim": true,
+    "no_actor_or_provider_automation": true,
+    "publication_requires_fresh_expected_parent_guard": true
+  },
+  "locks": [
+    {
+      "relative_path": "polling-peer.test.ts",
+      "bytes": 10169,
+      "sha256": "be2e136ac4d6804dfbc9d952040478b5efc84f6f10ed0c81c18269941d2eb32d"
+    },
+    {
+      "relative_path": "vitest.config.mts",
+      "bytes": 243,
+      "sha256": "7a374966ad039e1b051d4ea50b61b41e8f517872d32e13b625e7493b3b183e79"
+    },
+    {
+      "relative_path": "network-deny.cjs",
+      "bytes": 854,
+      "sha256": "2cb5bcd1697c84505546d7cdcc4dc8e8617ef4ba3ff97955116e6b55f2050b48"
+    },
+    {
+      "relative_path": "peer-frozen-353.log",
+      "bytes": 7354,
+      "sha256": "b8bac0c0fb053a2fc21aae1dfc4677516d9fc777e4287eeda031ef089634bdef"
+    },
+    {
+      "relative_path": "peer-candidate-353.log",
+      "bytes": 2248,
+      "sha256": "6ba36505c66fff388d4015f5edee6c3fd4ef78d4dc3a7d9117d0315d2a4c3ccc"
+    },
+    {
+      "relative_path": "peer-network-frozen-353.json",
+      "bytes": 276,
+      "sha256": "c0bfe9065d3bfc3a0f38a5f9de4aebdf4cf706e28872503b5c1078ab9ba25660"
+    },
+    {
+      "relative_path": "peer-network-candidate-353.json",
+      "bytes": 279,
+      "sha256": "44233b6614c5db210918bf42b740f6fb5afce6f0b8fe9f1525fa95fc9857bb04"
+    },
+    {
+      "relative_path": "source-projection-review.json",
+      "bytes": 147226,
+      "sha256": "8f37ebb8840bcb9a656baf8b048dc30446ed0228937adb5c6316fbcfbb452039"
+    },
+    {
+      "relative_path": "native-353/expected-projection.json",
+      "bytes": 46730,
+      "sha256": "98ca57fa0acae9bd5751bfb94db9dce038f32c709a80264ca92c8b1fb42c8f2e"
+    },
+    {
+      "relative_path": "frozen-candidate/docs/polling.md",
+      "bytes": 2705,
+      "sha256": "9161918a19eed4bce156b5dbc9815111fb3e17b17f034a879e9ace9c2247be44"
+    },
+    {
+      "relative_path": "frozen-candidate/src/transactions/polling.ts",
+      "bytes": 7192,
+      "sha256": "25c92662f6542b2144ffc5632c99acab4aa980ff195d0f08ab1f7ec4bc6b64e1"
+    },
+    {
+      "relative_path": "frozen-candidate/tests/polling-lifecycle.test.ts",
+      "bytes": 9576,
+      "sha256": "1c9046e79460fbe121c3aa760502f09585b8ceef4022ef318ea6284bfb6d4c8e"
+    }
+  ]
+}

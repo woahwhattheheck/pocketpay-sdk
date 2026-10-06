@@ -1,0 +1,22 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk333-independent-review
+
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > terminates a hung first read with an epoch-zero clock and releases its abort listener 9ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > keeps the pending timeout after a late confirmed 2ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > keeps the pending timeout after a late nonretryable rejection 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > enforces the elapsed deadline when a synchronous lookup throws after it 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > checks the deadline on a late confirmed before the timer callback runs 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > checks the deadline on a late nonretryable rejection before the timer callback runs 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > uses exactly a fractional attempt budget after rounding down 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > never overlaps delayed reads or starts a new read past its deadline 2ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > keeps preexisting pre-abort behavior without issuing a read 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > keeps in-flight abort behavior while handling a later transport rejection 4ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > preserves a valid timeout beyond the host timer range for a prompt read 14ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > respects a long retry interval across the host timer range 1ms
+ ✓ polling-peer.test.ts > independent polling deadlines and callable bounds > keeps prompt ledger failure distinct from lookup timeout and releases resources 1ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  19:51:20
+   Duration  590ms (transform 167ms, setup 0ms, collect 360ms, tests 39ms, environment 0ms, prepare 63ms)
+

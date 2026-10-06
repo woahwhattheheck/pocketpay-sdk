@@ -1,0 +1,243 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk333-validation-frozen-353
+
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout at the deadline even when the lookup never settles 7ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores a confirmation that arrives after the deadline 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > retains the last pending observation when the next lookup hangs 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels an in-flight lookup and handles its later rejection 4ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels during the retry delay and removes its timer and listener 1ms
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional attempt bound to at least one lookup 10ms
+   → expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional timeout to at least one millisecond 2ms
+   → expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional interval so retries have a real delay 2ms
+   → expected { status: 'timeout', …(4) } to match object { status: 'timeout', …(2) }
+(2 matching properties omitted from actual)
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > removes deadline and abort resources after a prompt confirmation 1ms
+(node:35) TimeoutOverflowWarning: 2147483648 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:35) TimeoutOverflowWarning: 4294967296 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(node:35) TimeoutOverflowWarning: 2147483648 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+(node:35) TimeoutOverflowWarning: 4294967294 does not fit into a 32-bit signed integer.
+Timeout duration was set to 1.
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > polls through the public SDK export without a submission path 309ms
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout when a synchronous lookup failure crosses the deadline 2ms
+   → expected { status: 'unknown', …(4) } to match object { status: 'timeout', …(2) }
+(2 matching properties omitted from actual)
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores confirmation after a clock advance before deadline timer delivery 1ms
+   → expected { status: 'success', …(4) } to match object { status: 'timeout', …(2) }
+(11 matching properties omitted from actual)
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow expire a long timeout immediately 2ms
+   → expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+ × tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow schedule a long retry delay immediately 4ms
+   → promise resolved "{ status: 'success', …(4) }" instead of rejecting
+ ✓ tests/polling.test.ts > pollTransaction > returns confirmed success with the number of status lookups 3ms
+ ✓ tests/polling.test.ts > pollTransaction > returns failed when Horizon confirms an unsuccessful transaction 1ms
+ ✓ tests/polling.test.ts > pollTransaction > treats Horizon 404 as pending and retries until confirmation 2ms
+ ✓ tests/polling.test.ts > pollTransaction > stops at maxAttempts and reports the last observed state as pending 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns timeout with pending state when the time bound expires 41ms
+ ✓ tests/polling.test.ts > pollTransaction > applies the timeout while a Horizon lookup is still in flight 21ms
+ ✓ tests/polling.test.ts > pollTransaction > retries a retryable lookup error within the configured bounds 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns unknown for a non-retryable status lookup error 1ms
+ ✓ tests/polling.test.ts > pollTransaction > supports AbortSignal cancellation without issuing a status request when already aborted 2ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional attempt bound to at least one lookup
+AssertionError: expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "attempts": 1,
+-   "state": "confirmed",
+-   "status": "success",
++   "attempts": 0,
++   "state": "unknown",
++   "status": "timeout",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:132:8
+    130|     installLookup(call);
+    131|     expect(await pollTransaction(HASH, { maxAttempts: 0.5, timeout: 40…
+    132|       .toMatchObject({ status: 'success', state: 'confirmed', attempts…
+       |        ^
+    133|     expect(call).toHaveBeenCalledTimes(1);
+    134|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional timeout to at least one millisecond
+AssertionError: expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "attempts": 1,
+-   "state": "confirmed",
+-   "status": "success",
++   "attempts": 0,
++   "state": "unknown",
++   "status": "timeout",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:140:8
+    138|     installLookup(call);
+    139|     expect(await pollTransaction(HASH, { timeout: 0.5 }))
+    140|       .toMatchObject({ status: 'success', state: 'confirmed', attempts…
+       |        ^
+    141|     expect(call).toHaveBeenCalledTimes(1);
+    142|     expect(vi.getTimerCount()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional interval so retries have a real delay
+AssertionError: expected { status: 'timeout', …(4) } to match object { status: 'timeout', …(2) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+-   "attempts": 3,
++   "attempts": 5,
+    "state": "pending",
+    "status": "timeout",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:151:29
+    149| 
+    150|     await vi.advanceTimersByTimeAsync(3);
+    151|     expect(await completed).toMatchObject({ status: 'timeout', state: …
+       |                             ^
+    152|     expect(call).toHaveBeenCalledTimes(3);
+    153|     expect(vi.getTimerCount()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout when a synchronous lookup failure crosses the deadline
+AssertionError: expected { status: 'unknown', …(4) } to match object { status: 'timeout', …(2) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "attempts": 1,
+    "state": "unknown",
+-   "status": "timeout",
++   "status": "unknown",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:192:8
+    190| 
+    191|     expect(await pollTransaction(HASH, { timeout: 40 }))
+    192|       .toMatchObject({ status: 'timeout', state: 'unknown', attempts: …
+       |        ^
+    193|     expect(call).toHaveBeenCalledTimes(1);
+    194|     expect(vi.getTimerCount()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores confirmation after a clock advance before deadline timer delivery
+AssertionError: expected { status: 'success', …(4) } to match object { status: 'timeout', …(2) }
+(11 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "attempts": 1,
+-   "state": "unknown",
+-   "status": "timeout",
++   "state": "confirmed",
++   "status": "success",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:205:8
+    203| 
+    204|     expect(await pollTransaction(HASH, { timeout: 40 }))
+    205|       .toMatchObject({ status: 'timeout', state: 'unknown', attempts: …
+       |        ^
+    206|     expect(call).toHaveBeenCalledTimes(1);
+    207|     expect(vi.getTimerCount()).toBe(0);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow expire a long timeout immediately
+AssertionError: expected { status: 'timeout', …(4) } to match object { status: 'success', …(2) }
+(2 matching properties omitted from actual)
+
+- Expected
++ Received
+
+  {
+    "attempts": 1,
+-   "state": "confirmed",
+-   "status": "success",
++   "state": "unknown",
++   "status": "timeout",
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:218:8
+    216| 
+    217|     expect(await pollTransaction(HASH, { timeout: 2147483648 }))
+    218|       .toMatchObject({ status: 'success', state: 'confirmed', attempts…
+       |        ^
+    219|     expect(call).toHaveBeenCalledTimes(1);
+    220|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+ FAIL  tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow schedule a long retry delay immediately
+AssertionError: promise resolved "{ status: 'success', …(4) }" instead of rejecting
+
+- Expected
++ Received
+
+- Error {
+-   "message": "rejected promise",
++ {
++   "attempts": 2,
++   "hash": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
++   "state": "confirmed",
++   "status": "success",
++   "transaction": {
++     "createdAt": "2023-01-01T00:00:00Z",
++     "fee": "100",
++     "hash": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
++     "ledger": 102,
++     "memo": undefined,
++     "memoType": undefined,
++     "operationCount": 1,
++     "sourceAccount": "GABC",
++     "successful": true,
++   },
+  }
+
+ ❯ tests/polling-lifecycle.test.ts:236:9
+    234|         maxAttempts: 2,
+    235|         signal: controller.signal,
+    236|       })).rejects.toMatchObject({ name: 'AbortError' });
+       |         ^
+    237|       expect(call).toHaveBeenCalledTimes(1);
+    238|     } finally {
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/7]⎯
+
+
+ Test Files  1 failed | 1 passed (2)
+      Tests  7 failed | 16 passed (23)
+   Start at  19:51:14
+   Duration  1.41s (transform 448ms, setup 48ms, collect 563ms, tests 423ms, environment 0ms, prepare 119ms)
+

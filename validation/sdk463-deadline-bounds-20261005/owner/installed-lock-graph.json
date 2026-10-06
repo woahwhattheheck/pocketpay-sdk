@@ -1,0 +1,938 @@
+{
+  "present": 186,
+  "versionMismatches": [],
+  "absentOptionalPlatformPackages": 49,
+  "absentNonoptional": [],
+  "installed": [
+    {
+      "path": "node_modules/@ampproject/remapping",
+      "lockedVersion": "2.3.0",
+      "installedVersion": "2.3.0"
+    },
+    {
+      "path": "node_modules/@babel/helper-string-parser",
+      "lockedVersion": "7.29.7",
+      "installedVersion": "7.29.7"
+    },
+    {
+      "path": "node_modules/@babel/helper-validator-identifier",
+      "lockedVersion": "7.29.7",
+      "installedVersion": "7.29.7"
+    },
+    {
+      "path": "node_modules/@babel/parser",
+      "lockedVersion": "7.29.7",
+      "installedVersion": "7.29.7"
+    },
+    {
+      "path": "node_modules/@babel/types",
+      "lockedVersion": "7.29.7",
+      "installedVersion": "7.29.7"
+    },
+    {
+      "path": "node_modules/@bcoe/v8-coverage",
+      "lockedVersion": "1.0.2",
+      "installedVersion": "1.0.2"
+    },
+    {
+      "path": "node_modules/@esbuild/linux-x64",
+      "lockedVersion": "0.28.1",
+      "installedVersion": "0.28.1"
+    },
+    {
+      "path": "node_modules/@isaacs/cliui",
+      "lockedVersion": "8.0.2",
+      "installedVersion": "8.0.2"
+    },
+    {
+      "path": "node_modules/@istanbuljs/schema",
+      "lockedVersion": "0.1.6",
+      "installedVersion": "0.1.6"
+    },
+    {
+      "path": "node_modules/@jridgewell/gen-mapping",
+      "lockedVersion": "0.3.13",
+      "installedVersion": "0.3.13"
+    },
+    {
+      "path": "node_modules/@jridgewell/resolve-uri",
+      "lockedVersion": "3.1.2",
+      "installedVersion": "3.1.2"
+    },
+    {
+      "path": "node_modules/@jridgewell/sourcemap-codec",
+      "lockedVersion": "1.5.5",
+      "installedVersion": "1.5.5"
+    },
+    {
+      "path": "node_modules/@jridgewell/trace-mapping",
+      "lockedVersion": "0.3.31",
+      "installedVersion": "0.3.31"
+    },
+    {
+      "path": "node_modules/@pkgjs/parseargs",
+      "lockedVersion": "0.11.0",
+      "installedVersion": "0.11.0"
+    },
+    {
+      "path": "node_modules/@rollup/rollup-linux-x64-gnu",
+      "lockedVersion": "4.62.2",
+      "installedVersion": "4.62.2"
+    },
+    {
+      "path": "node_modules/@rollup/rollup-linux-x64-musl",
+      "lockedVersion": "4.62.2",
+      "installedVersion": "4.62.2"
+    },
+    {
+      "path": "node_modules/@stellar/js-xdr",
+      "lockedVersion": "3.1.2",
+      "installedVersion": "3.1.2"
+    },
+    {
+      "path": "node_modules/@stellar/stellar-base",
+      "lockedVersion": "13.1.0",
+      "installedVersion": "13.1.0"
+    },
+    {
+      "path": "node_modules/@stellar/stellar-sdk",
+      "lockedVersion": "13.3.0",
+      "installedVersion": "13.3.0"
+    },
+    {
+      "path": "node_modules/@types/chai",
+      "lockedVersion": "5.2.3",
+      "installedVersion": "5.2.3"
+    },
+    {
+      "path": "node_modules/@types/deep-eql",
+      "lockedVersion": "4.0.2",
+      "installedVersion": "4.0.2"
+    },
+    {
+      "path": "node_modules/@types/estree",
+      "lockedVersion": "1.0.9",
+      "installedVersion": "1.0.9"
+    },
+    {
+      "path": "node_modules/@types/node",
+      "lockedVersion": "22.20.1",
+      "installedVersion": "22.20.1"
+    },
+    {
+      "path": "node_modules/@vitest/coverage-v8",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/expect",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/mocker",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/pretty-format",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/runner",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/snapshot",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/spy",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/@vitest/utils",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/agent-base",
+      "lockedVersion": "6.0.2",
+      "installedVersion": "6.0.2"
+    },
+    {
+      "path": "node_modules/ansi-regex",
+      "lockedVersion": "6.2.2",
+      "installedVersion": "6.2.2"
+    },
+    {
+      "path": "node_modules/ansi-styles",
+      "lockedVersion": "6.2.3",
+      "installedVersion": "6.2.3"
+    },
+    {
+      "path": "node_modules/assertion-error",
+      "lockedVersion": "2.0.1",
+      "installedVersion": "2.0.1"
+    },
+    {
+      "path": "node_modules/ast-v8-to-istanbul",
+      "lockedVersion": "0.3.12",
+      "installedVersion": "0.3.12"
+    },
+    {
+      "path": "node_modules/ast-v8-to-istanbul/node_modules/js-tokens",
+      "lockedVersion": "10.0.0",
+      "installedVersion": "10.0.0"
+    },
+    {
+      "path": "node_modules/asynckit",
+      "lockedVersion": "0.4.0",
+      "installedVersion": "0.4.0"
+    },
+    {
+      "path": "node_modules/available-typed-arrays",
+      "lockedVersion": "1.0.7",
+      "installedVersion": "1.0.7"
+    },
+    {
+      "path": "node_modules/axios",
+      "lockedVersion": "1.18.1",
+      "installedVersion": "1.18.1"
+    },
+    {
+      "path": "node_modules/balanced-match",
+      "lockedVersion": "4.0.4",
+      "installedVersion": "4.0.4"
+    },
+    {
+      "path": "node_modules/bare-addon-resolve",
+      "lockedVersion": "1.10.1",
+      "installedVersion": "1.10.1"
+    },
+    {
+      "path": "node_modules/bare-module-resolve",
+      "lockedVersion": "1.12.4",
+      "installedVersion": "1.12.4"
+    },
+    {
+      "path": "node_modules/bare-semver",
+      "lockedVersion": "1.1.0",
+      "installedVersion": "1.1.0"
+    },
+    {
+      "path": "node_modules/base32.js",
+      "lockedVersion": "0.1.0",
+      "installedVersion": "0.1.0"
+    },
+    {
+      "path": "node_modules/base64-js",
+      "lockedVersion": "1.5.1",
+      "installedVersion": "1.5.1"
+    },
+    {
+      "path": "node_modules/bignumber.js",
+      "lockedVersion": "9.3.1",
+      "installedVersion": "9.3.1"
+    },
+    {
+      "path": "node_modules/brace-expansion",
+      "lockedVersion": "5.0.8",
+      "installedVersion": "5.0.8"
+    },
+    {
+      "path": "node_modules/buffer",
+      "lockedVersion": "6.0.3",
+      "installedVersion": "6.0.3"
+    },
+    {
+      "path": "node_modules/cac",
+      "lockedVersion": "6.7.14",
+      "installedVersion": "6.7.14"
+    },
+    {
+      "path": "node_modules/call-bind",
+      "lockedVersion": "1.0.9",
+      "installedVersion": "1.0.9"
+    },
+    {
+      "path": "node_modules/call-bind-apply-helpers",
+      "lockedVersion": "1.0.2",
+      "installedVersion": "1.0.2"
+    },
+    {
+      "path": "node_modules/call-bound",
+      "lockedVersion": "1.0.4",
+      "installedVersion": "1.0.4"
+    },
+    {
+      "path": "node_modules/chai",
+      "lockedVersion": "5.3.3",
+      "installedVersion": "5.3.3"
+    },
+    {
+      "path": "node_modules/check-error",
+      "lockedVersion": "2.1.3",
+      "installedVersion": "2.1.3"
+    },
+    {
+      "path": "node_modules/color-convert",
+      "lockedVersion": "2.0.1",
+      "installedVersion": "2.0.1"
+    },
+    {
+      "path": "node_modules/color-name",
+      "lockedVersion": "1.1.4",
+      "installedVersion": "1.1.4"
+    },
+    {
+      "path": "node_modules/combined-stream",
+      "lockedVersion": "1.0.8",
+      "installedVersion": "1.0.8"
+    },
+    {
+      "path": "node_modules/cross-spawn",
+      "lockedVersion": "7.0.6",
+      "installedVersion": "7.0.6"
+    },
+    {
+      "path": "node_modules/debug",
+      "lockedVersion": "4.4.3",
+      "installedVersion": "4.4.3"
+    },
+    {
+      "path": "node_modules/deep-eql",
+      "lockedVersion": "5.0.2",
+      "installedVersion": "5.0.2"
+    },
+    {
+      "path": "node_modules/define-data-property",
+      "lockedVersion": "1.1.4",
+      "installedVersion": "1.1.4"
+    },
+    {
+      "path": "node_modules/delayed-stream",
+      "lockedVersion": "1.0.0",
+      "installedVersion": "1.0.0"
+    },
+    {
+      "path": "node_modules/dotenv",
+      "lockedVersion": "16.6.1",
+      "installedVersion": "16.6.1"
+    },
+    {
+      "path": "node_modules/dunder-proto",
+      "lockedVersion": "1.0.1",
+      "installedVersion": "1.0.1"
+    },
+    {
+      "path": "node_modules/eastasianwidth",
+      "lockedVersion": "0.2.0",
+      "installedVersion": "0.2.0"
+    },
+    {
+      "path": "node_modules/emoji-regex",
+      "lockedVersion": "9.2.2",
+      "installedVersion": "9.2.2"
+    },
+    {
+      "path": "node_modules/es-define-property",
+      "lockedVersion": "1.0.1",
+      "installedVersion": "1.0.1"
+    },
+    {
+      "path": "node_modules/es-errors",
+      "lockedVersion": "1.3.0",
+      "installedVersion": "1.3.0"
+    },
+    {
+      "path": "node_modules/es-module-lexer",
+      "lockedVersion": "1.7.0",
+      "installedVersion": "1.7.0"
+    },
+    {
+      "path": "node_modules/es-object-atoms",
+      "lockedVersion": "1.1.2",
+      "installedVersion": "1.1.2"
+    },
+    {
+      "path": "node_modules/es-set-tostringtag",
+      "lockedVersion": "2.1.0",
+      "installedVersion": "2.1.0"
+    },
+    {
+      "path": "node_modules/esbuild",
+      "lockedVersion": "0.28.1",
+      "installedVersion": "0.28.1"
+    },
+    {
+      "path": "node_modules/estree-walker",
+      "lockedVersion": "3.0.3",
+      "installedVersion": "3.0.3"
+    },
+    {
+      "path": "node_modules/eventsource",
+      "lockedVersion": "2.0.2",
+      "installedVersion": "2.0.2"
+    },
+    {
+      "path": "node_modules/expect-type",
+      "lockedVersion": "1.4.0",
+      "installedVersion": "1.4.0"
+    },
+    {
+      "path": "node_modules/fdir",
+      "lockedVersion": "6.5.0",
+      "installedVersion": "6.5.0"
+    },
+    {
+      "path": "node_modules/feaxios",
+      "lockedVersion": "0.0.23",
+      "installedVersion": "0.0.23"
+    },
+    {
+      "path": "node_modules/follow-redirects",
+      "lockedVersion": "1.16.0",
+      "installedVersion": "1.16.0"
+    },
+    {
+      "path": "node_modules/for-each",
+      "lockedVersion": "0.3.5",
+      "installedVersion": "0.3.5"
+    },
+    {
+      "path": "node_modules/foreground-child",
+      "lockedVersion": "3.3.1",
+      "installedVersion": "3.3.1"
+    },
+    {
+      "path": "node_modules/form-data",
+      "lockedVersion": "4.0.6",
+      "installedVersion": "4.0.6"
+    },
+    {
+      "path": "node_modules/function-bind",
+      "lockedVersion": "1.1.2",
+      "installedVersion": "1.1.2"
+    },
+    {
+      "path": "node_modules/get-intrinsic",
+      "lockedVersion": "1.3.0",
+      "installedVersion": "1.3.0"
+    },
+    {
+      "path": "node_modules/get-proto",
+      "lockedVersion": "1.0.1",
+      "installedVersion": "1.0.1"
+    },
+    {
+      "path": "node_modules/glob",
+      "lockedVersion": "10.5.0",
+      "installedVersion": "10.5.0"
+    },
+    {
+      "path": "node_modules/glob/node_modules/balanced-match",
+      "lockedVersion": "1.0.2",
+      "installedVersion": "1.0.2"
+    },
+    {
+      "path": "node_modules/glob/node_modules/brace-expansion",
+      "lockedVersion": "2.1.3",
+      "installedVersion": "2.1.3"
+    },
+    {
+      "path": "node_modules/glob/node_modules/minimatch",
+      "lockedVersion": "9.0.9",
+      "installedVersion": "9.0.9"
+    },
+    {
+      "path": "node_modules/gopd",
+      "lockedVersion": "1.2.0",
+      "installedVersion": "1.2.0"
+    },
+    {
+      "path": "node_modules/has-flag",
+      "lockedVersion": "4.0.0",
+      "installedVersion": "4.0.0"
+    },
+    {
+      "path": "node_modules/has-property-descriptors",
+      "lockedVersion": "1.0.2",
+      "installedVersion": "1.0.2"
+    },
+    {
+      "path": "node_modules/has-symbols",
+      "lockedVersion": "1.1.0",
+      "installedVersion": "1.1.0"
+    },
+    {
+      "path": "node_modules/has-tostringtag",
+      "lockedVersion": "1.0.2",
+      "installedVersion": "1.0.2"
+    },
+    {
+      "path": "node_modules/hasown",
+      "lockedVersion": "2.0.4",
+      "installedVersion": "2.0.4"
+    },
+    {
+      "path": "node_modules/html-escaper",
+      "lockedVersion": "2.0.2",
+      "installedVersion": "2.0.2"
+    },
+    {
+      "path": "node_modules/https-proxy-agent",
+      "lockedVersion": "5.0.1",
+      "installedVersion": "5.0.1"
+    },
+    {
+      "path": "node_modules/ieee754",
+      "lockedVersion": "1.2.1",
+      "installedVersion": "1.2.1"
+    },
+    {
+      "path": "node_modules/inherits",
+      "lockedVersion": "2.0.4",
+      "installedVersion": "2.0.4"
+    },
+    {
+      "path": "node_modules/is-callable",
+      "lockedVersion": "1.2.7",
+      "installedVersion": "1.2.7"
+    },
+    {
+      "path": "node_modules/is-fullwidth-code-point",
+      "lockedVersion": "3.0.0",
+      "installedVersion": "3.0.0"
+    },
+    {
+      "path": "node_modules/is-retry-allowed",
+      "lockedVersion": "3.0.0",
+      "installedVersion": "3.0.0"
+    },
+    {
+      "path": "node_modules/is-typed-array",
+      "lockedVersion": "1.1.15",
+      "installedVersion": "1.1.15"
+    },
+    {
+      "path": "node_modules/isarray",
+      "lockedVersion": "2.0.5",
+      "installedVersion": "2.0.5"
+    },
+    {
+      "path": "node_modules/isexe",
+      "lockedVersion": "2.0.0",
+      "installedVersion": "2.0.0"
+    },
+    {
+      "path": "node_modules/istanbul-lib-coverage",
+      "lockedVersion": "3.2.2",
+      "installedVersion": "3.2.2"
+    },
+    {
+      "path": "node_modules/istanbul-lib-report",
+      "lockedVersion": "3.0.1",
+      "installedVersion": "3.0.1"
+    },
+    {
+      "path": "node_modules/istanbul-lib-source-maps",
+      "lockedVersion": "5.0.6",
+      "installedVersion": "5.0.6"
+    },
+    {
+      "path": "node_modules/istanbul-reports",
+      "lockedVersion": "3.2.0",
+      "installedVersion": "3.2.0"
+    },
+    {
+      "path": "node_modules/jackspeak",
+      "lockedVersion": "3.4.3",
+      "installedVersion": "3.4.3"
+    },
+    {
+      "path": "node_modules/js-tokens",
+      "lockedVersion": "9.0.1",
+      "installedVersion": "9.0.1"
+    },
+    {
+      "path": "node_modules/loupe",
+      "lockedVersion": "3.2.1",
+      "installedVersion": "3.2.1"
+    },
+    {
+      "path": "node_modules/lru-cache",
+      "lockedVersion": "10.4.3",
+      "installedVersion": "10.4.3"
+    },
+    {
+      "path": "node_modules/magic-string",
+      "lockedVersion": "0.30.21",
+      "installedVersion": "0.30.21"
+    },
+    {
+      "path": "node_modules/magicast",
+      "lockedVersion": "0.3.5",
+      "installedVersion": "0.3.5"
+    },
+    {
+      "path": "node_modules/make-dir",
+      "lockedVersion": "4.0.0",
+      "installedVersion": "4.0.0"
+    },
+    {
+      "path": "node_modules/math-intrinsics",
+      "lockedVersion": "1.1.0",
+      "installedVersion": "1.1.0"
+    },
+    {
+      "path": "node_modules/mime-db",
+      "lockedVersion": "1.52.0",
+      "installedVersion": "1.52.0"
+    },
+    {
+      "path": "node_modules/mime-types",
+      "lockedVersion": "2.1.35",
+      "installedVersion": "2.1.35"
+    },
+    {
+      "path": "node_modules/minimatch",
+      "lockedVersion": "10.2.6",
+      "installedVersion": "10.2.6"
+    },
+    {
+      "path": "node_modules/minipass",
+      "lockedVersion": "7.1.3",
+      "installedVersion": "7.1.3"
+    },
+    {
+      "path": "node_modules/ms",
+      "lockedVersion": "2.1.3",
+      "installedVersion": "2.1.3"
+    },
+    {
+      "path": "node_modules/nanoid",
+      "lockedVersion": "3.3.16",
+      "installedVersion": "3.3.16"
+    },
+    {
+      "path": "node_modules/package-json-from-dist",
+      "lockedVersion": "1.0.1",
+      "installedVersion": "1.0.1"
+    },
+    {
+      "path": "node_modules/path-key",
+      "lockedVersion": "3.1.1",
+      "installedVersion": "3.1.1"
+    },
+    {
+      "path": "node_modules/path-scurry",
+      "lockedVersion": "1.11.1",
+      "installedVersion": "1.11.1"
+    },
+    {
+      "path": "node_modules/pathe",
+      "lockedVersion": "2.0.3",
+      "installedVersion": "2.0.3"
+    },
+    {
+      "path": "node_modules/pathval",
+      "lockedVersion": "2.0.1",
+      "installedVersion": "2.0.1"
+    },
+    {
+      "path": "node_modules/picocolors",
+      "lockedVersion": "1.1.1",
+      "installedVersion": "1.1.1"
+    },
+    {
+      "path": "node_modules/picomatch",
+      "lockedVersion": "4.0.5",
+      "installedVersion": "4.0.5"
+    },
+    {
+      "path": "node_modules/possible-typed-array-names",
+      "lockedVersion": "1.1.0",
+      "installedVersion": "1.1.0"
+    },
+    {
+      "path": "node_modules/postcss",
+      "lockedVersion": "8.5.19",
+      "installedVersion": "8.5.19"
+    },
+    {
+      "path": "node_modules/proxy-from-env",
+      "lockedVersion": "2.1.0",
+      "installedVersion": "2.1.0"
+    },
+    {
+      "path": "node_modules/randombytes",
+      "lockedVersion": "2.1.0",
+      "installedVersion": "2.1.0"
+    },
+    {
+      "path": "node_modules/require-addon",
+      "lockedVersion": "1.2.0",
+      "installedVersion": "1.2.0"
+    },
+    {
+      "path": "node_modules/rollup",
+      "lockedVersion": "4.62.2",
+      "installedVersion": "4.62.2"
+    },
+    {
+      "path": "node_modules/safe-buffer",
+      "lockedVersion": "5.2.1",
+      "installedVersion": "5.2.1"
+    },
+    {
+      "path": "node_modules/semver",
+      "lockedVersion": "7.8.5",
+      "installedVersion": "7.8.5"
+    },
+    {
+      "path": "node_modules/set-function-length",
+      "lockedVersion": "1.2.2",
+      "installedVersion": "1.2.2"
+    },
+    {
+      "path": "node_modules/sha.js",
+      "lockedVersion": "2.4.12",
+      "installedVersion": "2.4.12"
+    },
+    {
+      "path": "node_modules/shebang-command",
+      "lockedVersion": "2.0.0",
+      "installedVersion": "2.0.0"
+    },
+    {
+      "path": "node_modules/shebang-regex",
+      "lockedVersion": "3.0.0",
+      "installedVersion": "3.0.0"
+    },
+    {
+      "path": "node_modules/siginfo",
+      "lockedVersion": "2.0.0",
+      "installedVersion": "2.0.0"
+    },
+    {
+      "path": "node_modules/signal-exit",
+      "lockedVersion": "4.1.0",
+      "installedVersion": "4.1.0"
+    },
+    {
+      "path": "node_modules/sodium-native",
+      "lockedVersion": "4.3.3",
+      "installedVersion": "4.3.3"
+    },
+    {
+      "path": "node_modules/source-map-js",
+      "lockedVersion": "1.2.1",
+      "installedVersion": "1.2.1"
+    },
+    {
+      "path": "node_modules/stackback",
+      "lockedVersion": "0.0.2",
+      "installedVersion": "0.0.2"
+    },
+    {
+      "path": "node_modules/std-env",
+      "lockedVersion": "3.10.0",
+      "installedVersion": "3.10.0"
+    },
+    {
+      "path": "node_modules/string-width",
+      "lockedVersion": "5.1.2",
+      "installedVersion": "5.1.2"
+    },
+    {
+      "path": "node_modules/string-width-cjs",
+      "lockedVersion": "4.2.3",
+      "installedVersion": "4.2.3"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/ansi-regex",
+      "lockedVersion": "5.0.1",
+      "installedVersion": "5.0.1"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/emoji-regex",
+      "lockedVersion": "8.0.0",
+      "installedVersion": "8.0.0"
+    },
+    {
+      "path": "node_modules/string-width-cjs/node_modules/strip-ansi",
+      "lockedVersion": "6.0.1",
+      "installedVersion": "6.0.1"
+    },
+    {
+      "path": "node_modules/strip-ansi",
+      "lockedVersion": "7.2.0",
+      "installedVersion": "7.2.0"
+    },
+    {
+      "path": "node_modules/strip-ansi-cjs",
+      "lockedVersion": "6.0.1",
+      "installedVersion": "6.0.1"
+    },
+    {
+      "path": "node_modules/strip-ansi-cjs/node_modules/ansi-regex",
+      "lockedVersion": "5.0.1",
+      "installedVersion": "5.0.1"
+    },
+    {
+      "path": "node_modules/strip-literal",
+      "lockedVersion": "3.1.0",
+      "installedVersion": "3.1.0"
+    },
+    {
+      "path": "node_modules/supports-color",
+      "lockedVersion": "7.2.0",
+      "installedVersion": "7.2.0"
+    },
+    {
+      "path": "node_modules/test-exclude",
+      "lockedVersion": "7.0.2",
+      "installedVersion": "7.0.2"
+    },
+    {
+      "path": "node_modules/tinybench",
+      "lockedVersion": "2.9.0",
+      "installedVersion": "2.9.0"
+    },
+    {
+      "path": "node_modules/tinyexec",
+      "lockedVersion": "0.3.2",
+      "installedVersion": "0.3.2"
+    },
+    {
+      "path": "node_modules/tinyglobby",
+      "lockedVersion": "0.2.17",
+      "installedVersion": "0.2.17"
+    },
+    {
+      "path": "node_modules/tinypool",
+      "lockedVersion": "1.1.1",
+      "installedVersion": "1.1.1"
+    },
+    {
+      "path": "node_modules/tinyrainbow",
+      "lockedVersion": "2.0.0",
+      "installedVersion": "2.0.0"
+    },
+    {
+      "path": "node_modules/tinyspy",
+      "lockedVersion": "4.0.4",
+      "installedVersion": "4.0.4"
+    },
+    {
+      "path": "node_modules/to-buffer",
+      "lockedVersion": "1.2.2",
+      "installedVersion": "1.2.2"
+    },
+    {
+      "path": "node_modules/toml",
+      "lockedVersion": "3.0.0",
+      "installedVersion": "3.0.0"
+    },
+    {
+      "path": "node_modules/tsx",
+      "lockedVersion": "4.23.1",
+      "installedVersion": "4.23.1"
+    },
+    {
+      "path": "node_modules/tweetnacl",
+      "lockedVersion": "1.0.3",
+      "installedVersion": "1.0.3"
+    },
+    {
+      "path": "node_modules/typed-array-buffer",
+      "lockedVersion": "1.0.3",
+      "installedVersion": "1.0.3"
+    },
+    {
+      "path": "node_modules/typescript",
+      "lockedVersion": "5.9.3",
+      "installedVersion": "5.9.3"
+    },
+    {
+      "path": "node_modules/undici-types",
+      "lockedVersion": "6.21.0",
+      "installedVersion": "6.21.0"
+    },
+    {
+      "path": "node_modules/urijs",
+      "lockedVersion": "1.19.11",
+      "installedVersion": "1.19.11"
+    },
+    {
+      "path": "node_modules/vite",
+      "lockedVersion": "7.3.6",
+      "installedVersion": "7.3.6"
+    },
+    {
+      "path": "node_modules/vite-node",
+      "lockedVersion": "3.2.4",
+      "installedVersion": "3.2.4"
+    },
+    {
+      "path": "node_modules/vitest",
+      "lockedVersion": "3.2.7",
+      "installedVersion": "3.2.7"
+    },
+    {
+      "path": "node_modules/which",
+      "lockedVersion": "2.0.2",
+      "installedVersion": "2.0.2"
+    },
+    {
+      "path": "node_modules/which-typed-array",
+      "lockedVersion": "1.1.22",
+      "installedVersion": "1.1.22"
+    },
+    {
+      "path": "node_modules/why-is-node-running",
+      "lockedVersion": "2.3.0",
+      "installedVersion": "2.3.0"
+    },
+    {
+      "path": "node_modules/wrap-ansi",
+      "lockedVersion": "8.1.0",
+      "installedVersion": "8.1.0"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs",
+      "lockedVersion": "7.0.0",
+      "installedVersion": "7.0.0"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/ansi-regex",
+      "lockedVersion": "5.0.1",
+      "installedVersion": "5.0.1"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/ansi-styles",
+      "lockedVersion": "4.3.0",
+      "installedVersion": "4.3.0"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/emoji-regex",
+      "lockedVersion": "8.0.0",
+      "installedVersion": "8.0.0"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/string-width",
+      "lockedVersion": "4.2.3",
+      "installedVersion": "4.2.3"
+    },
+    {
+      "path": "node_modules/wrap-ansi-cjs/node_modules/strip-ansi",
+      "lockedVersion": "6.0.1",
+      "installedVersion": "6.0.1"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+
+ RUN  v3.2.7 /workspace/scratch/ea8baa184658/sdk333-validation-candidate-353
+
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout at the deadline even when the lookup never settles 5ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores a confirmation that arrives after the deadline 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > retains the last pending observation when the next lookup hangs 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels an in-flight lookup and handles its later rejection 2ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > cancels during the retry delay and removes its timer and listener 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional attempt bound to at least one lookup 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional timeout to at least one millisecond 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > normalizes a positive fractional interval so retries have a real delay 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > removes deadline and abort resources after a prompt confirmation 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > polls through the public SDK export without a submission path 340ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > returns timeout when a synchronous lookup failure crosses the deadline 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > ignores confirmation after a clock advance before deadline timer delivery 1ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow expire a long timeout immediately 13ms
+ ✓ tests/polling-lifecycle.test.ts > pollTransaction request and cancellation lifecycle > does not let Node timer overflow schedule a long retry delay immediately 21ms
+ ✓ tests/polling.test.ts > pollTransaction > returns confirmed success with the number of status lookups 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns failed when Horizon confirms an unsuccessful transaction 0ms
+ ✓ tests/polling.test.ts > pollTransaction > treats Horizon 404 as pending and retries until confirmation 2ms
+ ✓ tests/polling.test.ts > pollTransaction > stops at maxAttempts and reports the last observed state as pending 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns timeout with pending state when the time bound expires 41ms
+ ✓ tests/polling.test.ts > pollTransaction > applies the timeout while a Horizon lookup is still in flight 21ms
+ ✓ tests/polling.test.ts > pollTransaction > retries a retryable lookup error within the configured bounds 2ms
+ ✓ tests/polling.test.ts > pollTransaction > returns unknown for a non-retryable status lookup error 1ms
+ ✓ tests/polling.test.ts > pollTransaction > supports AbortSignal cancellation without issuing a status request when already aborted 2ms
+
+ Test Files  2 passed (2)
+      Tests  23 passed (23)
+   Start at  19:51:14
+   Duration  1.44s (transform 456ms, setup 41ms, collect 556ms, tests 464ms, environment 0ms, prepare 117ms)
+

@@ -1,0 +1,13 @@
+{
+  "node": "24.19.0",
+  "vitest": "3.2.7",
+  "typescript": "5.9.3",
+  "stellarSdk": "13.3.0",
+  "tsx": "4.23.1",
+  "installation": "Read-only reuse of sdk179-validation-base after byte/graph validation; no install was executed for this packet.",
+  "packageGit": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+  "packageSha256": "66fceb4791046b18fcc67148c27fbb72a5d4096d0170f1e82bbede44d10dc506",
+  "lockGit": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+  "lockSha256": "c0723711d676fa3f2d0647938a95ba618d44ad167bb8a380530cb507a84825b9",
+  "npm": "11.9.0"
+}

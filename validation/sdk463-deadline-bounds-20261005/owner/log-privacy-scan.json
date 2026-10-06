@@ -1,0 +1,82 @@
+{
+  "method": "Scan published raw logs for 56-character Stellar secret-seed shape; owner root logs also scanned with locked Stellar SDK StrKey validation.",
+  "logs": [
+    {
+      "path": "peer/peer-candidate-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "6ba36505c66fff388d4015f5edee6c3fd4ef78d4dc3a7d9117d0315d2a4c3ccc"
+    },
+    {
+      "path": "peer/peer-frozen-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "b8bac0c0fb053a2fc21aae1dfc4677516d9fc777e4287eeda031ef089634bdef"
+    },
+    {
+      "path": "owner/whole-types-candidate-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/project-lint-source-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "d8db162bd8826f4c5191675fbf3f89af55ca07d4d25756952d7d887ef6fe9788"
+    },
+    {
+      "path": "owner/whole-candidate-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "c06d38931d2284aa153532eae36d05a0e1cddc2df8de32f63b0918e6b6630b06"
+    },
+    {
+      "path": "owner/polling-scoped-types-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "owner/whole-types-source-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/whole-base-ddd.log",
+      "seedShapedMatches": 0,
+      "sha256": "ef351c40e240fac8daef59020270f06d8e966343d2bc81308d9e12e6360163af"
+    },
+    {
+      "path": "owner/polling-final-candidate-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "305013b4e07133489bf2ee09d143e9825e1cab17a23e5a1d5333b389938fd46e"
+    },
+    {
+      "path": "owner/runtime-and-test-strict-types.log",
+      "seedShapedMatches": 0,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/polling-final-frozen-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "ee6c9e731ae2aad38c70a7b3622f4519e771490a73be3e431f53d4ba22c748a7"
+    },
+    {
+      "path": "owner/project-lint-candidate-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "d8db162bd8826f4c5191675fbf3f89af55ca07d4d25756952d7d887ef6fe9788"
+    },
+    {
+      "path": "owner/whole-types-base-ddd.log",
+      "seedShapedMatches": 0,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/patch-apply-check.log",
+      "seedShapedMatches": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "owner/whole-source-353.log",
+      "seedShapedMatches": 0,
+      "sha256": "5d239d79fa7263cb5ba86213b2be7a143a7c8796b5305caaefbe9ed8ee2b7dd9"
+    }
+  ],
+  "validSecretSeedMatches": 0,
+  "redactionsPerformed": 0
+}

@@ -1,0 +1,13 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> stellar-pocketpay-sdk@1.0.0 lint
+> tsc --noEmit --pretty false
+
+src/payments/qrParser.ts(51,7): error TS2322: Type '"address"' is not assignable to type 'ValidationErrorField'.
+src/payments/qrParser.ts(61,9): error TS2322: Type '"address"' is not assignable to type 'ValidationErrorField'.
+src/payments/qrParser.ts(99,9): error TS2322: Type '"INVALID_ASSET"' is not assignable to type 'ValidationErrorCode'.
+src/payments/qrParser.ts(100,9): error TS2322: Type '"asset"' is not assignable to type 'ValidationErrorField'.
+src/payments/qrParser.ts(110,11): error TS2322: Type '"INVALID_ASSET"' is not assignable to type 'ValidationErrorCode'.
+src/payments/qrParser.ts(111,11): error TS2322: Type '"asset"' is not assignable to type 'ValidationErrorField'.
+src/payments/qrParser.ts(150,9): error TS2322: Type '"INVALID_METADATA"' is not assignable to type 'ValidationErrorCode'.
+src/payments/qrParser.ts(151,9): error TS2322: Type '"metadata"' is not assignable to type 'ValidationErrorField'.

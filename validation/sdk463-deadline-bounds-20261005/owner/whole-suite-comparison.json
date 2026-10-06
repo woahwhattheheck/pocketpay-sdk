@@ -1,0 +1,53 @@
+{
+  "base-ddd": {
+    "failureBlockSha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c",
+    "bytes": 1222,
+    "failureNames": [
+      "tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+      "tests/qrParser.test.ts > QR Parser > throws on malformed URL"
+    ],
+    "guardWorkerFiles": 60,
+    "deniedUnmockedTransportAttempts": {
+      "socketConnect": 0,
+      "tlsConnect": 0,
+      "httpRequest": 0,
+      "httpsRequest": 4,
+      "fetch": 1,
+      "udpSend": 0
+    }
+  },
+  "source-353": {
+    "failureBlockSha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c",
+    "bytes": 1222,
+    "failureNames": [
+      "tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+      "tests/qrParser.test.ts > QR Parser > throws on malformed URL"
+    ],
+    "guardWorkerFiles": 60,
+    "deniedUnmockedTransportAttempts": {
+      "socketConnect": 0,
+      "tlsConnect": 0,
+      "httpRequest": 0,
+      "httpsRequest": 4,
+      "fetch": 1,
+      "udpSend": 0
+    }
+  },
+  "candidate-353": {
+    "failureBlockSha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c",
+    "bytes": 1222,
+    "failureNames": [
+      "tests/qrParser.test.ts > QR Parser > parses valid QR payload",
+      "tests/qrParser.test.ts > QR Parser > throws on malformed URL"
+    ],
+    "guardWorkerFiles": 61,
+    "deniedUnmockedTransportAttempts": {
+      "socketConnect": 0,
+      "tlsConnect": 0,
+      "httpRequest": 0,
+      "httpsRequest": 4,
+      "fetch": 1,
+      "udpSend": 0
+    }
+  }
+}

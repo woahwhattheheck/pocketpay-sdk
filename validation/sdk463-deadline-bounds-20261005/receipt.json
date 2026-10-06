@@ -1,0 +1,363 @@
+{
+  "schema": "sdk463-deadline-bounds-validation-v1",
+  "result": "FOCUSED_PASS_WITH_BASELINE_FAILURES_DISCLOSED",
+  "preparedAt": "2026-10-05T23:59:58.855667+00:00",
+  "publicationPerformedByThisAgent": false,
+  "pr": "https://github.com/Stellar-PocketPay/pocketpay-sdk/pull/463",
+  "expectedProductParent": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+  "expectedParentTree": "2e45e9920d314a0fe594f3033512b26a22cf1b81",
+  "base": "ddd18b381d2dc7286eabf10046f2f9c768b3a6fb",
+  "candidate": {
+    "source": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+    "tree": "2e45e9920d314a0fe594f3033512b26a22cf1b81",
+    "sourceBlobsVerified": 294,
+    "candidateTree": "850c620f5ba11057a822ead10cc24c637d300959",
+    "changed": [
+      {
+        "path": "docs/polling.md",
+        "preimageGit": "4d3c132a6373f88bc6d26d99500c0e3821131277",
+        "postimageGit": "d87fc2486e5a162f4050f9e19f3cbabb5d8343a6",
+        "sha256": "9161918a19eed4bce156b5dbc9815111fb3e17b17f034a879e9ace9c2247be44",
+        "bytes": 2705,
+        "kind": "modified"
+      },
+      {
+        "path": "src/transactions/polling.ts",
+        "preimageGit": "60cc2e6181ff610de3100b9333bbde59cb1329ef",
+        "postimageGit": "99eadc11b262b5af49d7f2a567757a442ea31625",
+        "sha256": "25c92662f6542b2144ffc5632c99acab4aa980ff195d0f08ab1f7ec4bc6b64e1",
+        "bytes": 7192,
+        "kind": "modified"
+      },
+      {
+        "path": "tests/polling-lifecycle.test.ts",
+        "postimageGit": "2001a40f1bb8bd2b228946f98b3ce68a58ebc094",
+        "sha256": "1c9046e79460fbe121c3aa760502f09585b8ceef4022ef318ea6284bfb6d4c8e",
+        "bytes": 9576,
+        "kind": "added"
+      }
+    ],
+    "patchBytes": 14719,
+    "patchSha256": "3bd673b7597912192ba71a49357f870f0bc1988acc89b2c8a455ea7a59ca7966",
+    "outsideExistingTestPreserved": true
+  },
+  "custody": {
+    "qaRelease": "https://tokenjunkielabs.slack.com/archives/C0BVANHNB26/p1791243775857039",
+    "rootContinuationTake": "https://tokenjunkielabs.slack.com/archives/C0BU51F1PL3/p1791244207439879",
+    "outside353SourceTestsDocsPreserved": true
+  },
+  "ownerFocused": {
+    "original353": {
+      "passed": 16,
+      "failed": 7,
+      "total": 23
+    },
+    "candidate": {
+      "passed": 23,
+      "failed": 0,
+      "total": 23
+    },
+    "existingNineTestsUnchanged": true,
+    "newLifecycleTests": 14,
+    "unmockedTransportAttempts": 0
+  },
+  "independentPeer": {
+    "receiptSha256": "1b9008757fdf0d820b9f5bd586b1b6d3291620c5eac21896364534ef91f32afe",
+    "source353": {
+      "passed": 8,
+      "failed": 5,
+      "total": 13
+    },
+    "candidate": {
+      "passed": 13,
+      "failed": 0,
+      "total": 13
+    },
+    "result": "CLEAR",
+    "unmockedTransportAttempts": 0
+  },
+  "wholeUnits": {
+    "baseDdd": {
+      "files": 60,
+      "passed": 1117,
+      "failed": 2,
+      "total": 1119
+    },
+    "source353": {
+      "files": 60,
+      "passed": 1121,
+      "failed": 2,
+      "total": 1123
+    },
+    "candidate": {
+      "files": 61,
+      "passed": 1135,
+      "failed": 2,
+      "total": 1137
+    },
+    "onlyFailures": [
+      "QR Parser > parses valid QR payload",
+      "QR Parser > throws on malformed URL"
+    ],
+    "identicalFailureBlockSha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c",
+    "excludedOnlyExplicitOptInIntegrationFile": "tests/friendbot.integration.test.ts",
+    "workerGuardsVerifiedInEveryTestFile": true,
+    "perRunDeniedAttempts": {
+      "httpsRequest": 4,
+      "fetch": 1,
+      "socketConnect": 0,
+      "tlsConnect": 0,
+      "httpRequest": 0,
+      "udpSend": 0
+    },
+    "actualOutboundTransports": 0
+  },
+  "typesAndLint": {
+    "scopedStrictRuntimeErrors": 0,
+    "strictRuntimePlusNewTestErrors": 8,
+    "strictRuntimePlusNewTestOnlyInheritedQrErrors": true,
+    "wholeBaseSourceCandidateErrors": 8,
+    "wholeTypeLogsByteIdentical": true,
+    "wholeTypeLogSha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c",
+    "projectLint": "tsc --noEmit",
+    "actualProjectLintExitCode": 2,
+    "projectLintSourceCandidateLogsByteIdentical": true,
+    "projectLintLogSha256": "d8db162bd8826f4c5191675fbf3f89af55ca07d4d25756952d7d887ef6fe9788",
+    "noSeparateEslintOrDocsLintScript": true,
+    "exactParentWhitespacePatchCheckPassed": true
+  },
+  "limits": [
+    "No new PR, source/ref/body mutation was performed by this agent.",
+    "No full build, coverage gate, all-green unit/type/lint, hosted CI or live integration claim.",
+    "No signing, submission, resubmission, payment, assignment, reward or maintainer approval claim.",
+    "Underlying Horizon lookup transport may finish after poll cancellation/timeout; late results cannot alter the completed poll.",
+    "Historical 4de and unpublished prototype probes remain at the original local paths and are not represented as current353 evidence."
+  ],
+  "lockedInputs": [
+    {
+      "path": "README.md",
+      "bytes": 4297,
+      "sha256": "0b7c5301343828ba87bef3e34db8f08fc46d83e572867e1b38fe60fb093db238"
+    },
+    {
+      "path": "harness/validation-network-deny.cjs",
+      "bytes": 1476,
+      "sha256": "813afd3a4a5bb455cd33801169992fbd190ea58548681cc27182a3e2445a1e20"
+    },
+    {
+      "path": "harness/validation-network-setup.ts",
+      "bytes": 1190,
+      "sha256": "8d0c5c207fd9043947c09d377684257182f7a453fdfb81c4d1b88ec7a9e0f49c"
+    },
+    {
+      "path": "harness/validation-vitest.config.mts",
+      "bytes": 310,
+      "sha256": "98000b868b655dad68ef097c6c852a614e4431d92a35abc6fec328241d2549c0"
+    },
+    {
+      "path": "owner/commands.json",
+      "bytes": 4256,
+      "sha256": "e9a22ef9e082f3edeaf986d1ea66bad32b4d67a586641d65077769ddf7de6697"
+    },
+    {
+      "path": "owner/guard-original-records.json",
+      "bytes": 71070,
+      "sha256": "03b457f4e67bcd575b07c63b17f6b5f9f764a10d112f0626b766368c3aceee03"
+    },
+    {
+      "path": "owner/installed-lock-graph.json",
+      "bytes": 23324,
+      "sha256": "e8b9bec0216cad7496b8662f75587265c6746d699cbfb003b0ccf55b4d303768"
+    },
+    {
+      "path": "owner/known-qr-failures-base-ddd.txt",
+      "bytes": 1222,
+      "sha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c"
+    },
+    {
+      "path": "owner/known-qr-failures-candidate-353.txt",
+      "bytes": 1222,
+      "sha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c"
+    },
+    {
+      "path": "owner/known-qr-failures-source-353.txt",
+      "bytes": 1222,
+      "sha256": "6c9890ff8df20e465755622b2cdbe060640a94df4b7330c3a8d205c377e90e2c"
+    },
+    {
+      "path": "owner/log-privacy-scan.json",
+      "bytes": 2860,
+      "sha256": "f77096396e372a78f81c3140ad3ad5d6956adf2ff59bacf9fff8e04da8163473"
+    },
+    {
+      "path": "owner/patch-apply-check.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "owner/polling-final-candidate-353.log",
+      "bytes": 3594,
+      "sha256": "305013b4e07133489bf2ee09d143e9825e1cab17a23e5a1d5333b389938fd46e"
+    },
+    {
+      "path": "owner/polling-final-frozen-353.log",
+      "bytes": 11474,
+      "sha256": "ee6c9e731ae2aad38c70a7b3622f4519e771490a73be3e431f53d4ba22c748a7"
+    },
+    {
+      "path": "owner/polling-scoped-types-353.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "owner/project-lint-candidate-353.log",
+      "bytes": 1092,
+      "sha256": "d8db162bd8826f4c5191675fbf3f89af55ca07d4d25756952d7d887ef6fe9788"
+    },
+    {
+      "path": "owner/project-lint-source-353.log",
+      "bytes": 1092,
+      "sha256": "d8db162bd8826f4c5191675fbf3f89af55ca07d4d25756952d7d887ef6fe9788"
+    },
+    {
+      "path": "owner/runtime-and-test-strict-types.log",
+      "bytes": 926,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/runtime.json",
+      "bytes": 555,
+      "sha256": "671d6ded572c8684dba067615dab2a283f7782185b292362133e7be1a97f1c3e"
+    },
+    {
+      "path": "owner/whole-base-ddd.log",
+      "bytes": 147236,
+      "sha256": "ef351c40e240fac8daef59020270f06d8e966343d2bc81308d9e12e6360163af"
+    },
+    {
+      "path": "owner/whole-candidate-353.log",
+      "bytes": 150086,
+      "sha256": "c06d38931d2284aa153532eae36d05a0e1cddc2df8de32f63b0918e6b6630b06"
+    },
+    {
+      "path": "owner/whole-source-353.log",
+      "bytes": 147801,
+      "sha256": "5d239d79fa7263cb5ba86213b2be7a143a7c8796b5305caaefbe9ed8ee2b7dd9"
+    },
+    {
+      "path": "owner/whole-suite-comparison.json",
+      "bytes": 1546,
+      "sha256": "60868cd3d671e0f1116ce9b406352e61c3108827d813d1a2365c38977afefc61"
+    },
+    {
+      "path": "owner/whole-types-base-ddd.log",
+      "bytes": 926,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/whole-types-candidate-353.log",
+      "bytes": 926,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "owner/whole-types-source-353.log",
+      "bytes": 926,
+      "sha256": "49bb1a022b84f78e63aa76127c4f6fe2de9c4f12a7ad9d422590e9a04f57fc6c"
+    },
+    {
+      "path": "peer/frozen-candidate/docs/polling.md",
+      "bytes": 2705,
+      "sha256": "9161918a19eed4bce156b5dbc9815111fb3e17b17f034a879e9ace9c2247be44"
+    },
+    {
+      "path": "peer/frozen-candidate/src/transactions/polling.ts",
+      "bytes": 7192,
+      "sha256": "25c92662f6542b2144ffc5632c99acab4aa980ff195d0f08ab1f7ec4bc6b64e1"
+    },
+    {
+      "path": "peer/frozen-candidate/tests/polling-lifecycle.test.ts",
+      "bytes": 9576,
+      "sha256": "1c9046e79460fbe121c3aa760502f09585b8ceef4022ef318ea6284bfb6d4c8e"
+    },
+    {
+      "path": "peer/native-353/expected-projection.json",
+      "bytes": 46730,
+      "sha256": "98ca57fa0acae9bd5751bfb94db9dce038f32c709a80264ca92c8b1fb42c8f2e"
+    },
+    {
+      "path": "peer/network-deny.cjs",
+      "bytes": 854,
+      "sha256": "2cb5bcd1697c84505546d7cdcc4dc8e8617ef4ba3ff97955116e6b55f2050b48"
+    },
+    {
+      "path": "peer/peer-candidate-353.log",
+      "bytes": 2248,
+      "sha256": "6ba36505c66fff388d4015f5edee6c3fd4ef78d4dc3a7d9117d0315d2a4c3ccc"
+    },
+    {
+      "path": "peer/peer-frozen-353.log",
+      "bytes": 7354,
+      "sha256": "b8bac0c0fb053a2fc21aae1dfc4677516d9fc777e4287eeda031ef089634bdef"
+    },
+    {
+      "path": "peer/peer-network-candidate-353.json",
+      "bytes": 279,
+      "sha256": "44233b6614c5db210918bf42b740f6fb5afce6f0b8fe9f1525fa95fc9857bb04"
+    },
+    {
+      "path": "peer/peer-network-frozen-353.json",
+      "bytes": 276,
+      "sha256": "c0bfe9065d3bfc3a0f38a5f9de4aebdf4cf706e28872503b5c1078ab9ba25660"
+    },
+    {
+      "path": "peer/polling-peer.test.ts",
+      "bytes": 10169,
+      "sha256": "be2e136ac4d6804dfbc9d952040478b5efc84f6f10ed0c81c18269941d2eb32d"
+    },
+    {
+      "path": "peer/sdk463-peer-review.json",
+      "bytes": 7946,
+      "sha256": "1b9008757fdf0d820b9f5bd586b1b6d3291620c5eac21896364534ef91f32afe"
+    },
+    {
+      "path": "peer/source-projection-review.json",
+      "bytes": 147226,
+      "sha256": "8f37ebb8840bcb9a656baf8b048dc30446ed0228937adb5c6316fbcfbb452039"
+    },
+    {
+      "path": "peer/vitest.config.mts",
+      "bytes": 243,
+      "sha256": "7a374966ad039e1b051d4ea50b61b41e8f517872d32e13b625e7493b3b183e79"
+    },
+    {
+      "path": "sdk463-deadline-bounds.patch",
+      "bytes": 14719,
+      "sha256": "3bd673b7597912192ba71a49357f870f0bc1988acc89b2c8a455ea7a59ca7966"
+    },
+    {
+      "path": "source-before-353/docs/polling.md",
+      "bytes": 2252,
+      "sha256": "b574a50bd4be1440854959ad584e67f639c0ee731d1bbcf6b0c11ed87a971eb7"
+    },
+    {
+      "path": "source-before-353/src/transactions/polling.ts",
+      "bytes": 6144,
+      "sha256": "f38d523c34a3e2d36010cf4274333a69daf066ce453a91e008247ac3b4a8c277"
+    },
+    {
+      "path": "source-before-353/tests/polling.test.ts",
+      "bytes": 6713,
+      "sha256": "7dfd11f288ba6b4e2ea7cde5d28a15a6478d6f722780e315da6c478de6b05e83"
+    },
+    {
+      "path": "source-freeze.json",
+      "bytes": 1254,
+      "sha256": "80c2fea12bce00c96f47ec136ca4564891287e2ee3c2b783662c4c699e344109"
+    },
+    {
+      "path": "source-pin-manifest.json",
+      "bytes": 40901,
+      "sha256": "c3c23262dc0eacfde7775bb89bcf6c39357793701924cd3cc04dbae66881fde9"
+    }
+  ]
+}

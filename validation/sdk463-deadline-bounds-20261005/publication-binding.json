@@ -1,0 +1,17 @@
+{
+  "schema": "sdk463-published-source-evidence-binding-v1",
+  "publishedSourceCommit": "8aa8cbdbba0f42e127c7bced3bf2e7c95a668962",
+  "publishedSourceTree": "850c620f5ba11057a822ead10cc24c637d300959",
+  "publishedSourceSoleParent": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+  "testedProspectiveTree": "850c620f5ba11057a822ead10cc24c637d300959",
+  "evidenceBranch": "validation/sdk463-deadline-bounds-8aa-20261006",
+  "frozenReceipt": {
+    "path": "receipt.json",
+    "bytes": 12356,
+    "sha256": "aac15a0a6308fdb5580f6294830cee511239969679560dd129cbdceab24e9785"
+  },
+  "binding": "Local tests executed on the prospective source tree before source commit 8aa8cbdb was published. The published source tree is byte-identical to that tested tree. This note does not claim that commit 8aa8cbdb itself was checked out before the recorded tests.",
+  "scope": "Evidence-only child of the published source; no product, source branch, PR body, workflow or dependency mutation.",
+  "limits": "Focused owner/peer passes and inherited whole-suite/type/lint failures are preserved in the frozen receipt. No all-green build, hosted CI, live integration, assignment, maintainer approval, reward or payment claim.",
+  "sourceCommitProviderDate": "2026-10-06T00:02:46Z"
+}

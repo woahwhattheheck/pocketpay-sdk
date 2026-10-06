@@ -1,0 +1,1477 @@
+{
+  "source": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+  "tree": "2e45e9920d314a0fe594f3033512b26a22cf1b81",
+  "all294ImmutableNativeBlobsVerified": true,
+  "blobs": [
+    {
+      "path": ".env.example",
+      "sha": "8e9e8840269dcb8d795c5c019e76c66efd809fc0",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "sha": "bf04143a1480acc0e0a5c44f06c847cd901f5b04",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/documentation.md",
+      "sha": "1709e5b96d61015b51cff800aa218874b512f22c",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "sha": "d45109d6179dbc45963d7fbde626d184de1f2e67",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "sha": "62e6aa2fdcf15a5ff3f896bd2b8e18aae6d332b3",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/acceptance-criteria.template.md",
+      "sha": "2acebf9eb8514e4ec9ce481a61915fb8063e7439",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/contribution-quality-gate.md",
+      "sha": "e243352cc72611c900535e59165d51b872b58758",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/contributor-self-review.template.md",
+      "sha": "df44b3fb17ee5f1cfa826cea32ede964a00aaac3",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-249.md",
+      "sha": "8173473c41ff43f4c067991bf6f96652bd92b220",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-274.md",
+      "sha": "edbaa63464e110ac43a62be550f343623c4ed58c",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-305.md",
+      "sha": "76f37eb4824250dc72c9d3e40e5b68a7db6a12b0",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-316.md",
+      "sha": "e4f04ecc47a2f5406ee80f350e91db34b68f24de",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-337.md",
+      "sha": "48d44d3d69cd3bcba3f7a68f5e6378221e85c6cb",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/checklists/issue-369.md",
+      "sha": "874cd00670c319a9008d100332dc4880d5309708",
+      "mode": "100644"
+    },
+    {
+      "path": ".github/workflows/trigger-auto-merge.yml",
+      "sha": "ecb99b81d6df8e1b773beb907f0afc1be0ee78ad",
+      "mode": "100644"
+    },
+    {
+      "path": ".gitignore",
+      "sha": "26905d62ec5901f83dc72a3cf7d27e83525128ba",
+      "mode": "100644"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "sha": "54357fa311e37c2cf5ac27a972e37a1bb8b692ce",
+      "mode": "100644"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "sha": "77fa9ef3aaab1d7aa554d130642b2434315df835",
+      "mode": "100644"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "sha": "ac216736374f573abf3d1ae0ed267f9fac9a0707",
+      "mode": "100644"
+    },
+    {
+      "path": "README.md",
+      "sha": "060ab7d8b73959c0856d698266030f537aa22939",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/Asset-Model.md",
+      "sha": "bedc7871c39cd3c96f87a1eb3c9b448262325adc",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/FIXTURES.md",
+      "sha": "b2c78731a02a04441cd680466f89acfbf284bd0a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/PUBLIC_API_COMPATIBILITY_CHECKLIST.md",
+      "sha": "c35d0dee876f078b5a7ebac53dce2afd63d14351",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/acceptance-criteria-traceability.md",
+      "sha": "fb62109ca4a71216a739640048313847377745a0",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/account-abstraction.md",
+      "sha": "2858043a262a06f6b3a6beaa99f62aa80fd0cbc4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/account_history_model.md",
+      "sha": "faea48e7022e2d18ca8672e68e529e22444b8ed6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/0001-api-design-principles.md",
+      "sha": "fac7eece010a4fff6462713c36947852ebde7677",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/0002-account-abstraction.md",
+      "sha": "7e6c50cdeb6ce288220a1008c730cf523a87c6a7",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/0003-trustline-validation.md",
+      "sha": "540d1d86a9588bc2f0e2481c922d8cf0ec798401",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/0004-signer-capability-architecture.md",
+      "sha": "b6b59119c2bc28c5fbf321f30c5b97919f5097c6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/0005-transaction-lifecycle.md",
+      "sha": "3dbed259e5b08c479a3f608e38c498d0de8eca0a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/adr/README.md",
+      "sha": "fb77feaf6b198d2f12d4c37a6febc117cfc8d8d5",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/amount-model.md",
+      "sha": "b2159c6e2f6063941b7430e6e786413e4aa3d580",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/api-reference.md",
+      "sha": "7b611b848532843720b5e0c6c02c2bc6f4f07005",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/app_integration_blueprint.md",
+      "sha": "ecf18fadab5825a436dbd2cf847356796fa22b5d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/architecture.md",
+      "sha": "8bb4a6c6a62adf1540420da898debbf462319f64",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/asset-formatting.md",
+      "sha": "ee89ed27c0547a8e9c7b1b485aa1175ee5aa3d4d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/auth-requirements.md",
+      "sha": "ff7c6080746fd9f9495915dae5a6862a25eb7f4a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/capability_error_standard.md",
+      "sha": "99edae674a92ab214e353578fea3ac1f97a8be12",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/changelog-policy.md",
+      "sha": "630e1b2ab989d40ff7cafa702ba77dbec7386fae",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/client_factory_design.md",
+      "sha": "aee173d56d1d371a41662f649d45313a9056dc0e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/concurrent_submission_safety.md",
+      "sha": "73d6c404e34e2c7286a5328b476de0e5c992c153",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/configuration.md",
+      "sha": "6159f835d78db82d5f6689b7c6bec73e511b4a52",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/contract-client-factory.md",
+      "sha": "264f16b502f22ba349d1b5ce3026e68d0fba8e3a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/contract_error_taxonomy.md",
+      "sha": "5c1855e4a7440274d706380f547322727f78a9db",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/contract_invocation_client.md",
+      "sha": "7367503d39e0af98649311db2f0ccd7430e7e6eb",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/contribution-quality-gate.md",
+      "sha": "d5b57d79a37537e2c30829f96c59ccd0fd6ca351",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/coverage-baseline.md",
+      "sha": "07b5a78cf98572e4e304c65ed432bcfe5934fc02",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/dependency-review.md",
+      "sha": "ddb302604fdc06a11ae946b7a6b58e6f4982bf5e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/dependency_direction_map.md",
+      "sha": "f71efca9631a8e7ed5058d15029fa3946be2975b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/destination-validation.md",
+      "sha": "ac20e9da12db991efa5bcabbb48553f23e630ac6",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/diagnostics.md",
+      "sha": "400a42e9a7b17d01b2e9277ae9e87511e902510a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/diagnostics_observability_hooks.md",
+      "sha": "87969dd23ea3cfa4b76d0d4d947a97f0210fac2b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/error-handling.md",
+      "sha": "dc793c5182dddd1808121efa1058ad2ff47000a4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/error-standard.md",
+      "sha": "7154c36d727ca5625e297601be4a7d733d6aabd4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/evaluation-readiness.md",
+      "sha": "a164a2c64e19a3fdf4eb0efa87eb706911b21710",
+      "mode": "100755"
+    },
+    {
+      "path": "docs/external_signer.md",
+      "sha": "f0ab9cc9c027074676dd56c7e90cf9cfe6bd8274",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/feature-flags.md",
+      "sha": "dc8ced89cd45e2c058390f92d7af1215348ae881",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/fee-estimation.md",
+      "sha": "aa01bec1f6a94211c5c36e51a7e6f0584f885d6c",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/getting-started.md",
+      "sha": "418c08a5dd73f4924e271792054c05ac4e5605e3",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/glossary.md",
+      "sha": "b70e9b9f2952300d772ae0570d24ea4e25592dd9",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/idempotency.md",
+      "sha": "f745b7a2a37b5c391785d7f43a038179f6258124",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/issued-asset-payments.md",
+      "sha": "9eeab142dbdcf23647cf5ef978f9c181461f1a2d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/local-mobile-consumption.md",
+      "sha": "c5d5734ebffa53147117ac6990dc3bca74e1bc4b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/local-verification.md",
+      "sha": "c7b368582e6bc8b7fd973f09443439106b07bebf",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/logging-payloads-and-debug.md",
+      "sha": "ae801fa17f5d1578993df6b392f40bf4bb842cf4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/logging.md",
+      "sha": "92cbdb1a0eaa8254b1786ef793f20909efbae8b7",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/meaningful-change-review.md",
+      "sha": "cb516b434788484295438380264e14b024543651",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/memo-validation.md",
+      "sha": "2c9e51732629ec92bbccc81026db9412f684eaa5",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/migration-note-template.md",
+      "sha": "7f43aa6a8ffe0fc586506ae71b3cdfbfc76b7c91",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/module-test-matrix.md",
+      "sha": "ddc6a43387cc2b6fc84442edf02e8ecae601fac0",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/multi-asset-balance-model.md",
+      "sha": "757754741a353d25311661089731407553dc4b83",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/multi_asset_payment_intents.md",
+      "sha": "140a84f263b2016a477de67132a929b1fd16c8ec",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/network-errors.md",
+      "sha": "9653c6f793df54df4263e76a6538c69c98011353",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/network-resilience.md",
+      "sha": "c07fef4fdb017f56d4aafa206954f8b798b5e06b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/offline-transaction-preparation.md",
+      "sha": "a3ddb3b20f348e56d2b81356c3a927fe3dd47e9a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/payment-receipts.md",
+      "sha": "e9850dff8647b7fe93f5d768f242f6f158273143",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/pocketpay_sdk_unit_tests.md",
+      "sha": "063969405e4e8f25f2500c33b7a13802027da3aa",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/polling.md",
+      "sha": "4d3c132a6373f88bc6d26d99500c0e3821131277",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/pre-pr-verification.md",
+      "sha": "f35fc1b54aa581e5dc1f6810b223ea824c3b6eb0",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/pre-submission-verification.md",
+      "sha": "cfb0ce643989e18b1345f9c5624eef5de7aa8886",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/public_error_taxonomy.md",
+      "sha": "502fd16be4ec9e7b58e3499c64375eec59f6d008",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/react-native.md",
+      "sha": "169e17b8f2bae94b5d96537189fd1d765c59c4ba",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/release-checklist.md",
+      "sha": "451bf3c2e2108b3fa24bdc8e13b3d52fc7297db5",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/retry-policy.md",
+      "sha": "b02a14989ac3f926a10b874aff0a3e7409f9fa03",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/roadmap.md",
+      "sha": "5571c722981f035198cb290e8c4e0790c0c89292",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/runtime-compatibility.md",
+      "sha": "795814da5eed4b05a3e931ec25c903e22eda1934",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/sdk_migration_system.md",
+      "sha": "2c55d1526f8e1a2fcb702e274619afcc061331f8",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/sdk_security_readiness_review.md",
+      "sha": "a7b1707d172f596b4ea1c0e442a634764fdafa0d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/security.md",
+      "sha": "58610960b143ec350f35f3c96fbb3363be85ac27",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/security_threat_model.md",
+      "sha": "634690d03ef4d9f7d80718f8dad4a1e0c6a23aac",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/sequence-safety.md",
+      "sha": "97b431657e611b6792d8f87e93962a7ea479fd96",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/signed-transaction-inspection.md",
+      "sha": "22b6bc812463b5f91daf865c71d4318a42b0498d",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/signing-boundaries.md",
+      "sha": "7fa0599b10254564473305fab024f56c890d693e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/simulation-result-mapping.md",
+      "sha": "2686a06f71d23fd3a449343e6ec3eab271c3f9c2",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/soroban-vault.md",
+      "sha": "d8fb442222efac3d0ea214669daeaf61dad5813e",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/support-policy.md",
+      "sha": "d60e85c174f8df48130c5386a4340a3a0838e91b",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/test-first-guide.md",
+      "sha": "839dc26d38d89fb6614bae7edfdd8146d2180a9a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/testing-fixtures.md",
+      "sha": "38dca75ef1f642e5588f68818a87438091371dd4",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/testing.md",
+      "sha": "e74c9ecea94b378762551dd332b36a5e6fbbb406",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/testnet-funding.md",
+      "sha": "1380140682009688820419c19a5ac5dd8fcbc213",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/timeout-classification.md",
+      "sha": "872b92853da39bc0897e473a931cb363f8ef7e32",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/transaction-build-validation.md",
+      "sha": "44c09fc222d5ca35b651ee6e9c1e51c808cfe89a",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/transaction-lifecycle.md",
+      "sha": "474d4cbda29fcdd595d69c7dcb235e8b553163cb",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/transaction-timestamps.md",
+      "sha": "5c5c09634d9baf298536e4c614548f24777daa04",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/trustline-validation.md",
+      "sha": "c1baba3bf0f33f92e2ec8d73fc41a556013b02d8",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/vault-capabilities.md",
+      "sha": "15339475c42388a8b1fb80bc875a96ed2530d4b8",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/wallet-import-safety.md",
+      "sha": "e575c9d04e78f76a94bb906f3fb635cad7866ac8",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/wallet-recovery-limitations.md",
+      "sha": "fb99d74847f950f47e8fbc4672aa5a473df48dd3",
+      "mode": "100644"
+    },
+    {
+      "path": "docs/wallet-secret-export.md",
+      "sha": "37c611269e5f491077474594e967c93f630451c0",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/README.md",
+      "sha": "e612da10ef424d25827c60926b38d630f37e3758",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/app-integration-blueprint.ts",
+      "sha": "5e822f1cbea275653f91dbd27cea9fd941c9f159",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/create-wallet.ts",
+      "sha": "339100e9eceec550529454e85f0990d9e67073f9",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/custom-contract-client.ts",
+      "sha": "7c20114ac8f30e47f8919802ccf7b09eaab2f381",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/get-transactions.ts",
+      "sha": "5f4ea0c34f78f1b28963cfffcedfed1867a1c0fb",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/multiple-contracts.ts",
+      "sha": "198f497784460a9244d6ffbf6c977008ce12d9a4",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/send-asset.ts",
+      "sha": "6910b625777d1588f5ea3855dd6b680a9639bb59",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/send-xlm.ts",
+      "sha": "5d142f0a143e4886fb1cb96946c8bdb22169d955",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/vault-balance.ts",
+      "sha": "38bd00b1ad9b85e443a942a73171eb5b2b3a97aa",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/vault-client-factory.ts",
+      "sha": "f4922af81e50ba995ca99bdd8671354a8bbdcc3b",
+      "mode": "100644"
+    },
+    {
+      "path": "examples/vault-operations.ts",
+      "sha": "e153d04b6dffbc039f84d4bca594c3a1ffa3fe3d",
+      "mode": "100644"
+    },
+    {
+      "path": "package-lock.json",
+      "sha": "1bd4deb28e8813795a0a0b7eb574e6e58545eb54",
+      "mode": "100644"
+    },
+    {
+      "path": "package.json",
+      "sha": "053c3743ad374b986ab82eeb950e84c8eb602a08",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/check-circular-deps.ts",
+      "sha": "cb1575a880e7cfa6d5b250fea1e30eeceb4d450b",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/lib/acceptance-checklist.ts",
+      "sha": "08f4c481c7b45014cc6ac4d1f8bfcd62b5ac5738",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/presubmit.ts",
+      "sha": "c65ae915d960254df07c83e7a844e47351d4043d",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/print-coverage-baseline.ts",
+      "sha": "dedb90c6b1602bcf6ed2e4c90458ef95dee55a7a",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/smoke-test.ts",
+      "sha": "72ee0b8c24e767433bf73248a301803c2630fede",
+      "mode": "100644"
+    },
+    {
+      "path": "scripts/verify-acceptance.ts",
+      "sha": "083b62e71281e4f621c1177aba7cca571b7657f2",
+      "mode": "100644"
+    },
+    {
+      "path": "src/account/account.ts",
+      "sha": "586a933c19ad6b79f1a7e9eb712d2ea284ddc0ea",
+      "mode": "100644"
+    },
+    {
+      "path": "src/account/index.ts",
+      "sha": "86d26379402f07c54ec4ae4a2ccb725e3dc30c05",
+      "mode": "100644"
+    },
+    {
+      "path": "src/account/sequence.ts",
+      "sha": "9eaad0ebe860ee5ac879b8adcb15172e1a9db09d",
+      "mode": "100644"
+    },
+    {
+      "path": "src/account/signer.ts",
+      "sha": "de12d7a15663d4759e7f24292eefd209325ed011",
+      "mode": "100644"
+    },
+    {
+      "path": "src/account/types.ts",
+      "sha": "82ffec718cf4f3c7fb10884f67bb2dd20368818a",
+      "mode": "100644"
+    },
+    {
+      "path": "src/config/index.ts",
+      "sha": "9b9011293c183f988b07dc1dec73d155a010c830",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/hooks.ts",
+      "sha": "1b708044dc909ff1264ad8ac2fa8fa60056ccf9d",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/index.ts",
+      "sha": "ee8dd3b80043709b9d5d3aa5e65803f45bc028aa",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/probe.ts",
+      "sha": "681a858ff061c8a8ad34a9b096ab4265b02bdd06",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/redact.ts",
+      "sha": "e51c0c565edce694ac1837e5f06ac1fdb991a6cd",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/report.ts",
+      "sha": "f9d8d908722e6bf1318937401d1caea8139e0697",
+      "mode": "100644"
+    },
+    {
+      "path": "src/diagnostics/types.ts",
+      "sha": "51a86ca5330eac7d364b56e28a0e8c56912bd9e4",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/capabilities.ts",
+      "sha": "e0d4077637ea2477bae3b9f47299602b217252eb",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/codes.ts",
+      "sha": "7d6e5d30bc156d72a3714d7173758d737af45724",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/index.ts",
+      "sha": "6556b314f8b0638646beced23e88ad4b5565ca16",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/payment-errors.ts",
+      "sha": "48009b57f8e906b674fea5dc7f40beedc8679aaa",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/taxonomy.ts",
+      "sha": "376cb49acce043fc35b4cec29a26890ee2a95cc2",
+      "mode": "100644"
+    },
+    {
+      "path": "src/errors/unsupported.ts",
+      "sha": "743ef92d4a18e3b410259fd68b20ee1c38ae20ee",
+      "mode": "100644"
+    },
+    {
+      "path": "src/index.ts",
+      "sha": "0fa0ec75cd35790cc39aae03119fee612d4c3d44",
+      "mode": "100644"
+    },
+    {
+      "path": "src/network/fee.ts",
+      "sha": "f2b4ac4710c58ff6397b2eb0449117677a63a47d",
+      "mode": "100644"
+    },
+    {
+      "path": "src/network/idempotency.ts",
+      "sha": "27dbf92a816a5414b4b065d2dd08dc2548d015b9",
+      "mode": "100644"
+    },
+    {
+      "path": "src/network/index.ts",
+      "sha": "d1070b3529adecb8c99fbdc63bbca90437dc1c94",
+      "mode": "100644"
+    },
+    {
+      "path": "src/network/operations.ts",
+      "sha": "a06fa891fae2cfb4abf647220f4abfc4715c2086",
+      "mode": "100644"
+    },
+    {
+      "path": "src/network/retry-policy.ts",
+      "sha": "25b1e5638256556d17ab5716ccf3e61881cb62b7",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/destination-validation.ts",
+      "sha": "c96363062769c20c3c4d688c6c60f8cb82cf6197",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/index.ts",
+      "sha": "73a27e8e3e4517ae3e9b7d0d2f532a2af2dfd8a9",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/intent.ts",
+      "sha": "65b0ba110ebc7247c250ebd2eeef17e929b39618",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/preview.ts",
+      "sha": "618cd1de6703c9ba07368799891fafa95392c95e",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/qrParser.ts",
+      "sha": "57759a3e4c2166bfd8bb9225af0d982dbbdba745",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/receipt.ts",
+      "sha": "6d072798837ef8b35ce21206c83d6c5249e2b6e9",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/trustline.ts",
+      "sha": "424c89c9c2db5f7648c472a3f9ce5fab78d1aca9",
+      "mode": "100644"
+    },
+    {
+      "path": "src/payments/validation.ts",
+      "sha": "1264c904718a67043543eb961ebecc77056eec9f",
+      "mode": "100644"
+    },
+    {
+      "path": "src/soroban/client-factory.ts",
+      "sha": "49a03b96992ca50de31a814859aadb0d57bbd7e5",
+      "mode": "100644"
+    },
+    {
+      "path": "src/soroban/index.ts",
+      "sha": "7b9683019cbaf8b1feb7d03dcc81665ed2f6f5ab",
+      "mode": "100644"
+    },
+    {
+      "path": "src/soroban/mapper.ts",
+      "sha": "b85ff78ef5be92e625f2398e2f6d937c0da8a593",
+      "mode": "100644"
+    },
+    {
+      "path": "src/soroban/simulation.ts",
+      "sha": "1b00f3c2f04289255adb7980e8d641f1b2c34f28",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/auth.ts",
+      "sha": "b69c020cc806ee510b96a14e87d11413669750ae",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/build-validation.ts",
+      "sha": "3ada4d309c7d2893eaacf4f559598141990e355e",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/filter.ts",
+      "sha": "1550d6223fc3f5a375bdbf554d7f90cd14c87f48",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/fixtures.ts",
+      "sha": "79c80313b0b24de44e0221cdf88998801a64ac19",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/guarded-submit.ts",
+      "sha": "bc2bb14153901fcc76fe20ecb314e0bce3e5aa8b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/index.ts",
+      "sha": "cd5b3bcc2ed3b09c31f48d2dd73204860ca751bb",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/inspect.ts",
+      "sha": "48946cf266bf3db77ccf57aedb109bdb19782b3d",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/mapper.ts",
+      "sha": "331ce56efc85247287115e5b0ddc7f6fe4fea04e",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/offline-preparation.ts",
+      "sha": "38efdefbe5217364bc8b24ca2f433c7b57157c49",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/orchestrator.ts",
+      "sha": "399d65fca90c6a8ec881154bd7ade10119708aea",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/polling.ts",
+      "sha": "60cc2e6181ff610de3100b9333bbde59cb1329ef",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/sort.ts",
+      "sha": "484bbd19817bdbacc2a4b15f138862c5acf624f6",
+      "mode": "100644"
+    },
+    {
+      "path": "src/transactions/test-fixtures.ts",
+      "sha": "935f2f0f13320fc7a512e54724707d74d1c5253b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/asset.ts",
+      "sha": "dd074bfa638a627a21869c8b40923b6cd273e121",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/auth.ts",
+      "sha": "db52f4df59ce1f1adb0605b1abfb74be5895b94c",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/balance.ts",
+      "sha": "0a021ce14a25dc3432d2b5c8c3b8ff4137dc2bdd",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/index.ts",
+      "sha": "63109e15165625df2c83d7ee93c72a857f015a4e",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/lifecycle.ts",
+      "sha": "71dffae8d75b5242a481228d956a2045b4ef411a",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/payment-intent.ts",
+      "sha": "982cb46717bba45446648118b4f79d5afe5ec6f9",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/payment-payload.ts",
+      "sha": "97e74589f89dcc9be5fadb498eb7b79ba4aceb4c",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/receipt.ts",
+      "sha": "1b730d8394ce2c77faf232ba7e9dbaad2643e1f2",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/simulation.ts",
+      "sha": "6cb8364e7b1afd995a1d10b1343443da856bcfc8",
+      "mode": "100644"
+    },
+    {
+      "path": "src/types/transaction.ts",
+      "sha": "8bfffc2cabc6987fd54b10f91b6175e64b1d45ca",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/amount.ts",
+      "sha": "28d358f23d784fb6fdfcdfa215e7de0a4990fa1b",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/assetHelpers.ts",
+      "sha": "20f2ff2223209fa49c921beb08c4e3facf0a1654",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/env.ts",
+      "sha": "ed98cfb351e226f2e2fe4586eff74eb98d1be37f",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/explorer.ts",
+      "sha": "02fb20d2d17ad53d355afbd450c727d7ebe2189d",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/index.ts",
+      "sha": "78883c3c1a74e3387879b45814aa7c6dcf22f1e6",
+      "mode": "100644"
+    },
+    {
+      "path": "src/utils/memo.ts",
+      "sha": "5a7a3f9b9d21766bf3ff9b3758a2bcf2adb1f4a8",
+      "mode": "100644"
+    },
+    {
+      "path": "src/vault/index.ts",
+      "sha": "86b5bda059fbd9d40ac6db385448f764c8447b91",
+      "mode": "100644"
+    },
+    {
+      "path": "src/vault/intents.ts",
+      "sha": "871ef1ef6c1a03ef28313b91c246b37315f57cef",
+      "mode": "100644"
+    },
+    {
+      "path": "src/wallet/index.ts",
+      "sha": "76cb7c8547969ab83fa16de2fe873d6d59945816",
+      "mode": "100644"
+    },
+    {
+      "path": "src/wallet/multi-asset.ts",
+      "sha": "66bea1da8d56dd3592e05198d4e179e0816ac707",
+      "mode": "100644"
+    },
+    {
+      "path": "stellar-pocketpay-sdk@1.0.0",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/account.test.ts",
+      "sha": "23c6cd0b6c889a0d4325822beb24a8ec38ca76cf",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/assets.test.ts",
+      "sha": "706806aee4442fe8de2e0689d03ea5c18387b72a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/auth-requirements.test.ts",
+      "sha": "88f2bda38cd81ba045bddb0f23fd50d3a60f66ea",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/balance.test.ts",
+      "sha": "2d7aba6c87e534f46a120be1f54e5c901d5b9549",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/build-validation.test.ts",
+      "sha": "a3774cdd97f878f4beeb7e63159a3259aa32629a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/config-validation.test.ts",
+      "sha": "f1ae360d6c0ce36223e429f02cf04660b7cac1e5",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/config.test.ts",
+      "sha": "d1e6bd2d6edfa425d57a7cdb481d49f2edf909e8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/contract-client-factory.test.ts",
+      "sha": "71708c35f90ad7a5f863292691b64e6cef0fb7bf",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/destination-validation.test.ts",
+      "sha": "28ddc638a7154ed8a266ba740b1b6a32aa6f6270",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/diagnostics.test.ts",
+      "sha": "12e48ec722910e573bfac2ebf0e8eeacccec3679",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/endpoint-diagnostics.test.ts",
+      "sha": "eeabc92ce8aba7c97490346e47c7a41683d82867",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/enhanced-result.test.ts",
+      "sha": "b4fba829cdc0f6a9773335266ae97495347da236",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/env.test.ts",
+      "sha": "3497c6ebaefc8d0ecc8d014207b7d598c7fdc0c4",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/error-standard.test.ts",
+      "sha": "7a8d6e85db614088f153054ed9296de9a1382589",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/explorer.test.ts",
+      "sha": "6fcc7fd86e7ae438130d0ddf43eb29086dcb3e7e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/exports.test.ts",
+      "sha": "75b0c482a6b4cef97fba0d9a27d329fe3f236cc0",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/external_signer.test.ts",
+      "sha": "ce5611b7e94db8ef62f811b996dd0889cdbb0b7c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/feature-flag-registry.test.ts",
+      "sha": "6b5732d9c610e35f51c41c8bc3ebd2beff61b2d8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/feature-flags.test.ts",
+      "sha": "4d5dfaf2f6ad4b136dfea056cb6d53299eb5a898",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/filterTransactions.test.ts",
+      "sha": "5777e710363b8bf54c61aab72cc6b19a20148185",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/README.md",
+      "sha": "b02992fe97f84a31e53652637864381828830dd9",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/accounts.ts",
+      "sha": "402f2219d189bf134fa8ab76a525ccbf698ffd86",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/accounts/account-builder.ts",
+      "sha": "0ba377e4e827f21ace73c1693b3cc690f68ae358",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/accounts/account-fixtures.ts",
+      "sha": "ca9c689b4d06c3f27d562fd30808c5f160e4eeb8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/accounts/index.ts",
+      "sha": "c689a1dd9d2d3b17fb85944165deebf67a23b4dc",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/builders/fixture-builder.ts",
+      "sha": "8b07d56b691e56a52a9b8e25435ae663be09ece4",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/builders/index.ts",
+      "sha": "3657caa106322770c133901eb56763e2da3c89d1",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/index.ts",
+      "sha": "36a614437697a13cbb3aeb3a870219ce63e7fece",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/multi-asset-fixtures.ts",
+      "sha": "6fa1e8d0ae3457c9415ea79444e6c2b5f314f6de",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/network/index.ts",
+      "sha": "078b6caa39fc042b9dc9e375dcbb37b5055eb9ec",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/network/network-builder.ts",
+      "sha": "98b8d801361565866daa8fddd1e5a23062be6704",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/network/network-fixtures.ts",
+      "sha": "30bca962e2fd92bd78556fecdc17f80ef6cd13b7",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/payments.ts",
+      "sha": "75f05f53c861d4f308ef526baa36b906767d7b9f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/payments/index.ts",
+      "sha": "00b958a33a214494a74beffda76a4b9dd3f8f989",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/payments/payment-builder.ts",
+      "sha": "bd961f153ac912fce40b5e9cd54dcea3dbdeddc0",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/payments/payment-fixtures.ts",
+      "sha": "bc857e0524c81242799897978b496b6082099c32",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/simulation-responses.ts",
+      "sha": "d72413e7b945161a263f3a8a49785bb3924b3c51",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/soroban/index.ts",
+      "sha": "d744386dfa27ea85369579f23b446a4e519ed6fd",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/soroban/soroban-builder.ts",
+      "sha": "428804d685984e46d23f1c1faef2762c7e1783ea",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/soroban/soroban-fixtures.ts",
+      "sha": "f2c01f2eb7ae8daf70eca86d675189ec65addcf0",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/transactionSummary.ts",
+      "sha": "3617efbd1a585bf23a64165a294e7772b163101b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/transactions.ts",
+      "sha": "b93d48a9a1ce0d6c358a8c648fa946b5e8b5cd13",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/transactions/index.ts",
+      "sha": "18a1086c10770429e88214f65e4053715a26451a",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/transactions/transaction-builder.ts",
+      "sha": "fd88e9cc5178805bd915cffbf5225690a81cd53c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/transactions/transaction-fixtures.ts",
+      "sha": "3edb041655a653857a262090b518d437e88d127c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/vault/index.ts",
+      "sha": "823506be4b869b65edcdde4df69b4d8d22228ef4",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/vault/vault-builder.ts",
+      "sha": "67290d9cc4328cd5d57685bce87795fb85f2664f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fixtures/vault/vault-fixtures.ts",
+      "sha": "4262bb2cd22284f2dab18f01dd2f03b5cfdf8fff",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/friendbot.integration.test.ts",
+      "sha": "5b4f298345dea273213ac393826dabc866385520",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/fund.test.ts",
+      "sha": "cd9a6ff7cf818f04de337252a1b0d745dcbe773b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/helpers/mockHorizon.ts",
+      "sha": "2c715fe8b264f0320934a56a7a36f01e9984f7be",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/idempotency.test.ts",
+      "sha": "0c163077669341112dbec1d2c538281fe976e1ba",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/memo-validation.test.ts",
+      "sha": "2b2cbee82ab9e87a740af1c600bd43d31bee7dac",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/mockHorizon.test.ts",
+      "sha": "04b003302dbc991c86cb217673f2332c656d6b8e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/multi-asset-balance.test.ts",
+      "sha": "05582eb13fa77d1685a5e7b6a2f6f60889d21e1c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/multi-asset-payment-intent.test.ts",
+      "sha": "5b2c6a4410b0295001b1cafd60d623c76e41bf13",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/network-client.test.ts",
+      "sha": "17780dd27e1c82b141a64050afae89b120fe7fb8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/network-fee.test.ts",
+      "sha": "5777dd24739f5c3cbfbf8eb8fa973bc441013901",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/payment-receipt.test.ts",
+      "sha": "e6d82515768580477fdf22b7569cc82ac874b73d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/payments-error-paths.test.ts",
+      "sha": "a3a3a9a857445e186701d0ab50181e2fb3ee100b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/payments-preview.test.ts",
+      "sha": "849f640f83292c6b2a90e6cf389d336788b7e984",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/payments-validation.test.ts",
+      "sha": "0575213404c1528e780d5fbd1bcb11e955e1fa29",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/payments.test.ts",
+      "sha": "80777ece3e210b8b74761b0aabd0c5097f4f6ba0",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/polling.test.ts",
+      "sha": "9ef51c36335da9512d5f9f2b37fa5e25a3e393c4",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/qrParser.test.ts",
+      "sha": "e63c0b525436c334ac5f3b36f828ced9516f7054",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/result.test.ts",
+      "sha": "5154909f58f33b1fd93201b7df87e3f54641627f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/retry-policy.test.ts",
+      "sha": "e62bd1b9196769d66b60d14ac8f386c926d0910d",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/safe-amount.test.ts",
+      "sha": "0c5e6c5dc0c0e8f0efdd4447df30deeda42879b9",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/sequence-safety.test.ts",
+      "sha": "936b7be8fca6a808caedf4646993e00f518a4f82",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/setup/offline-guard.ts",
+      "sha": "74f8ad40e443d7e153ec20f94e406a09da662008",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/signed-transaction-inspection.test.ts",
+      "sha": "2f82981d538d867f88ad4ef97c0aa0d1310f2c8e",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/signer-capability.test.ts",
+      "sha": "56f2a181b3f55e3faf29e01046ac52aac5418202",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/simulation-mapper.test.ts",
+      "sha": "93e96e880cbfa89ba4a91f59501a530af3cb932c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/sorobanMapper.test.ts",
+      "sha": "d3a7d6e386d31601507217f4a461754ea7a75ca7",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/sortTransactionsByDate.test.ts",
+      "sha": "f1c082b498a9a004a378990cea131de8c22f28a3",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/timeout-classification.test.ts",
+      "sha": "8722b8056539a7cf0f5d89ef86e899e8f5132f43",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transaction-authorization.test.ts",
+      "sha": "608f9a7b50b9a99fd0f64add6e511ef62ecba042",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transaction-lifecycle.test.ts",
+      "sha": "febe677031eeb7ab4794d952d918369a004962c8",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transaction-test-fixtures.test.ts",
+      "sha": "f2d178e5bbd7d83c6eea06b27f5cb3b03bbf5dd4",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transactionFixtures.test.ts",
+      "sha": "b985c20f887e6fb2490280ee495b46988c5a7b34",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transactions.test.ts",
+      "sha": "0792605134a45660eb47ffb30eda564c97baab8c",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/transactions/mapper.test.ts",
+      "sha": "1fdafe4be5985898f94f44517c6f4b5656f2ae9b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/trustline.test.ts",
+      "sha": "b644e0ecbc3c498d77d6ca78238593327b7e3c68",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/types/asset.test.ts",
+      "sha": "94c44d5a1fa7dd85cbbd00e29d29a8b522ce4b44",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/unsupported-feature.test.ts",
+      "sha": "423c6c842d9b7f9e1af54905f2cdbc78b6c5f67f",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/utils.test.ts",
+      "sha": "891410b19cff4a6bd4adfab88333220621605dca",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/vault-capabilities.test.ts",
+      "sha": "df561bb5b62f841c36490d935e6440e05cb6bb97",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/vault.test.ts",
+      "sha": "168944a07906b6d49d5b78dd086346160de3c83b",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/vaultParams.test.ts",
+      "sha": "8b837fa282a012cc975900ce25fd65c3270403ea",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/verify-acceptance.test.ts",
+      "sha": "79c01d9ae7c6b3355ae72199ae3588b8a8f4d5bc",
+      "mode": "100644"
+    },
+    {
+      "path": "tests/wallet.test.ts",
+      "sha": "98d014c7c63a3d042a8d3694fdb902b8bc5a41d2",
+      "mode": "100644"
+    },
+    {
+      "path": "tsc",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "mode": "100644"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha": "7d30223d1701fc83936d7ac367171496b34c03f1",
+      "mode": "100644"
+    },
+    {
+      "path": "vitest.config.mts",
+      "sha": "d907beba82eae9c75f2ddff2e924c706f42499a6",
+      "mode": "100644"
+    },
+    {
+      "path": "vitest.integration.config.ts",
+      "sha": "aa70e99f17ed1344362920e5082104990ef1dea6",
+      "mode": "100644"
+    }
+  ]
+}

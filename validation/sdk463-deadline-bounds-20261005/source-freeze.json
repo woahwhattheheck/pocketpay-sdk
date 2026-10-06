@@ -1,0 +1,34 @@
+{
+  "source": "353bb4f4723f1a44f94d94ca2c798a8be493c912",
+  "tree": "2e45e9920d314a0fe594f3033512b26a22cf1b81",
+  "sourceBlobsVerified": 294,
+  "candidateTree": "850c620f5ba11057a822ead10cc24c637d300959",
+  "changed": [
+    {
+      "path": "docs/polling.md",
+      "preimageGit": "4d3c132a6373f88bc6d26d99500c0e3821131277",
+      "postimageGit": "d87fc2486e5a162f4050f9e19f3cbabb5d8343a6",
+      "sha256": "9161918a19eed4bce156b5dbc9815111fb3e17b17f034a879e9ace9c2247be44",
+      "bytes": 2705,
+      "kind": "modified"
+    },
+    {
+      "path": "src/transactions/polling.ts",
+      "preimageGit": "60cc2e6181ff610de3100b9333bbde59cb1329ef",
+      "postimageGit": "99eadc11b262b5af49d7f2a567757a442ea31625",
+      "sha256": "25c92662f6542b2144ffc5632c99acab4aa980ff195d0f08ab1f7ec4bc6b64e1",
+      "bytes": 7192,
+      "kind": "modified"
+    },
+    {
+      "path": "tests/polling-lifecycle.test.ts",
+      "postimageGit": "2001a40f1bb8bd2b228946f98b3ce68a58ebc094",
+      "sha256": "1c9046e79460fbe121c3aa760502f09585b8ceef4022ef318ea6284bfb6d4c8e",
+      "bytes": 9576,
+      "kind": "added"
+    }
+  ],
+  "patchBytes": 14719,
+  "patchSha256": "3bd673b7597912192ba71a49357f870f0bc1988acc89b2c8a455ea7a59ca7966",
+  "outsideExistingTestPreserved": true
+}

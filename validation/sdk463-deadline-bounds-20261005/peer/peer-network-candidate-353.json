@@ -1,0 +1,13 @@
+{
+  "pid": 35,
+  "source": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+  "guardLoadedBeforeSubjectImport": true,
+  "counts": {
+    "socketConnect": 0,
+    "tlsConnect": 0,
+    "httpRequest": 0,
+    "httpsRequest": 0,
+    "fetch": 0,
+    "udpSend": 0
+  }
+}

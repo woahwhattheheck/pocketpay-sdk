@@ -1,0 +1,32 @@
+
+ FAIL  tests/qrParser.test.ts > QR Parser > parses valid QR payload
+AssertionError: expected undefined to be 'GABCDEF1234567890' // Object.is equality
+
+- Expected: 
+"GABCDEF1234567890"
+
++ Received: 
+undefined
+
+ ❯ tests/qrParser.test.ts:8:28
+      6|     const url = 'pocketpay://pay?address=GABCDEF1234567890&amount=10.5…
+      7|     const result = parseQRPayload(url);
+      8|     expect(result.address).toBe('GABCDEF1234567890');
+       |                            ^
+      9|     expect(result.amount).toBe('10.5');
+     10|     expect(result.asset).toEqual({ code: 'USD', issuer: 'ISSUER' });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/qrParser.test.ts > QR Parser > throws on malformed URL
+AssertionError: expected function to throw an error, but it didn't
+ ❯ tests/qrParser.test.ts:17:42
+     15|   test('throws on malformed URL', () => {
+     16|     const badUrl = 'pocketpay://pay?address=invalid&amount=abc';
+     17|     expect(() => parseQRPayload(badUrl)).toThrow(PaymentParseError);
+       |                                          ^
+     18|   });
+     19| });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+

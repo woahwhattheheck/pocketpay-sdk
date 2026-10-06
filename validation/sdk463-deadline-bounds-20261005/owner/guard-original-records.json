@@ -1,0 +1,1145 @@
+{
+  "schema": 1,
+  "records": [
+    {
+      "path": "guard-final-candidate-353/5.json",
+      "bytes": 109,
+      "sha256": "8ec25eef843d613663e24b1a557c5bf8e763325ed2ebff9522614d846f8b9922",
+      "originalUtf8": "{\"pid\":5,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-final-candidate-353/worker-polling-lifecycle.test.ts.json",
+      "bytes": 138,
+      "sha256": "4c94437ecb3f3e80227dca31274eac67fcba9d93aa9761009f837704c5f88ae9",
+      "originalUtf8": "{\"pid\":37,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-final-candidate-353/worker-polling.test.ts.json",
+      "bytes": 138,
+      "sha256": "e4b91485331a58e05658bdb91ebbdc0f32151f5bfd0a376d2826183d5ecb8b79",
+      "originalUtf8": "{\"pid\":61,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-final-frozen-353/5.json",
+      "bytes": 109,
+      "sha256": "8ec25eef843d613663e24b1a557c5bf8e763325ed2ebff9522614d846f8b9922",
+      "originalUtf8": "{\"pid\":5,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-final-frozen-353/worker-polling-lifecycle.test.ts.json",
+      "bytes": 138,
+      "sha256": "1f442c4349ce165c8e23c5c58deacb7bf196cabeaf9229816e88ca3b0ab1c780",
+      "originalUtf8": "{\"pid\":35,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-final-frozen-353/worker-polling.test.ts.json",
+      "bytes": 138,
+      "sha256": "e4b91485331a58e05658bdb91ebbdc0f32151f5bfd0a376d2826183d5ecb8b79",
+      "originalUtf8": "{\"pid\":61,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/5.json",
+      "bytes": 109,
+      "sha256": "8ec25eef843d613663e24b1a557c5bf8e763325ed2ebff9522614d846f8b9922",
+      "originalUtf8": "{\"pid\":5,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-account.test.ts.json",
+      "bytes": 139,
+      "sha256": "b3b381c421a377d25148e9612180aa20f0a30bf62ac1c05e7794717936b8c316",
+      "originalUtf8": "{\"pid\":301,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-asset.test.ts.json",
+      "bytes": 139,
+      "sha256": "dcdf45f78bb870c0b04c79d9be0478a8e2b8ee1f0a0cfc341b177a1b61bb399f",
+      "originalUtf8": "{\"pid\":921,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-assets.test.ts.json",
+      "bytes": 140,
+      "sha256": "5fe233122559db65e753244b54e888454b9f77ad745c1115aa2f5b1b25ae4aa5",
+      "originalUtf8": "{\"pid\":1101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-auth-requirements.test.ts.json",
+      "bytes": 139,
+      "sha256": "86a8549e91f1e343bd9c60b67c515c5f1a6e2a47d626f25a6bb621d9d51e4d92",
+      "originalUtf8": "{\"pid\":261,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "e51724ff20a9e94061b3f3555299b6533e12f1258f0a002c390041dfc635a34d",
+      "originalUtf8": "{\"pid\":521,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-build-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "d2afc8933d32c9b42a35869e8ef093d1b1e0b1402519030a45b3d0893c34f0a3",
+      "originalUtf8": "{\"pid\":581,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-config-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "3b9460c9248a74a5ef92dba5ef8fadfb7d5410870b96039ddc743cd956687adb",
+      "originalUtf8": "{\"pid\":901,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-config.test.ts.json",
+      "bytes": 139,
+      "sha256": "d491788ae56638263ce1f949fc89d0d3746d08e26a31c0c1f99243a04bd1d6ce",
+      "originalUtf8": "{\"pid\":421,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-contract-client-factory.test.ts.json",
+      "bytes": 139,
+      "sha256": "cf62b86e238e12d4c47a38296efd11c38484382c46d92e81dfe0319452c1c09a",
+      "originalUtf8": "{\"pid\":881,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-destination-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "7996645cbb863bdff307b07a029f1ccf02979f2c77b074925e820c154db17f27",
+      "originalUtf8": "{\"pid\":321,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-diagnostics.test.ts.json",
+      "bytes": 139,
+      "sha256": "b9a3bd29705ed5e2ffcca180eea39b692b98c1552fb7630e6fcde51ae832a788",
+      "originalUtf8": "{\"pid\":601,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-endpoint-diagnostics.test.ts.json",
+      "bytes": 140,
+      "sha256": "019e301ba5c0d9cb4a919dfebb250ff72bae8749fd29e9a94231599e069d0d47",
+      "originalUtf8": "{\"pid\":1081,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-enhanced-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "32b1c689c65f357116c84f4b22ec985a0563b349a27e6912aa97968fbf53298d",
+      "originalUtf8": "{\"pid\":461,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-env.test.ts.json",
+      "bytes": 140,
+      "sha256": "8d25d9f513924ca856d1a697bff5533ac3cb844d549b1048707358179d1d61af",
+      "originalUtf8": "{\"pid\":1201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-error-standard.test.ts.json",
+      "bytes": 139,
+      "sha256": "e945590994246ecdbbaec704c88aeef80789a4554358e8098f9bf04988df289f",
+      "originalUtf8": "{\"pid\":741,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-explorer.test.ts.json",
+      "bytes": 140,
+      "sha256": "fb1449b28ae638ad9df1887d3f0626503c876229c52a15cf0ffc7e27b9f706be",
+      "originalUtf8": "{\"pid\":1041,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-exports.test.ts.json",
+      "bytes": 140,
+      "sha256": "8e1e1aff131da4f99f5bfb6e21d4b49d81be39c34e93154c8def7a359bb19407",
+      "originalUtf8": "{\"pid\":1061,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-external_signer.test.ts.json",
+      "bytes": 140,
+      "sha256": "65e965a84b7e11f4cfb14119c736bcd5b21d495f0414ad526eafd77823ec2a6c",
+      "originalUtf8": "{\"pid\":1221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-feature-flag-registry.test.ts.json",
+      "bytes": 139,
+      "sha256": "6f63b996ff9b361283629b9ad1b0a572dc38d4c48d29fad191d911afadb5c6f0",
+      "originalUtf8": "{\"pid\":721,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-feature-flags.test.ts.json",
+      "bytes": 139,
+      "sha256": "c7933317f5ee3eed441467c88fc091feb44f848ab27e469661ad9afa198eab03",
+      "originalUtf8": "{\"pid\":621,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-filterTransactions.test.ts.json",
+      "bytes": 139,
+      "sha256": "63f568bf995a35c9afedfecc425ee615143b195fe79e6c5d3e3ba6954cb8d906",
+      "originalUtf8": "{\"pid\":981,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-fund.test.ts.json",
+      "bytes": 139,
+      "sha256": "0d982d4bc42c7357ab1ee969df5a21aec8fa35b815708b50e99ab9b3a810ffe0",
+      "originalUtf8": "{\"pid\":361,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-idempotency.test.ts.json",
+      "bytes": 139,
+      "sha256": "7a9676e5682b2178d2fb5548fa6fadfa823d149be31f7b4602d2ddf0e4e2ae58",
+      "originalUtf8": "{\"pid\":281,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-mapper.test.ts.json",
+      "bytes": 140,
+      "sha256": "eae846c333d6508d113c366a1fe3de4a0fcdbf41e6ccb3b2d810d6bba52294a5",
+      "originalUtf8": "{\"pid\":1021,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-memo-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "b55a6d98162ffb96a542895a49d8cc16a8c363255981a941afa96d85a3dedcd7",
+      "originalUtf8": "{\"pid\":761,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-mockHorizon.test.ts.json",
+      "bytes": 139,
+      "sha256": "9d1ec15d7403a87bedef27746093f8a7df83bd2bbbfa98e2305d46bef8fe5ced",
+      "originalUtf8": "{\"pid\":681,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-multi-asset-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "f55f4bf19b98242bfed013f90f576f6cd2abddf4507f1b9ee598b2bc32101fbb",
+      "originalUtf8": "{\"pid\":501,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-multi-asset-payment-intent.test.ts.json",
+      "bytes": 139,
+      "sha256": "a4200696c55d68d52cc4fade2913abc0eeff2c5db2ffd15313e9ad5c0dd0e6b9",
+      "originalUtf8": "{\"pid\":861,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-network-client.test.ts.json",
+      "bytes": 139,
+      "sha256": "40f80aa47e15593ba32728a7571dee06e4d51f327a9883073ba4842bfc96a5e2",
+      "originalUtf8": "{\"pid\":541,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-network-fee.test.ts.json",
+      "bytes": 140,
+      "sha256": "60b7bcec915c4af04435977e400ecca53bbf2fbe587322dd88b6e9c83cd2e861",
+      "originalUtf8": "{\"pid\":1001,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-payment-receipt.test.ts.json",
+      "bytes": 139,
+      "sha256": "d3f4bde8d6426201d95027671379393ea1b65c6e27a0085e8bb837a1d7dfbe43",
+      "originalUtf8": "{\"pid\":781,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-payments-error-paths.test.ts.json",
+      "bytes": 139,
+      "sha256": "03d285f124d2786837e8ed07841b9fe49cea0a07159ac5710d9eb5c36fde29ea",
+      "originalUtf8": "{\"pid\":121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-payments-preview.test.ts.json",
+      "bytes": 139,
+      "sha256": "22699e3d92f0b43622c520bd91873ecfa968d0a7bec47eab046f00671cc273c0",
+      "originalUtf8": "{\"pid\":841,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-payments-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "57c5edbc3ae9021eaa1dd266f38e22d236231cfde16a3f981c6c50c65eb06436",
+      "originalUtf8": "{\"pid\":661,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-payments.test.ts.json",
+      "bytes": 139,
+      "sha256": "c1ecc4de31169b1cf7404c79346afdb2f1e0929c0d5e6fe3170c40f44229b6e2",
+      "originalUtf8": "{\"pid\":181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-polling.test.ts.json",
+      "bytes": 139,
+      "sha256": "bfc535229349ff7ddf99413a12edd5c8428cf4e73ea8f9be491f619c7db68137",
+      "originalUtf8": "{\"pid\":141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-qrParser.test.ts.json",
+      "bytes": 138,
+      "sha256": "94d35e7c1412ebb232b2751e3bdf8e8fd3376788ebdafff37705f8b339579a5e",
+      "originalUtf8": "{\"pid\":39,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "04c631c5e2df40f49406fe9319bc62022c869c055949a45a426c25c5c3e1b665",
+      "originalUtf8": "{\"pid\":441,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-retry-policy.test.ts.json",
+      "bytes": 138,
+      "sha256": "b99f971126b4b70a29f0d5ea4506535aee5e3e9402e948fdcc0ab54fe5f6c5d5",
+      "originalUtf8": "{\"pid\":60,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-safe-amount.test.ts.json",
+      "bytes": 139,
+      "sha256": "65c63d5bc3ff755519fb2d5bbbe3b84cd643961c2dd9d1fd0fa369dd430103b9",
+      "originalUtf8": "{\"pid\":821,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-sequence-safety.test.ts.json",
+      "bytes": 139,
+      "sha256": "ef0fb49212700aca015250b11d2643b59ba84e082cf4fb7feff6549755a0464f",
+      "originalUtf8": "{\"pid\":101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-signed-transaction-inspection.test.ts.json",
+      "bytes": 139,
+      "sha256": "a5ccaf31da9e9fd6d32591f4d89094ab5416932a37b5c23d416348ec7129c416",
+      "originalUtf8": "{\"pid\":161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-signer-capability.test.ts.json",
+      "bytes": 139,
+      "sha256": "12ce6d388084123a84bb9a3e7de3a18098a50050ea41aaf93d056d9a7ecf28bc",
+      "originalUtf8": "{\"pid\":221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-simulation-mapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "704c29006b67ef745b7f4ba25cbd4368006cd97e5d804257fa1665a9f7e5296c",
+      "originalUtf8": "{\"pid\":941,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-sorobanMapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "a9904c67c69f23a41574ebf5a8ef36a4252ea6aa8c638e53af19023d3627ed54",
+      "originalUtf8": "{\"pid\":961,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-sortTransactionsByDate.test.ts.json",
+      "bytes": 140,
+      "sha256": "b12d3bee4e8c530802df34d260fa369feb29764d54e334d629fb3d5313235bb5",
+      "originalUtf8": "{\"pid\":1141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-timeout-classification.test.ts.json",
+      "bytes": 139,
+      "sha256": "dad5244a1add346ab9a931a0a4f10ce308681f15df089821b5744e966b6f75ff",
+      "originalUtf8": "{\"pid\":341,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":1,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-transaction-authorization.test.ts.json",
+      "bytes": 139,
+      "sha256": "aaf9cf82f1f7d83118bc2fa8b1113a4ff43eae11652de3536f62f6d8974c47db",
+      "originalUtf8": "{\"pid\":201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-transaction-lifecycle.test.ts.json",
+      "bytes": 139,
+      "sha256": "c52a44c925329102399ae5c47908da52d520cb8d9dafcdeaba8399f16619996a",
+      "originalUtf8": "{\"pid\":241,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-transaction-test-fixtures.test.ts.json",
+      "bytes": 139,
+      "sha256": "88539b3ef42d0cd4cbe320e92f53e0d1f3eb98e3cf4ff94162b7617d29970c4b",
+      "originalUtf8": "{\"pid\":701,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-transactionFixtures.test.ts.json",
+      "bytes": 140,
+      "sha256": "a5aca580f01aff8fd96e2bbdef5f87e394f16cdc4077da562d84670cab1043d6",
+      "originalUtf8": "{\"pid\":1181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-transactions.test.ts.json",
+      "bytes": 139,
+      "sha256": "e1a416da6f9e0f773fcf30b2c8b0bd09d73d2129218c1c665b75149b93bc3e78",
+      "originalUtf8": "{\"pid\":381,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-trustline.test.ts.json",
+      "bytes": 139,
+      "sha256": "2f7add9435a338e3eb01eb78af1562060bc83a3f1e40f4450ee1849f761d72f0",
+      "originalUtf8": "{\"pid\":561,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-unsupported-feature.test.ts.json",
+      "bytes": 138,
+      "sha256": "4d7777bd80519ade6ded882aa790cc0a8141ac87cc7501e843d2ec07e1581371",
+      "originalUtf8": "{\"pid\":81,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":4,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-utils.test.ts.json",
+      "bytes": 139,
+      "sha256": "ed37cad74b93f3276a81f137b0c25d9fe52a39344052278716534e4c6f1b2773",
+      "originalUtf8": "{\"pid\":481,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-vault-capabilities.test.ts.json",
+      "bytes": 139,
+      "sha256": "e59022f6b285953afc78286a79d458850f64b19941d2b4ff19476de86936d0e7",
+      "originalUtf8": "{\"pid\":641,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-vault.test.ts.json",
+      "bytes": 139,
+      "sha256": "f3ea2571cc7c1edc4a67791391947d83716ec835d2fe880a0014034ec75108bc",
+      "originalUtf8": "{\"pid\":401,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-vaultParams.test.ts.json",
+      "bytes": 140,
+      "sha256": "7b83a3f6c75ebfd3e0814022de3c93ff22acdd92b69ed168b90f18bf0b32ab36",
+      "originalUtf8": "{\"pid\":1161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-verify-acceptance.test.ts.json",
+      "bytes": 140,
+      "sha256": "be1fc370cd0561c2730e42d83e63dcdefb3eb859da4ffcc9c2072a5c56cd3f0c",
+      "originalUtf8": "{\"pid\":1121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-base-ddd/worker-wallet.test.ts.json",
+      "bytes": 139,
+      "sha256": "5572c63e97ce67ce77cc029952426017709037816be9ef1c0461da5456464493",
+      "originalUtf8": "{\"pid\":801,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/5.json",
+      "bytes": 109,
+      "sha256": "8ec25eef843d613663e24b1a557c5bf8e763325ed2ebff9522614d846f8b9922",
+      "originalUtf8": "{\"pid\":5,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-account.test.ts.json",
+      "bytes": 139,
+      "sha256": "7996645cbb863bdff307b07a029f1ccf02979f2c77b074925e820c154db17f27",
+      "originalUtf8": "{\"pid\":321,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-asset.test.ts.json",
+      "bytes": 139,
+      "sha256": "704c29006b67ef745b7f4ba25cbd4368006cd97e5d804257fa1665a9f7e5296c",
+      "originalUtf8": "{\"pid\":941,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-assets.test.ts.json",
+      "bytes": 140,
+      "sha256": "be1fc370cd0561c2730e42d83e63dcdefb3eb859da4ffcc9c2072a5c56cd3f0c",
+      "originalUtf8": "{\"pid\":1121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-auth-requirements.test.ts.json",
+      "bytes": 139,
+      "sha256": "7a9676e5682b2178d2fb5548fa6fadfa823d149be31f7b4602d2ddf0e4e2ae58",
+      "originalUtf8": "{\"pid\":281,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "40f80aa47e15593ba32728a7571dee06e4d51f327a9883073ba4842bfc96a5e2",
+      "originalUtf8": "{\"pid\":541,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-build-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "b9a3bd29705ed5e2ffcca180eea39b692b98c1552fb7630e6fcde51ae832a788",
+      "originalUtf8": "{\"pid\":601,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-config-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "dcdf45f78bb870c0b04c79d9be0478a8e2b8ee1f0a0cfc341b177a1b61bb399f",
+      "originalUtf8": "{\"pid\":921,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-config.test.ts.json",
+      "bytes": 139,
+      "sha256": "04c631c5e2df40f49406fe9319bc62022c869c055949a45a426c25c5c3e1b665",
+      "originalUtf8": "{\"pid\":441,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-contract-client-factory.test.ts.json",
+      "bytes": 139,
+      "sha256": "3b9460c9248a74a5ef92dba5ef8fadfb7d5410870b96039ddc743cd956687adb",
+      "originalUtf8": "{\"pid\":901,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-destination-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "f03008df2b191f270302681a5dc5414719f45cda5e1962c04cb1bf71de63259b",
+      "originalUtf8": "{\"pid\":341,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-diagnostics.test.ts.json",
+      "bytes": 139,
+      "sha256": "c7933317f5ee3eed441467c88fc091feb44f848ab27e469661ad9afa198eab03",
+      "originalUtf8": "{\"pid\":621,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-endpoint-diagnostics.test.ts.json",
+      "bytes": 140,
+      "sha256": "5fe233122559db65e753244b54e888454b9f77ad745c1115aa2f5b1b25ae4aa5",
+      "originalUtf8": "{\"pid\":1101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-enhanced-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "ed37cad74b93f3276a81f137b0c25d9fe52a39344052278716534e4c6f1b2773",
+      "originalUtf8": "{\"pid\":481,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-env.test.ts.json",
+      "bytes": 140,
+      "sha256": "65e965a84b7e11f4cfb14119c736bcd5b21d495f0414ad526eafd77823ec2a6c",
+      "originalUtf8": "{\"pid\":1221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-error-standard.test.ts.json",
+      "bytes": 139,
+      "sha256": "b55a6d98162ffb96a542895a49d8cc16a8c363255981a941afa96d85a3dedcd7",
+      "originalUtf8": "{\"pid\":761,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-explorer.test.ts.json",
+      "bytes": 140,
+      "sha256": "8e1e1aff131da4f99f5bfb6e21d4b49d81be39c34e93154c8def7a359bb19407",
+      "originalUtf8": "{\"pid\":1061,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-exports.test.ts.json",
+      "bytes": 140,
+      "sha256": "019e301ba5c0d9cb4a919dfebb250ff72bae8749fd29e9a94231599e069d0d47",
+      "originalUtf8": "{\"pid\":1081,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-external_signer.test.ts.json",
+      "bytes": 140,
+      "sha256": "08039b3f24fb2768a568e3a472a1d2697cff3c2e8b4c60398943cf9cd455e04c",
+      "originalUtf8": "{\"pid\":1241,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-feature-flag-registry.test.ts.json",
+      "bytes": 139,
+      "sha256": "e945590994246ecdbbaec704c88aeef80789a4554358e8098f9bf04988df289f",
+      "originalUtf8": "{\"pid\":741,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-feature-flags.test.ts.json",
+      "bytes": 139,
+      "sha256": "e59022f6b285953afc78286a79d458850f64b19941d2b4ff19476de86936d0e7",
+      "originalUtf8": "{\"pid\":641,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-filterTransactions.test.ts.json",
+      "bytes": 140,
+      "sha256": "60b7bcec915c4af04435977e400ecca53bbf2fbe587322dd88b6e9c83cd2e861",
+      "originalUtf8": "{\"pid\":1001,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-fund.test.ts.json",
+      "bytes": 139,
+      "sha256": "e1a416da6f9e0f773fcf30b2c8b0bd09d73d2129218c1c665b75149b93bc3e78",
+      "originalUtf8": "{\"pid\":381,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-idempotency.test.ts.json",
+      "bytes": 139,
+      "sha256": "b3b381c421a377d25148e9612180aa20f0a30bf62ac1c05e7794717936b8c316",
+      "originalUtf8": "{\"pid\":301,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-mapper.test.ts.json",
+      "bytes": 140,
+      "sha256": "fb1449b28ae638ad9df1887d3f0626503c876229c52a15cf0ffc7e27b9f706be",
+      "originalUtf8": "{\"pid\":1041,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-memo-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "d3f4bde8d6426201d95027671379393ea1b65c6e27a0085e8bb837a1d7dfbe43",
+      "originalUtf8": "{\"pid\":781,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-mockHorizon.test.ts.json",
+      "bytes": 139,
+      "sha256": "88539b3ef42d0cd4cbe320e92f53e0d1f3eb98e3cf4ff94162b7617d29970c4b",
+      "originalUtf8": "{\"pid\":701,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-multi-asset-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "e51724ff20a9e94061b3f3555299b6533e12f1258f0a002c390041dfc635a34d",
+      "originalUtf8": "{\"pid\":521,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-multi-asset-payment-intent.test.ts.json",
+      "bytes": 139,
+      "sha256": "cf62b86e238e12d4c47a38296efd11c38484382c46d92e81dfe0319452c1c09a",
+      "originalUtf8": "{\"pid\":881,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-network-client.test.ts.json",
+      "bytes": 139,
+      "sha256": "2f7add9435a338e3eb01eb78af1562060bc83a3f1e40f4450ee1849f761d72f0",
+      "originalUtf8": "{\"pid\":561,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-network-fee.test.ts.json",
+      "bytes": 140,
+      "sha256": "eae846c333d6508d113c366a1fe3de4a0fcdbf41e6ccb3b2d810d6bba52294a5",
+      "originalUtf8": "{\"pid\":1021,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-payment-receipt.test.ts.json",
+      "bytes": 139,
+      "sha256": "5572c63e97ce67ce77cc029952426017709037816be9ef1c0461da5456464493",
+      "originalUtf8": "{\"pid\":801,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-payments-error-paths.test.ts.json",
+      "bytes": 139,
+      "sha256": "bfc535229349ff7ddf99413a12edd5c8428cf4e73ea8f9be491f619c7db68137",
+      "originalUtf8": "{\"pid\":141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-payments-preview.test.ts.json",
+      "bytes": 139,
+      "sha256": "a4200696c55d68d52cc4fade2913abc0eeff2c5db2ffd15313e9ad5c0dd0e6b9",
+      "originalUtf8": "{\"pid\":861,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-payments-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "9d1ec15d7403a87bedef27746093f8a7df83bd2bbbfa98e2305d46bef8fe5ced",
+      "originalUtf8": "{\"pid\":681,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-payments.test.ts.json",
+      "bytes": 139,
+      "sha256": "aaf9cf82f1f7d83118bc2fa8b1113a4ff43eae11652de3536f62f6d8974c47db",
+      "originalUtf8": "{\"pid\":201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-polling-lifecycle.test.ts.json",
+      "bytes": 139,
+      "sha256": "ef0fb49212700aca015250b11d2643b59ba84e082cf4fb7feff6549755a0464f",
+      "originalUtf8": "{\"pid\":101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-polling.test.ts.json",
+      "bytes": 139,
+      "sha256": "a5ccaf31da9e9fd6d32591f4d89094ab5416932a37b5c23d416348ec7129c416",
+      "originalUtf8": "{\"pid\":161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-qrParser.test.ts.json",
+      "bytes": 138,
+      "sha256": "94d35e7c1412ebb232b2751e3bdf8e8fd3376788ebdafff37705f8b339579a5e",
+      "originalUtf8": "{\"pid\":39,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "32b1c689c65f357116c84f4b22ec985a0563b349a27e6912aa97968fbf53298d",
+      "originalUtf8": "{\"pid\":461,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-retry-policy.test.ts.json",
+      "bytes": 138,
+      "sha256": "e4b91485331a58e05658bdb91ebbdc0f32151f5bfd0a376d2826183d5ecb8b79",
+      "originalUtf8": "{\"pid\":61,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-safe-amount.test.ts.json",
+      "bytes": 139,
+      "sha256": "22699e3d92f0b43622c520bd91873ecfa968d0a7bec47eab046f00671cc273c0",
+      "originalUtf8": "{\"pid\":841,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-sequence-safety.test.ts.json",
+      "bytes": 139,
+      "sha256": "03d285f124d2786837e8ed07841b9fe49cea0a07159ac5710d9eb5c36fde29ea",
+      "originalUtf8": "{\"pid\":121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-signed-transaction-inspection.test.ts.json",
+      "bytes": 139,
+      "sha256": "c1ecc4de31169b1cf7404c79346afdb2f1e0929c0d5e6fe3170c40f44229b6e2",
+      "originalUtf8": "{\"pid\":181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-signer-capability.test.ts.json",
+      "bytes": 139,
+      "sha256": "c52a44c925329102399ae5c47908da52d520cb8d9dafcdeaba8399f16619996a",
+      "originalUtf8": "{\"pid\":241,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-simulation-mapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "a9904c67c69f23a41574ebf5a8ef36a4252ea6aa8c638e53af19023d3627ed54",
+      "originalUtf8": "{\"pid\":961,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-sorobanMapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "63f568bf995a35c9afedfecc425ee615143b195fe79e6c5d3e3ba6954cb8d906",
+      "originalUtf8": "{\"pid\":981,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-sortTransactionsByDate.test.ts.json",
+      "bytes": 140,
+      "sha256": "7b83a3f6c75ebfd3e0814022de3c93ff22acdd92b69ed168b90f18bf0b32ab36",
+      "originalUtf8": "{\"pid\":1161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-timeout-classification.test.ts.json",
+      "bytes": 139,
+      "sha256": "00b607a40978eb605203fda8267a497e7052d5dd9e518eec5d52b44a4f55062e",
+      "originalUtf8": "{\"pid\":361,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":1,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-transaction-authorization.test.ts.json",
+      "bytes": 139,
+      "sha256": "12ce6d388084123a84bb9a3e7de3a18098a50050ea41aaf93d056d9a7ecf28bc",
+      "originalUtf8": "{\"pid\":221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-transaction-lifecycle.test.ts.json",
+      "bytes": 139,
+      "sha256": "86a8549e91f1e343bd9c60b67c515c5f1a6e2a47d626f25a6bb621d9d51e4d92",
+      "originalUtf8": "{\"pid\":261,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-transaction-test-fixtures.test.ts.json",
+      "bytes": 139,
+      "sha256": "6f63b996ff9b361283629b9ad1b0a572dc38d4c48d29fad191d911afadb5c6f0",
+      "originalUtf8": "{\"pid\":721,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-transactionFixtures.test.ts.json",
+      "bytes": 140,
+      "sha256": "8d25d9f513924ca856d1a697bff5533ac3cb844d549b1048707358179d1d61af",
+      "originalUtf8": "{\"pid\":1201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-transactions.test.ts.json",
+      "bytes": 139,
+      "sha256": "f3ea2571cc7c1edc4a67791391947d83716ec835d2fe880a0014034ec75108bc",
+      "originalUtf8": "{\"pid\":401,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-trustline.test.ts.json",
+      "bytes": 139,
+      "sha256": "d2afc8933d32c9b42a35869e8ef093d1b1e0b1402519030a45b3d0893c34f0a3",
+      "originalUtf8": "{\"pid\":581,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-unsupported-feature.test.ts.json",
+      "bytes": 138,
+      "sha256": "4d7777bd80519ade6ded882aa790cc0a8141ac87cc7501e843d2ec07e1581371",
+      "originalUtf8": "{\"pid\":81,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":4,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-utils.test.ts.json",
+      "bytes": 139,
+      "sha256": "f55f4bf19b98242bfed013f90f576f6cd2abddf4507f1b9ee598b2bc32101fbb",
+      "originalUtf8": "{\"pid\":501,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-vault-capabilities.test.ts.json",
+      "bytes": 139,
+      "sha256": "57c5edbc3ae9021eaa1dd266f38e22d236231cfde16a3f981c6c50c65eb06436",
+      "originalUtf8": "{\"pid\":661,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-vault.test.ts.json",
+      "bytes": 139,
+      "sha256": "d491788ae56638263ce1f949fc89d0d3746d08e26a31c0c1f99243a04bd1d6ce",
+      "originalUtf8": "{\"pid\":421,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-vaultParams.test.ts.json",
+      "bytes": 140,
+      "sha256": "a5aca580f01aff8fd96e2bbdef5f87e394f16cdc4077da562d84670cab1043d6",
+      "originalUtf8": "{\"pid\":1181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-verify-acceptance.test.ts.json",
+      "bytes": 140,
+      "sha256": "b12d3bee4e8c530802df34d260fa369feb29764d54e334d629fb3d5313235bb5",
+      "originalUtf8": "{\"pid\":1141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-candidate-353/worker-wallet.test.ts.json",
+      "bytes": 139,
+      "sha256": "65c63d5bc3ff755519fb2d5bbbe3b84cd643961c2dd9d1fd0fa369dd430103b9",
+      "originalUtf8": "{\"pid\":821,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/5.json",
+      "bytes": 109,
+      "sha256": "8ec25eef843d613663e24b1a557c5bf8e763325ed2ebff9522614d846f8b9922",
+      "originalUtf8": "{\"pid\":5,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-account.test.ts.json",
+      "bytes": 139,
+      "sha256": "b3b381c421a377d25148e9612180aa20f0a30bf62ac1c05e7794717936b8c316",
+      "originalUtf8": "{\"pid\":301,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-asset.test.ts.json",
+      "bytes": 139,
+      "sha256": "dcdf45f78bb870c0b04c79d9be0478a8e2b8ee1f0a0cfc341b177a1b61bb399f",
+      "originalUtf8": "{\"pid\":921,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-assets.test.ts.json",
+      "bytes": 140,
+      "sha256": "5fe233122559db65e753244b54e888454b9f77ad745c1115aa2f5b1b25ae4aa5",
+      "originalUtf8": "{\"pid\":1101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-auth-requirements.test.ts.json",
+      "bytes": 139,
+      "sha256": "86a8549e91f1e343bd9c60b67c515c5f1a6e2a47d626f25a6bb621d9d51e4d92",
+      "originalUtf8": "{\"pid\":261,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "e51724ff20a9e94061b3f3555299b6533e12f1258f0a002c390041dfc635a34d",
+      "originalUtf8": "{\"pid\":521,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-build-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "d2afc8933d32c9b42a35869e8ef093d1b1e0b1402519030a45b3d0893c34f0a3",
+      "originalUtf8": "{\"pid\":581,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-config-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "3b9460c9248a74a5ef92dba5ef8fadfb7d5410870b96039ddc743cd956687adb",
+      "originalUtf8": "{\"pid\":901,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-config.test.ts.json",
+      "bytes": 139,
+      "sha256": "d491788ae56638263ce1f949fc89d0d3746d08e26a31c0c1f99243a04bd1d6ce",
+      "originalUtf8": "{\"pid\":421,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-contract-client-factory.test.ts.json",
+      "bytes": 139,
+      "sha256": "cf62b86e238e12d4c47a38296efd11c38484382c46d92e81dfe0319452c1c09a",
+      "originalUtf8": "{\"pid\":881,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-destination-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "7996645cbb863bdff307b07a029f1ccf02979f2c77b074925e820c154db17f27",
+      "originalUtf8": "{\"pid\":321,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-diagnostics.test.ts.json",
+      "bytes": 139,
+      "sha256": "b9a3bd29705ed5e2ffcca180eea39b692b98c1552fb7630e6fcde51ae832a788",
+      "originalUtf8": "{\"pid\":601,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-endpoint-diagnostics.test.ts.json",
+      "bytes": 140,
+      "sha256": "019e301ba5c0d9cb4a919dfebb250ff72bae8749fd29e9a94231599e069d0d47",
+      "originalUtf8": "{\"pid\":1081,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-enhanced-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "32b1c689c65f357116c84f4b22ec985a0563b349a27e6912aa97968fbf53298d",
+      "originalUtf8": "{\"pid\":461,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-env.test.ts.json",
+      "bytes": 140,
+      "sha256": "8d25d9f513924ca856d1a697bff5533ac3cb844d549b1048707358179d1d61af",
+      "originalUtf8": "{\"pid\":1201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-error-standard.test.ts.json",
+      "bytes": 139,
+      "sha256": "e945590994246ecdbbaec704c88aeef80789a4554358e8098f9bf04988df289f",
+      "originalUtf8": "{\"pid\":741,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-explorer.test.ts.json",
+      "bytes": 140,
+      "sha256": "fb1449b28ae638ad9df1887d3f0626503c876229c52a15cf0ffc7e27b9f706be",
+      "originalUtf8": "{\"pid\":1041,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-exports.test.ts.json",
+      "bytes": 140,
+      "sha256": "8e1e1aff131da4f99f5bfb6e21d4b49d81be39c34e93154c8def7a359bb19407",
+      "originalUtf8": "{\"pid\":1061,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-external_signer.test.ts.json",
+      "bytes": 140,
+      "sha256": "65e965a84b7e11f4cfb14119c736bcd5b21d495f0414ad526eafd77823ec2a6c",
+      "originalUtf8": "{\"pid\":1221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-feature-flag-registry.test.ts.json",
+      "bytes": 139,
+      "sha256": "6f63b996ff9b361283629b9ad1b0a572dc38d4c48d29fad191d911afadb5c6f0",
+      "originalUtf8": "{\"pid\":721,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-feature-flags.test.ts.json",
+      "bytes": 139,
+      "sha256": "c7933317f5ee3eed441467c88fc091feb44f848ab27e469661ad9afa198eab03",
+      "originalUtf8": "{\"pid\":621,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-filterTransactions.test.ts.json",
+      "bytes": 139,
+      "sha256": "63f568bf995a35c9afedfecc425ee615143b195fe79e6c5d3e3ba6954cb8d906",
+      "originalUtf8": "{\"pid\":981,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-fund.test.ts.json",
+      "bytes": 139,
+      "sha256": "0d982d4bc42c7357ab1ee969df5a21aec8fa35b815708b50e99ab9b3a810ffe0",
+      "originalUtf8": "{\"pid\":361,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-idempotency.test.ts.json",
+      "bytes": 139,
+      "sha256": "7a9676e5682b2178d2fb5548fa6fadfa823d149be31f7b4602d2ddf0e4e2ae58",
+      "originalUtf8": "{\"pid\":281,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-mapper.test.ts.json",
+      "bytes": 140,
+      "sha256": "eae846c333d6508d113c366a1fe3de4a0fcdbf41e6ccb3b2d810d6bba52294a5",
+      "originalUtf8": "{\"pid\":1021,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-memo-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "b55a6d98162ffb96a542895a49d8cc16a8c363255981a941afa96d85a3dedcd7",
+      "originalUtf8": "{\"pid\":761,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-mockHorizon.test.ts.json",
+      "bytes": 139,
+      "sha256": "9d1ec15d7403a87bedef27746093f8a7df83bd2bbbfa98e2305d46bef8fe5ced",
+      "originalUtf8": "{\"pid\":681,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-multi-asset-balance.test.ts.json",
+      "bytes": 139,
+      "sha256": "f55f4bf19b98242bfed013f90f576f6cd2abddf4507f1b9ee598b2bc32101fbb",
+      "originalUtf8": "{\"pid\":501,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-multi-asset-payment-intent.test.ts.json",
+      "bytes": 139,
+      "sha256": "a4200696c55d68d52cc4fade2913abc0eeff2c5db2ffd15313e9ad5c0dd0e6b9",
+      "originalUtf8": "{\"pid\":861,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-network-client.test.ts.json",
+      "bytes": 139,
+      "sha256": "40f80aa47e15593ba32728a7571dee06e4d51f327a9883073ba4842bfc96a5e2",
+      "originalUtf8": "{\"pid\":541,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-network-fee.test.ts.json",
+      "bytes": 140,
+      "sha256": "60b7bcec915c4af04435977e400ecca53bbf2fbe587322dd88b6e9c83cd2e861",
+      "originalUtf8": "{\"pid\":1001,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-payment-receipt.test.ts.json",
+      "bytes": 139,
+      "sha256": "d3f4bde8d6426201d95027671379393ea1b65c6e27a0085e8bb837a1d7dfbe43",
+      "originalUtf8": "{\"pid\":781,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-payments-error-paths.test.ts.json",
+      "bytes": 139,
+      "sha256": "03d285f124d2786837e8ed07841b9fe49cea0a07159ac5710d9eb5c36fde29ea",
+      "originalUtf8": "{\"pid\":121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-payments-preview.test.ts.json",
+      "bytes": 139,
+      "sha256": "22699e3d92f0b43622c520bd91873ecfa968d0a7bec47eab046f00671cc273c0",
+      "originalUtf8": "{\"pid\":841,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-payments-validation.test.ts.json",
+      "bytes": 139,
+      "sha256": "57c5edbc3ae9021eaa1dd266f38e22d236231cfde16a3f981c6c50c65eb06436",
+      "originalUtf8": "{\"pid\":661,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-payments.test.ts.json",
+      "bytes": 139,
+      "sha256": "c1ecc4de31169b1cf7404c79346afdb2f1e0929c0d5e6fe3170c40f44229b6e2",
+      "originalUtf8": "{\"pid\":181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-polling.test.ts.json",
+      "bytes": 139,
+      "sha256": "bfc535229349ff7ddf99413a12edd5c8428cf4e73ea8f9be491f619c7db68137",
+      "originalUtf8": "{\"pid\":141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-qrParser.test.ts.json",
+      "bytes": 138,
+      "sha256": "1f442c4349ce165c8e23c5c58deacb7bf196cabeaf9229816e88ca3b0ab1c780",
+      "originalUtf8": "{\"pid\":35,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-result.test.ts.json",
+      "bytes": 139,
+      "sha256": "04c631c5e2df40f49406fe9319bc62022c869c055949a45a426c25c5c3e1b665",
+      "originalUtf8": "{\"pid\":441,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-retry-policy.test.ts.json",
+      "bytes": 138,
+      "sha256": "e4b91485331a58e05658bdb91ebbdc0f32151f5bfd0a376d2826183d5ecb8b79",
+      "originalUtf8": "{\"pid\":61,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-safe-amount.test.ts.json",
+      "bytes": 139,
+      "sha256": "65c63d5bc3ff755519fb2d5bbbe3b84cd643961c2dd9d1fd0fa369dd430103b9",
+      "originalUtf8": "{\"pid\":821,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-sequence-safety.test.ts.json",
+      "bytes": 139,
+      "sha256": "ef0fb49212700aca015250b11d2643b59ba84e082cf4fb7feff6549755a0464f",
+      "originalUtf8": "{\"pid\":101,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-signed-transaction-inspection.test.ts.json",
+      "bytes": 139,
+      "sha256": "a5ccaf31da9e9fd6d32591f4d89094ab5416932a37b5c23d416348ec7129c416",
+      "originalUtf8": "{\"pid\":161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-signer-capability.test.ts.json",
+      "bytes": 139,
+      "sha256": "12ce6d388084123a84bb9a3e7de3a18098a50050ea41aaf93d056d9a7ecf28bc",
+      "originalUtf8": "{\"pid\":221,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-simulation-mapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "704c29006b67ef745b7f4ba25cbd4368006cd97e5d804257fa1665a9f7e5296c",
+      "originalUtf8": "{\"pid\":941,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-sorobanMapper.test.ts.json",
+      "bytes": 139,
+      "sha256": "a9904c67c69f23a41574ebf5a8ef36a4252ea6aa8c638e53af19023d3627ed54",
+      "originalUtf8": "{\"pid\":961,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-sortTransactionsByDate.test.ts.json",
+      "bytes": 140,
+      "sha256": "b12d3bee4e8c530802df34d260fa369feb29764d54e334d629fb3d5313235bb5",
+      "originalUtf8": "{\"pid\":1141,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-timeout-classification.test.ts.json",
+      "bytes": 139,
+      "sha256": "dad5244a1add346ab9a931a0a4f10ce308681f15df089821b5744e966b6f75ff",
+      "originalUtf8": "{\"pid\":341,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":1,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-transaction-authorization.test.ts.json",
+      "bytes": 139,
+      "sha256": "aaf9cf82f1f7d83118bc2fa8b1113a4ff43eae11652de3536f62f6d8974c47db",
+      "originalUtf8": "{\"pid\":201,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-transaction-lifecycle.test.ts.json",
+      "bytes": 139,
+      "sha256": "c52a44c925329102399ae5c47908da52d520cb8d9dafcdeaba8399f16619996a",
+      "originalUtf8": "{\"pid\":241,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-transaction-test-fixtures.test.ts.json",
+      "bytes": 139,
+      "sha256": "88539b3ef42d0cd4cbe320e92f53e0d1f3eb98e3cf4ff94162b7617d29970c4b",
+      "originalUtf8": "{\"pid\":701,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-transactionFixtures.test.ts.json",
+      "bytes": 140,
+      "sha256": "a5aca580f01aff8fd96e2bbdef5f87e394f16cdc4077da562d84670cab1043d6",
+      "originalUtf8": "{\"pid\":1181,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-transactions.test.ts.json",
+      "bytes": 139,
+      "sha256": "e1a416da6f9e0f773fcf30b2c8b0bd09d73d2129218c1c665b75149b93bc3e78",
+      "originalUtf8": "{\"pid\":381,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-trustline.test.ts.json",
+      "bytes": 139,
+      "sha256": "2f7add9435a338e3eb01eb78af1562060bc83a3f1e40f4450ee1849f761d72f0",
+      "originalUtf8": "{\"pid\":561,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-unsupported-feature.test.ts.json",
+      "bytes": 138,
+      "sha256": "4d7777bd80519ade6ded882aa790cc0a8141ac87cc7501e843d2ec07e1581371",
+      "originalUtf8": "{\"pid\":81,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":4,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-utils.test.ts.json",
+      "bytes": 139,
+      "sha256": "ed37cad74b93f3276a81f137b0c25d9fe52a39344052278716534e4c6f1b2773",
+      "originalUtf8": "{\"pid\":481,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-vault-capabilities.test.ts.json",
+      "bytes": 139,
+      "sha256": "e59022f6b285953afc78286a79d458850f64b19941d2b4ff19476de86936d0e7",
+      "originalUtf8": "{\"pid\":641,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-vault.test.ts.json",
+      "bytes": 139,
+      "sha256": "f3ea2571cc7c1edc4a67791391947d83716ec835d2fe880a0014034ec75108bc",
+      "originalUtf8": "{\"pid\":401,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-vaultParams.test.ts.json",
+      "bytes": 140,
+      "sha256": "7b83a3f6c75ebfd3e0814022de3c93ff22acdd92b69ed168b90f18bf0b32ab36",
+      "originalUtf8": "{\"pid\":1161,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-verify-acceptance.test.ts.json",
+      "bytes": 140,
+      "sha256": "be1fc370cd0561c2730e42d83e63dcdefb3eb859da4ffcc9c2072a5c56cd3f0c",
+      "originalUtf8": "{\"pid\":1121,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    },
+    {
+      "path": "guard-whole-source-353/worker-wallet.test.ts.json",
+      "bytes": 139,
+      "sha256": "5572c63e97ce67ce77cc029952426017709037816be9ef1c0461da5456464493",
+      "originalUtf8": "{\"pid\":801,\"workerGuardInstalled\":true,\"counts\":{\"socketConnect\":0,\"tlsConnect\":0,\"httpRequest\":0,\"httpsRequest\":0,\"fetch\":0,\"udpSend\":0}}\n"
+    }
+  ]
+}

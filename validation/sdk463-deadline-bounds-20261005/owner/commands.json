@@ -1,0 +1,73 @@
+{
+  "environmentForVitest": {
+    "RUN_INTEGRATION": "0",
+    "NODE_OPTIONS": "--require <execution cwd>/validation-network-deny.cjs",
+    "SDK333_GUARD_RECEIPT_DIR": "<candidate cwd>/<guardDirectory>"
+  },
+  "executions": [
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-frozen-353",
+      "command": "node node_modules/vitest/vitest.mjs run tests/polling.test.ts tests/polling-lifecycle.test.ts --config validation-vitest.config.mts --maxWorkers=1 --no-file-parallelism --reporter=verbose",
+      "guardDirectory": "guard-final-frozen-353",
+      "exitCode": 1,
+      "log": "owner/polling-final-frozen-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+      "command": "node node_modules/vitest/vitest.mjs run tests/polling.test.ts tests/polling-lifecycle.test.ts --config validation-vitest.config.mts --maxWorkers=1 --no-file-parallelism --reporter=verbose",
+      "guardDirectory": "guard-final-candidate-353",
+      "exitCode": 0,
+      "log": "owner/polling-final-candidate-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-frozen-ddd",
+      "command": "node node_modules/vitest/vitest.mjs run --config validation-vitest.config.mts --exclude tests/friendbot.integration.test.ts --maxWorkers=1 --no-file-parallelism --reporter=verbose",
+      "guardDirectory": "guard-whole-base-ddd",
+      "exitCode": 1,
+      "log": "owner/whole-base-ddd.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-frozen-353",
+      "command": "node node_modules/vitest/vitest.mjs run --config validation-vitest.config.mts --exclude tests/friendbot.integration.test.ts --exclude tests/polling-lifecycle.test.ts --maxWorkers=1 --no-file-parallelism --reporter=verbose",
+      "guardDirectory": "guard-whole-source-353",
+      "exitCode": 1,
+      "log": "owner/whole-source-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+      "command": "node node_modules/vitest/vitest.mjs run --config validation-vitest.config.mts --exclude tests/friendbot.integration.test.ts --maxWorkers=1 --no-file-parallelism --reporter=verbose",
+      "guardDirectory": "guard-whole-candidate-353",
+      "exitCode": 1,
+      "log": "owner/whole-candidate-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+      "command": "node node_modules/typescript/bin/tsc --noEmit --pretty false --target ES2020 --module commonjs --lib ES2020 --strict --noUncheckedIndexedAccess --noImplicitReturns --noFallthroughCasesInSwitch --useDefineForClassFields false --esModuleInterop --skipLibCheck --forceConsistentCasingInFileNames --resolveJsonModule --moduleResolution node --types node --ignoreDeprecations 5.0 src/transactions/polling.ts",
+      "exitCode": 0,
+      "log": "owner/polling-scoped-types-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+      "command": "node node_modules/typescript/bin/tsc --noEmit --pretty false --target ES2020 --module commonjs --lib ES2020 --strict --noUncheckedIndexedAccess --noImplicitReturns --noFallthroughCasesInSwitch --useDefineForClassFields false --esModuleInterop --skipLibCheck --forceConsistentCasingInFileNames --resolveJsonModule --moduleResolution node --types node --ignoreDeprecations 5.0 src/transactions/polling.ts tests/polling-lifecycle.test.ts",
+      "exitCode": 2,
+      "log": "owner/runtime-and-test-strict-types.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-frozen-353",
+      "command": "npm run lint -- --pretty false",
+      "exitCode": 2,
+      "log": "owner/project-lint-source-353.log"
+    },
+    {
+      "cwd": "/workspace/scratch/ea8baa184658/sdk333-validation-candidate-353",
+      "command": "npm run lint -- --pretty false",
+      "exitCode": 2,
+      "log": "owner/project-lint-candidate-353.log"
+    }
+  ],
+  "fullSourceTypeCommand": "node node_modules/typescript/bin/tsc --noEmit --pretty false",
+  "patchCommand": "git apply --check --whitespace=error-all sdk463-deadline-bounds.patch",
+  "patchCheckExitCode": 0,
+  "projectLintIsTscOnly": true,
+  "separateEslintOrDocsLintScript": false
+}
