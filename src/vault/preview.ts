@@ -82,7 +82,10 @@ function operationRequiresAmount(operation: VaultPreviewAction): boolean {
 }
 
 function isSecretSeedLike(value: unknown): boolean {
-  return typeof value === 'string' && /^S[A-Z2-7]{55}$/i.test(value.trim());
+  // Any S-prefixed wallet value belongs on the secret-key error path. Even a
+  // truncated or mistyped seed must not reach validatePublicKey(), whose
+  // validation error intentionally includes the supplied public-key value.
+  return typeof value === 'string' && value.trim().toUpperCase().startsWith('S');
 }
 
 function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown): void {
