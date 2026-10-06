@@ -12,7 +12,7 @@ Stellar defines five memo types. All five are validated; four carry a payload.
 | --- | --- | --- |
 | `none` | — | No memo is attached. |
 | `text` | UTF-8 string | Up to **28 bytes**. Multi-byte characters count for more than one byte each. |
-| `id` | unsigned 64-bit integer | Decimal digits only, `0` to `18446744073709551615` (2⁶⁴−1). Accepts a string, number, or bigint. |
+| `id` | unsigned 64-bit integer | Decimal digits only, `0` to `18446744073709551615` (2⁶⁴−1). Strings and bigint support the full range; number inputs must satisfy `Number.isSafeInteger`. |
 | `hash` | 32 bytes | Exactly **64 hexadecimal characters**. Case-insensitive. |
 | `return` | 32 bytes | Exactly **64 hexadecimal characters**. Case-insensitive. |
 
@@ -81,6 +81,7 @@ The `validation.reason` field says which rule was broken:
 | `unsupported_type` | The `type` is not one of the five Stellar memo types. |
 | `too_long` | A `text` memo exceeds 28 bytes. |
 | `not_unsigned_integer` | An `id` memo is negative, fractional, or not numeric. |
+| `unsafe_number` | An `id` memo was passed as a JavaScript number outside the safe-integer range; use a decimal string or bigint instead. |
 | `out_of_range` | An `id` memo exceeds 2⁶⁴−1. |
 | `invalid_length` | A `hash` or `return` memo is not 64 hex characters. |
 | `not_hexadecimal` | A `hash` or `return` memo contains non-hex characters. |
