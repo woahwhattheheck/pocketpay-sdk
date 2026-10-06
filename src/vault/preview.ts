@@ -15,14 +15,29 @@ export type VaultPreviewAction = Extract<
 >;
 
 /** Input for a side-effect-free vault operation preview. */
-export interface VaultOperationPreviewParams {
-  /** Operation the UI is asking the user to review. */
-  operation: VaultPreviewAction;
-  /** Public wallet address only. Secret keys are never accepted by previews. */
-  wallet: string;
-  /** Required for deposit, withdraw, and createLock. Omit for getBalance. */
-  amount?: string;
-}
+export type VaultOperationPreviewParams =
+  | {
+      operation: 'deposit' | 'withdraw';
+      /** Public wallet address only. Secret keys are never accepted by previews. */
+      wallet: string;
+      amount: string;
+      unlockAt?: never;
+    }
+  | {
+      operation: 'getBalance';
+      /** Public wallet address only. Secret keys are never accepted by previews. */
+      wallet: string;
+      amount?: never;
+      unlockAt?: never;
+    }
+  | {
+      operation: 'createLock';
+      /** Public wallet address only. Secret keys are never accepted by previews. */
+      wallet: string;
+      amount: string;
+      /** Unix timestamp in seconds at which the proposed lock becomes withdrawable. */
+      unlockAt: number;
+    };
 
 /** Stable review-before-action model for vault operations. */
 export interface VaultOperationPreview {
@@ -33,6 +48,8 @@ export interface VaultOperationPreview {
   wallet: string;
   /** Requested amount, absent for a balance lookup. */
   amount?: string;
+  /** Proposed unlock time for createLock previews, in Unix seconds. */
+  unlockAt?: number;
   network: StellarNetwork;
   /** Base fee estimate in stroops. Read-only balance previews use "0". */
   estimatedFee: string;
@@ -66,6 +83,26 @@ function operationRequiresAmount(operation: VaultPreviewAction): boolean {
 
 function isSecretSeedLike(value: unknown): boolean {
   return typeof value === 'string' && /^S[A-Z2-7]{55}$/.test(value.trim());
+}
+
+function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown): void {
+  if (operation !== 'createLock') return;
+
+  if (!Number.isSafeInteger(unlockAt) || (unlockAt as number) <= 0) {
+    const validationValue =
+      typeof unlockAt === 'number' && Number.isFinite(unlockAt) ? unlockAt : undefined;
+    throw new PocketPayError(
+      'Vault lock previews require unlockAt as a positive integer Unix timestamp',
+      'INVALID_OPERATION',
+      {
+        validation: {
+          field: 'unlockAt',
+          reason: unlockAt === undefined ? 'missing' : 'invalid_timestamp',
+          ...(validationValue !== undefined ? { value: validationValue } : {}),
+        },
+      },
+    );
+  }
 }
 
 /**
@@ -113,6 +150,7 @@ export function buildVaultOperationPreview(
     // the SDK's existing PocketPayError validation contract.
     validateAmount(params.amount ?? '');
   }
+  validateLockUnlockAt(params.operation, params.unlockAt);
 
   const resolved = resolveConfig(config);
   const readiness = VAULT_ACTION_READINESS[params.operation];
@@ -143,6 +181,9 @@ export function buildVaultOperationPreview(
 
   if (operationRequiresAmount(params.operation)) {
     preview.amount = params.amount;
+  }
+  if (params.operation === 'createLock') {
+    preview.unlockAt = params.unlockAt;
   }
 
   return preview;
