@@ -172,6 +172,7 @@ export {
   sendAsset,
   safeSendAsset,
   previewPayment,
+  previewPaymentWithReadiness,
   validateAssetSpec,
   checkDestinationTrustline,
   safeCheckDestinationTrustline,
@@ -209,6 +210,7 @@ export type {
   TransactionReadinessWarningCode,
   TransactionReadinessField,
   TransactionReadinessBalance,
+  PaymentReadinessPreview,
 } from './payments';
 
 export type {
