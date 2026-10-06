@@ -18,6 +18,7 @@ export type {
   DiagnosticsSensitiveKey,
   AccountDiagnosticsSnapshot,
   PaymentReadinessSnapshot,
+  PaymentReadinessReason,
   AccountDiagnosticsLookup,
   BuildAccountDiagnosticsOptions,
   AccountDiagnosticsReport,

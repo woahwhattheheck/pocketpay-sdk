@@ -114,13 +114,38 @@ export interface DiagnosticsReport {
 
 /** Public account state included in an account-focused support report. */
 export interface AccountDiagnosticsSnapshot {
+  /**
+   * The queried public key (`G...`). Replaced with `[REDACTED]` when the
+   * input was not a valid public key, so mistaken input is never echoed.
+   */
   publicKey: string;
+  /** `funded` / `unfunded` (Horizon 404) / `error` (lookup failed or invalid key). */
   status: 'funded' | 'unfunded' | 'error';
+  /** Native XLM balance as reported by Horizon (funded accounts only). */
   nativeBalance?: string;
+  /** Number of balance entries, native included (funded accounts only). */
   assetCount?: number;
+  /**
+   * Lower-bound minimum balance: (2 + trustlines) x 0.5 XLM. Offers, extra
+   * signers, data entries, sponsorships and liabilities can raise the real
+   * minimum (funded accounts only).
+   */
+  estimatedMinimumBalance?: string;
+  /** Stable machine-readable code when `status` is `error`. */
   errorCode?: string;
+  /** Fixed, SDK-authored message; provider messages are never forwarded. */
   errorMessage?: string;
+  /** HTTP status of a failed Horizon lookup, when one was available. */
+  errorHttpStatus?: number;
 }
+
+/** Reason codes that can appear in {@link PaymentReadinessSnapshot.reasons}. */
+export type PaymentReadinessReason =
+  | 'INVALID_PUBLIC_KEY'
+  | 'ACCOUNT_STATE_UNAVAILABLE'
+  | 'ACCOUNT_UNFUNDED'
+  | 'NO_NATIVE_XLM_FOR_FEES'
+  | 'NETWORK_CONFIGURATION_UNAVAILABLE';
 
 /**
  * Coarse payment readiness derived only from account/config prerequisites.
@@ -128,11 +153,14 @@ export interface AccountDiagnosticsSnapshot {
  * validation for an actual payment.
  */
 export interface PaymentReadinessSnapshot {
+  /** `unknown` only when account state could not be loaded. */
   status: 'ready' | 'not_ready' | 'unknown';
   accountFunded: boolean;
+  /** Native balance exceeds the estimated minimum balance by at least 100 stroops. */
   feeBalancePresent: boolean;
   networkConfigured: boolean;
-  reasons: string[];
+  /** Empty when `status` is `ready`. */
+  reasons: PaymentReadinessReason[];
 }
 
 /** Deterministic account lookup seam for tests and offline support tooling. */
@@ -142,7 +170,12 @@ export type AccountDiagnosticsLookup = (
 ) => Promise<BalanceResult>;
 
 export interface BuildAccountDiagnosticsOptions {
+  /** SDK config overrides (same semantics as `resolveConfig`). */
   config?: Partial<SDKConfig>;
+  /**
+   * Account source. Defaults to one Horizon `loadAccount` read through the
+   * configured server; `getBalanceOrUnfunded` or a stub can be injected.
+   */
   lookup?: AccountDiagnosticsLookup;
 }
 

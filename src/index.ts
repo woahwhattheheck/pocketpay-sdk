@@ -399,6 +399,7 @@ export type {
   EndpointDiagnostics,
   AccountDiagnosticsSnapshot,
   PaymentReadinessSnapshot,
+  PaymentReadinessReason,
   AccountDiagnosticsLookup,
   BuildAccountDiagnosticsOptions,
   AccountDiagnosticsReport,
