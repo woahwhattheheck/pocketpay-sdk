@@ -78,6 +78,7 @@ The `validation.reason` field says which rule was broken:
 
 | `reason` | Meaning |
 | --- | --- |
+| `unexpected_payload` | A `none` memo included a value even though this memo type carries no payload. |
 | `unsupported_type` | The `type` is not one of the five Stellar memo types. |
 | `too_long` | A `text` memo exceeds 28 bytes. |
 | `not_unsigned_integer` | An `id` memo is negative, fractional, or not numeric. |
