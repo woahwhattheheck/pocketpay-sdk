@@ -63,7 +63,7 @@ During evaluation or payment periods:
 - keep technical review discussion separate from payment pressure.
 
 PocketPay's shared campaign guidance is documented in the
-[Payment-Period Conduct Guidance](https://github.com/Axionvera/pocketpay-contracts/blob/main/docs/payment-period-conduct.md).
+[Payment-Period Conduct Guidance](https://github.com/Stellar-PocketPay/pocketpay-contracts/blob/main/docs/payment-period-conduct.md).
 
 ## Acceptance criteria remain authoritative
 
