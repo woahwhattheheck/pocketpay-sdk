@@ -12,6 +12,7 @@ import { withTimeout } from '../network';
 import { submitWithGuard } from '../transactions/guarded-submit';
 import { assertTransactionBuildValid } from '../transactions/build-validation';
 import { validateAssetSpec, verifyPaymentTrustlineOrThrow } from './trustline';
+import { checkTransactionReadiness, type TransactionReadinessBlocker } from './readiness';
 
 /**
  * Sends XLM from one account to another.
@@ -119,11 +120,73 @@ export async function sendXLM(
 
 // ─── Safe Wrappers ──────────────────────────────────────────────────────────
 
+function readinessBlockerError(blocker: TransactionReadinessBlocker): PocketPayError {
+  return new PocketPayError(
+    blocker.message,
+    blocker.code,
+    {
+      validation: {
+        field: blocker.field ?? blocker.check,
+        reason: blocker.code.toLowerCase(),
+      },
+      category: 'Payment',
+      safeMessage: blocker.message,
+    },
+    undefined,
+    blocker.retryable,
+  );
+}
+
+function assertReadinessReady(
+  readiness: Awaited<ReturnType<typeof checkTransactionReadiness>>,
+): void {
+  if (readiness.ready) return;
+  const blocker = readiness.blockers[0];
+  if (!blocker) {
+    throw new PocketPayError(
+      'Transaction readiness could not be established.',
+      'TRANSACTION_NOT_READY',
+      {
+        category: 'Payment',
+        safeMessage: 'Transaction readiness could not be established.',
+      },
+    );
+  }
+  throw readinessBlockerError(blocker);
+}
+
 export async function safeSendXLM(
   params: SendXLMParams,
   config?: Partial<SDKConfig>
 ): Promise<PocketPayResult<PaymentResult>> {
-  return toResult(() => sendXLM(params, config), 'Failed to send XLM', 'SEND_ERROR');
+  return toResult(async () => {
+    assertTransactionBuildValid(
+      {
+        sourceSecret: params.sourceSecret,
+        destination: params.destination,
+        amount: params.amount,
+        memo: params.memo,
+      },
+      {
+        stages: ['sourceAccount', 'destination', 'amount', 'memo'],
+        selfPaymentMessage: 'Cannot send XLM to yourself',
+      },
+    );
+
+    const sourceAccount = StellarSDK.Keypair.fromSecret(params.sourceSecret).publicKey();
+    const readiness = await checkTransactionReadiness(
+      {
+        sourceAccount,
+        destination: params.destination,
+        amount: params.amount,
+        asset: { code: 'XLM' },
+        memo: params.memo,
+      },
+      config,
+    );
+    assertReadinessReady(readiness);
+    return sendXLM(params, config);
+  }, 'Failed to send XLM', 'SEND_ERROR');
 }
 
 /**
@@ -437,11 +500,45 @@ export async function safeSendAsset(
   params: SendAssetParams,
   config?: Partial<SDKConfig>,
 ): Promise<PocketPayResult<PaymentResult>> {
-  return toResult(
-    () => sendAsset(params, config),
-    'Failed to send asset',
-    'SEND_ERROR',
-  );
+  return toResult(async () => {
+    assertTransactionBuildValid(
+      {
+        sourceSecret: params.sourceSecret,
+        destination: params.destination,
+        amount: params.amount,
+        asset: params.asset,
+        memo: params.memo,
+      },
+      {
+        stages: ['sourceAccount', 'destination', 'amount', 'asset', 'memo'],
+        selfPaymentMessage: 'Cannot send asset to yourself',
+      },
+    );
+
+    const isNative =
+      params.asset.code.toUpperCase() === 'XLM' ||
+      params.asset.code.toLowerCase() === 'native';
+
+    // Preserve the explicit issued-asset trustline opt-out. Native XLM ignores
+    // skipTrustlineCheck, so it still receives the aggregate readiness gate.
+    if (!isNative && params.skipTrustlineCheck) {
+      return sendAsset(params, config);
+    }
+
+    const sourceAccount = StellarSDK.Keypair.fromSecret(params.sourceSecret).publicKey();
+    const readiness = await checkTransactionReadiness(
+      {
+        sourceAccount,
+        destination: params.destination,
+        amount: params.amount,
+        asset: params.asset,
+        memo: params.memo,
+      },
+      config,
+    );
+    assertReadinessReady(readiness);
+    return sendAsset(params, config);
+  }, 'Failed to send asset', 'SEND_ERROR');
 }
 
 
