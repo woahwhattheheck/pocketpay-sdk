@@ -27,6 +27,15 @@ describe('vault operation preview', () => {
     expect(JSON.stringify(preview)).not.toMatch(/secret|sourceSecret/i);
   });
 
+  it('returns the canonical public wallet in the review model', () => {
+    const preview = buildVaultOperationPreview({
+      operation: 'getBalance',
+      wallet: `  ${wallet}\n`,
+    });
+
+    expect(preview.wallet).toBe(wallet);
+  });
+
   it('marks balance previews as read-only with no transaction fee', () => {
     const preview = buildVaultOperationPreview({ operation: 'getBalance', wallet });
 
