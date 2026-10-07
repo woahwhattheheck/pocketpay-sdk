@@ -134,7 +134,8 @@ export function buildVaultOperationPreview(
     });
   }
 
-  if (isSecretSeedLike(params.wallet)) {
+  const runtimeWallet = (params as { wallet?: unknown }).wallet;
+  if (isSecretSeedLike(runtimeWallet)) {
     throw new PocketPayError(
       'Vault previews require a public Stellar address; secret keys are not accepted',
       'INVALID_PUBLIC_KEY',
@@ -146,7 +147,10 @@ export function buildVaultOperationPreview(
       },
     );
   }
-  validatePublicKey(params.wallet);
+  validatePublicKey(runtimeWallet as string);
+  // validatePublicKey accepts surrounding whitespace, so return the exact
+  // canonical value it validated instead of echoing a decorated caller string.
+  const wallet = (runtimeWallet as string).trim();
 
   if (operationRequiresAmount(params.operation)) {
     // Passing an empty value through the shared validator deliberately keeps
@@ -174,7 +178,7 @@ export function buildVaultOperationPreview(
   const preview: VaultOperationPreview = {
     operation: params.operation,
     asset: XLM_ASSET,
-    wallet: params.wallet,
+    wallet,
     network: resolved.network,
     estimatedFee:
       params.operation === 'getBalance' ? '0' : String(StellarSDK.BASE_FEE),
