@@ -43,6 +43,8 @@ Transaction summaries prefer an explicit mapper direction. When it is absent, `s
 
 Vault results have no timestamp in their existing public type, so the caller must provide `createdAt`; the normalizer does not invent one.
 
+For list reconciliation, known transaction-hash receipts retain their `receipt:<hash>` identity. Hashless pending receipts instead derive a deterministic fingerprint from timestamp and observable receipt fields, so simultaneous distinct submissions do not all share the same UI key; memo/destination text is not embedded verbatim. Identical hashless source records cannot be distinguished without a real upstream identifier. Vault activities with a shared transaction hash include the vault operation in the ID (`vault:<hash>:<operation>`) so a deposit and withdrawal in one transaction remain separate rows.
+
 ## Example
 
 ```ts
