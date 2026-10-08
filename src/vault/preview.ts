@@ -81,6 +81,20 @@ function operationRequiresAmount(operation: VaultPreviewAction): boolean {
   return operation === 'deposit' || operation === 'withdraw' || operation === 'createLock';
 }
 
+/** Snapshot an untrusted runtime property exactly once, with a typed failure. */
+function readPreviewField(
+  params: VaultOperationPreviewParams,
+  field: 'operation' | 'wallet' | 'amount' | 'unlockAt',
+): unknown {
+  try {
+    return (params as unknown as Record<string, unknown>)[field];
+  } catch {
+    throw new PocketPayError('Vault preview parameter could not be read', 'INVALID_OPERATION', {
+      validation: { field, reason: 'unreadable' },
+    });
+  }
+}
+
 function isSecretSeedLike(value: unknown): boolean {
   // Any S-prefixed wallet value belongs on the secret-key error path. Even a
   // truncated or mistyped seed must not reach validatePublicKey(), whose
@@ -121,13 +135,19 @@ export function buildVaultOperationPreview(
 ): VaultOperationPreview {
   // TypeScript types do not protect JavaScript and JSON callers at runtime.
   // Reject malformed container values with the SDK's typed error contract.
-  if (params === null || typeof params !== 'object' || Array.isArray(params)) {
+  let isObject = false;
+  try {
+    isObject = params !== null && typeof params === 'object' && !Array.isArray(params);
+  } catch {
+    // Array.isArray throws on revoked Proxies; treat that like invalid input.
+  }
+  if (!isObject) {
     throw new PocketPayError('Vault preview parameters must be an object', 'INVALID_OPERATION', {
       validation: { field: 'params', reason: 'invalid_type' },
     });
   }
 
-  const runtimeOperation = (params as { operation?: unknown }).operation;
+  const runtimeOperation = readPreviewField(params, 'operation');
   if (!isVaultPreviewAction(runtimeOperation)) {
     // The operation field is also untrusted JSON input. It may contain a
     // mistyped seed/token, so never copy its value to a serializable error.
@@ -136,7 +156,7 @@ export function buildVaultOperationPreview(
     });
   }
 
-  const runtimeWallet = (params as { wallet?: unknown }).wallet;
+  const runtimeWallet = readPreviewField(params, 'wallet');
   if (typeof runtimeWallet !== 'string') {
     // Do not preserve arbitrary object payloads in the error's validation value.
     throw new PocketPayError('Vault previews require a public Stellar address', 'INVALID_PUBLIC_KEY', {
@@ -168,8 +188,9 @@ export function buildVaultOperationPreview(
   // canonical value it validated instead of echoing a decorated caller string.
   const wallet = (runtimeWallet as string).trim();
 
-  if (operationRequiresAmount(params.operation)) {
-    const runtimeAmount = (params as { amount?: unknown }).amount;
+  let runtimeAmount: unknown;
+  if (operationRequiresAmount(runtimeOperation)) {
+    runtimeAmount = readPreviewField(params, 'amount');
     if (typeof runtimeAmount !== 'string') {
       throw new PocketPayError('Vault preview amount must be a decimal string', 'INVALID_AMOUNT', {
         validation: {
@@ -200,40 +221,42 @@ export function buildVaultOperationPreview(
       );
     }
   }
-  validateLockUnlockAt(params.operation, params.unlockAt);
+  const runtimeUnlockAt =
+    runtimeOperation === 'createLock' ? readPreviewField(params, 'unlockAt') : undefined;
+  validateLockUnlockAt(runtimeOperation, runtimeUnlockAt);
 
   const resolved = resolveConfig(config);
-  const readiness = VAULT_ACTION_READINESS[params.operation];
+  const readiness = VAULT_ACTION_READINESS[runtimeOperation];
   const warnings: string[] = [];
 
-  if (params.operation === 'deposit' || params.operation === 'withdraw') {
+  if (runtimeOperation === 'deposit' || runtimeOperation === 'withdraw') {
     warnings.push(BOOKKEEPING_WARNING);
   }
 
-  if (params.operation === 'createLock') {
+  if (runtimeOperation === 'createLock') {
     warnings.push(LOCK_PREVIEW_WARNING);
   }
 
-  if (params.operation !== 'getBalance') {
+  if (runtimeOperation !== 'getBalance') {
     warnings.push(SOROBAN_FEE_WARNING);
   }
 
   const preview: VaultOperationPreview = {
-    operation: params.operation,
+    operation: runtimeOperation,
     asset: XLM_ASSET,
     wallet,
     network: resolved.network,
     estimatedFee:
-      params.operation === 'getBalance' ? '0' : String(StellarSDK.BASE_FEE),
+      runtimeOperation === 'getBalance' ? '0' : String(StellarSDK.BASE_FEE),
     supported: readiness.supported,
     warnings,
   };
 
-  if (operationRequiresAmount(params.operation)) {
-    preview.amount = params.amount;
+  if (operationRequiresAmount(runtimeOperation)) {
+    preview.amount = runtimeAmount as string;
   }
-  if (params.operation === 'createLock') {
-    preview.unlockAt = params.unlockAt;
+  if (runtimeOperation === 'createLock') {
+    preview.unlockAt = runtimeUnlockAt as number;
   }
 
   return preview;
