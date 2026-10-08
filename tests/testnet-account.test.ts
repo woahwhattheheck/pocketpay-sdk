@@ -107,6 +107,29 @@ describe('diagnoseTestnetAccount', () => {
   });
 
 
+  it('rejects malformed funded native balances from injected lookup adapters', async () => {
+    const funded = testnetAccountFixtures.funded.result;
+    const publicKey = testnetAccountFixtures.funded.publicKey;
+
+    for (const nativeBalance of ['NaN', 'Infinity', '-1.0000000', '1e5', '0.00000001']) {
+      const result = await diagnoseTestnetAccount(publicKey, {
+        lookup: async () => ({
+          ...funded,
+          balance: { ...funded.balance, nativeBalance },
+        }),
+      });
+      expect(result.status).toBe('unavailable');
+    }
+
+    const valid = await diagnoseTestnetAccount(publicKey, {
+      lookup: async () => ({
+        ...funded,
+        balance: { ...funded.balance, nativeBalance: '0.0000001' },
+      }),
+    });
+    expect(valid.status).toBe('funded');
+  });
+
   it('does not mislabel another account or an unknown lookup result as funded/unfunded', async () => {
     const queried = testnetAccountFixtures.funded.publicKey;
     const another = testnetAccountFixtures.unfunded.publicKey;
