@@ -119,6 +119,14 @@ export function buildVaultOperationPreview(
   params: VaultOperationPreviewParams,
   config?: Partial<SDKConfig>,
 ): VaultOperationPreview {
+  // TypeScript types do not protect JavaScript and JSON callers at runtime.
+  // Reject malformed container values with the SDK's typed error contract.
+  if (params === null || typeof params !== 'object' || Array.isArray(params)) {
+    throw new PocketPayError('Vault preview parameters must be an object', 'INVALID_OPERATION', {
+      validation: { field: 'params', reason: 'invalid_type' },
+    });
+  }
+
   const runtimeOperation = (params as { operation?: unknown }).operation;
   if (!isVaultPreviewAction(runtimeOperation)) {
     const validationValue =
@@ -135,6 +143,12 @@ export function buildVaultOperationPreview(
   }
 
   const runtimeWallet = (params as { wallet?: unknown }).wallet;
+  if (typeof runtimeWallet !== 'string') {
+    // Do not preserve arbitrary object payloads in the error's validation value.
+    throw new PocketPayError('Vault previews require a public Stellar address', 'INVALID_PUBLIC_KEY', {
+      validation: { field: 'publicKey', reason: 'not_a_string' },
+    });
+  }
   if (isSecretSeedLike(runtimeWallet)) {
     throw new PocketPayError(
       'Vault previews require a public Stellar address; secret keys are not accepted',
@@ -153,9 +167,22 @@ export function buildVaultOperationPreview(
   const wallet = (runtimeWallet as string).trim();
 
   if (operationRequiresAmount(params.operation)) {
-    // Passing an empty value through the shared validator deliberately keeps
-    // the SDK's existing PocketPayError validation contract.
-    validateAmount(params.amount ?? '');
+    const runtimeAmount = (params as { amount?: unknown }).amount;
+    if (typeof runtimeAmount !== 'string') {
+      throw new PocketPayError('Vault preview amount must be a decimal string', 'INVALID_AMOUNT', {
+        validation: {
+          field: 'amount',
+          reason: runtimeAmount === undefined ? 'missing' : 'invalid_type',
+        },
+      });
+    }
+    // Rejection paths must not repeat seed material passed into an amount field.
+    if (isSecretSeedLike(runtimeAmount)) {
+      throw new PocketPayError('Vault preview amount must be a decimal string', 'INVALID_AMOUNT', {
+        validation: { field: 'amount', reason: 'secret_key_not_allowed' },
+      });
+    }
+    validateAmount(runtimeAmount);
   }
   validateLockUnlockAt(params.operation, params.unlockAt);
 
