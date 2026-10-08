@@ -75,6 +75,8 @@ if (!receipt.success && receipt.status === 'pending') {
 }
 ```
 
+Runtime RPC adapters may also return a malformed or `null` confirmation response, or a status accessor that throws. These are **unknown**, not proof of failure: the helper returns the pending receipt with the original submitted hash instead of throwing away the transaction identity.
+
 There is no automatic submission retry in either Soroban confirmation path.
 Do not convert an unknown confirmation into a failed payment or a zero balance.
 A response `status: 'failed'` requires actual RPC `FAILED` finality, not a
