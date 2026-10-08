@@ -7,8 +7,10 @@ import {
   ErrorCategory,
   ErrorCode,
   ERROR_CODES,
+  LEGACY_ERROR_CODE_ALIASES,
   type ErrorCodeValue,
   isKnownErrorCode,
+  resolveErrorCode,
 } from './codes';
 import { describeError, getErrorCategory, redactError, redactSensitive, isRetryableCode } from './taxonomy';
 
@@ -16,7 +18,9 @@ export {
   ErrorCategory,
   ErrorCode,
   ERROR_CODES,
+  LEGACY_ERROR_CODE_ALIASES,
   isKnownErrorCode,
+  resolveErrorCode,
   describeError,
   getErrorCategory,
   redactError,
