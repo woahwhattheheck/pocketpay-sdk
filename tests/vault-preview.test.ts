@@ -99,9 +99,41 @@ describe('vault operation preview', () => {
       validation: {
         field: 'operation',
         reason: 'unsupported_value',
-        value: 'not-a-vault-operation',
       },
     });
+    expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+  });
+
+  it('never serializes sensitive malformed operation, wallet or amount values', () => {
+    const privateValue = 'private-token-credential-1234567890';
+    const candidates = [
+      { operation: privateValue, wallet } as never,
+      { operation: 'deposit', wallet: privateValue, amount: '1' } as never,
+      { operation: 'deposit', wallet, amount: privateValue } as never,
+    ];
+    for (const candidate of candidates) {
+      let thrown: unknown;
+      try {
+        buildVaultOperationPreview(candidate);
+      } catch (error) {
+        thrown = error;
+      }
+      expect(thrown).toBeInstanceOf(PocketPayError);
+      expect(JSON.stringify(thrown)).not.toContain(privateValue);
+      expect((thrown as Error).message).not.toContain(privateValue);
+      expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+    }
+    let precision: unknown;
+    try {
+      buildVaultOperationPreview({ operation: 'deposit', wallet, amount: '0.12345678' });
+    } catch (error) {
+      precision = error;
+    }
+    expect(precision).toMatchObject({
+      code: 'INVALID_AMOUNT_PRECISION',
+      validation: { field: 'amount', reason: 'too_precise' },
+    });
+    expect((precision as PocketPayError).validation).not.toHaveProperty('value');
   });
 
   it('returns the SDK typed validation error for a malformed public key', () => {
