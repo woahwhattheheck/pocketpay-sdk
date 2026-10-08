@@ -31,6 +31,46 @@ describe('pollTransaction request and cancellation lifecycle', () => {
     vi.restoreAllMocks();
   });
 
+  it('rejects invalid transaction hashes before creating a Horizon client', async () => {
+    const getServer = vi.spyOn(configModule, 'getHorizonServer');
+    for (const input of ['', 'not-a-hash', 'S' + 'A'.repeat(55), {} as unknown as string]) {
+      const result = await pollTransaction(input, { maxAttempts: 1 });
+      expect(result).toMatchObject({
+        status: 'unknown',
+        state: 'unknown',
+        hash: '',
+        attempts: 0,
+      });
+      expect(result.error).toContain('64-character hexadecimal');
+      expect(JSON.stringify(result)).not.toContain('A'.repeat(55));
+    }
+    expect(getServer).not.toHaveBeenCalled();
+  });
+
+  it('keeps throwing provider response/name getters inside a safe unknown result', async () => {
+    const secret = 'private-provider-secret';
+    const hostile: Record<string, unknown> = {};
+    Object.defineProperty(hostile, 'name', {
+      get() { throw new Error(secret); },
+    });
+    Object.defineProperty(hostile, 'response', {
+      get() { throw new Error(secret); },
+    });
+    const call = vi.fn().mockRejectedValue(hostile);
+    installLookup(call);
+
+    const result = await pollTransaction(HASH, { timeout: 40, maxAttempts: 1 });
+    expect(result).toMatchObject({
+      status: 'unknown',
+      state: 'unknown',
+      hash: HASH,
+      attempts: 1,
+    });
+    expect(JSON.stringify(result)).not.toContain(secret);
+    expect(call).toHaveBeenCalledOnce();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('never accepts a mismatched or malformed Horizon status as confirmation', async () => {
     const wrongHash = 'abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890';
     for (const response of [
