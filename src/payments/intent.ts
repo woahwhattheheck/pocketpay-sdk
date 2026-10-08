@@ -195,7 +195,9 @@ export function validatePaymentIntent(intent: PaymentIntent): PaymentIntentValid
   }
 
   // 5. Memo check
-  if (intent.memo) {
+  // Validate every supplied memo, including falsey invalid runtime values (0, false,
+  // NaN). Only an omitted memo is absent; the memo helper permits empty text.
+  if (intent.memo !== undefined) {
     try {
       validateMemoInput(intent.memo);
     } catch (err) {
