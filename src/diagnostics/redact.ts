@@ -59,6 +59,28 @@ export function redactDiagnosticsString(value: string): string {
 }
 
 /**
+ * Render only the origin of an endpoint in a support report or error.
+ *
+ * Credentials may be embedded in URL userinfo, path segments or arbitrary
+ * query parameters, so pattern-only secret scrubbing is not sufficient.
+ * The actual request URL is not modified by this formatter.
+ */
+export function redactEndpointUrl(value: string): string {
+  try {
+    const parsed = new URL(value);
+    if (
+      (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') ||
+      !parsed.hostname
+    ) {
+      return '[INVALID ENDPOINT]';
+    }
+    return parsed.origin;
+  } catch {
+    return '[INVALID ENDPOINT]';
+  }
+}
+
+/**
  * Deep-redact a value for diagnostics / support export.
  *
  * - Deny-listed object keys → `[REDACTED]`
@@ -101,6 +123,9 @@ function redactInternal(value: unknown, seen: WeakSet<object>): unknown {
   for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
     if (isSensitiveKey(key)) {
       out[key] = REDACTED;
+    } else if ((key === 'horizonUrl' || key === 'sorobanRpcUrl') && typeof child === 'string') {
+      // Redact arbitrary credentials even when they are not recognizable tokens.
+      out[key] = redactEndpointUrl(child);
     } else {
       out[key] = redactInternal(child, seen);
     }
