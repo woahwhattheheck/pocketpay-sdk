@@ -112,6 +112,10 @@ log, or confirmation surface. It normalizes and validates the memo first.
 Text memos JSON-escape control characters, quotes, and backslashes without
 adding surrounding quotes; Unicode NEXT LINE (U+0085), LINE SEPARATOR (U+2028)
 and PARAGRAPH SEPARATOR (U+2029) are also escaped for single-line display.
+Bidirectional controls (U+061C, U+200E–U+200F, U+202A–U+202E,
+U+2066–U+2069) are rendered as literal `\uNNNN` escapes so
+memo text cannot visually reorder adjacent display labels. This does not
+sanitize memo text for HTML injection.
 `id`, `hash`, and `return` payloads are returned
 as their validated string values. Missing or `none` memos return `undefined`.
 
