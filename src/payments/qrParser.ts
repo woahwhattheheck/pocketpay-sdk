@@ -76,7 +76,9 @@ export function parseQRPayload(input: string): QRPayload {
   // metadata parsing (optional). format: "key1:value1,key2:value2"
   let metadata: Record<string, string> | undefined;
   if (metadataRaw) {
-    const parsed: Record<string, string> = {};
+    // Untrusted QR keys must be stored as own data properties. A plain object
+    // can lose "__proto__" or shadow inherited members such as "toString".
+    const parsed: Record<string, string> = Object.create(null);
     check(PaymentErrorCode.InvalidMetadata, () => {
       for (const pair of metadataRaw.split(',')) {
         const separator = pair.indexOf(':');
