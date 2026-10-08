@@ -67,9 +67,15 @@ export function classifySubmitError(error: unknown, txHash?: string): PocketPayE
     // the server may already have received the signed envelope; never let
     // that read-only retry signal bypass hash polling.
     if (
-      error.code === ErrorCode.NET_UNREACHABLE &&
-      typeof error.statusCode === 'number' &&
-      (error.statusCode === 408 || (error.statusCode >= 500 && error.statusCode < 600))
+      // These transport categories can fail *after* the envelope reaches
+      // Horizon. Without an HTTP status, reachability/timeouts are not a
+      // definitive rejection and must be reconciled by hash first.
+      (error.code === ErrorCode.NET_TIMEOUT ||
+       error.code === ErrorCode.REQUEST_TIMEOUT ||
+       (error.code === ErrorCode.NET_UNREACHABLE && error.statusCode == null) ||
+       ((error.code === ErrorCode.NET_UNREACHABLE || error.code === ErrorCode.NET_HTTP) &&
+        typeof error.statusCode === 'number' &&
+        (error.statusCode === 408 || (error.statusCode >= 500 && error.statusCode < 600))))
     ) {
       const hash = txHash ?? error.transactionHash;
       return new PocketPayError(
@@ -159,6 +165,9 @@ export function classifySubmitError(error: unknown, txHash?: string): PocketPayE
       (status === 408 || (status >= 500 && status < 600))) ||
     isTransportInterruption ||
     isAborted ||
+    // Some fetch implementations strip the transport cause and expose only
+    // TypeError('fetch failed'). An uncertain *submission* is not a rejection.
+    (err instanceof TypeError && err.message.toLowerCase() === 'fetch failed') ||
     (typeof err?.message === 'string' &&
       (err.message.toLowerCase().includes('timeout') ||
        err.message.toLowerCase().includes('timed out')));
