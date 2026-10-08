@@ -736,7 +736,7 @@ export async function checkTransactionReadiness(
   let destinationLookup: AccountLookup | undefined;
 
   if (cfg) {
-    const server = getHorizonServer(config);
+    const server = getHorizonServer(cfg);
     const activeCfg = cfg;
 
     const horizonCheck = input.verifyHorizonNetwork

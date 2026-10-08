@@ -13,6 +13,7 @@ import {
   READINESS_CHECK_ORDER,
   setHorizonServerFactory,
   resetHorizonServerFactory,
+  validatePocketPayConfig,
   type TransactionReadiness,
   type TransactionReadinessParams,
   type SDKConfig,
@@ -191,6 +192,37 @@ describe('checkTransactionReadiness — ready', () => {
     expect(result.ready).toBe(true);
     expect(result.fee).toBe('500');
     expect(result.balance?.nativeRequired).toBe('10.0000500');
+  });
+
+
+  it('uses the validated config snapshot for Horizon construction', async () => {
+    let validationReads = 0;
+    const probeConfig = {} as Partial<SDKConfig>;
+    Object.defineProperty(probeConfig, 'network', {
+      enumerable: true,
+      get() {
+        validationReads += 1;
+        return 'testnet';
+      },
+    });
+    validatePocketPayConfig(probeConfig);
+
+    let reads = 0;
+    const changingConfig = {} as Partial<SDKConfig>;
+    Object.defineProperty(changingConfig, 'network', {
+      enumerable: true,
+      get() {
+        reads += 1;
+        if (reads > validationReads) throw new Error('config read after validation');
+        return 'testnet';
+      },
+    });
+
+    const result = await check({}, changingConfig);
+
+    expect(result.ready).toBe(true);
+    expect(result.network).toBe('testnet');
+    expect(reads).toBe(validationReads);
   });
 });
 
