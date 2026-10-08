@@ -238,6 +238,22 @@ describe('Soroban Invocation Result Mapper', () => {
       expect(mapped.rawStroops).toBeUndefined();
     });
 
+    it('fails closed for malformed string get_balance values (#307)', () => {
+      for (const balance of ['not-a-balance.0', '12stroops', '-1']) {
+        expect(() =>
+          mapVaultInvocationResult('get_balance', { success: true, balance })
+        ).not.toThrow();
+        expect(
+          mapVaultInvocationResult('get_balance', { success: true, balance })
+        ).toMatchObject({
+          success: false,
+          status: 'error',
+          operation: 'get_balance',
+          errorCode: 'SOROBAN_INVALID_RESPONSE',
+        });
+      }
+    });
+
     it('maps successful deposit operation', () => {
       const raw = { status: 'SUCCESS', hash: 'deposithash' };
       const mapped = mapVaultInvocationResult('deposit', raw, { amount: '100', contractId: 'C123' });
