@@ -169,28 +169,40 @@ export async function pollTransaction(
         deadline,
       );
 
-      const record: TransactionRecord = {
-        hash: tx.hash,
-        // `tx.ledger` is Horizon's link-follow helper, not the ledger number;
-        // the numeric sequence is exposed as `ledger_attr`.
-        ledger: tx.ledger_attr,
-        createdAt: tx.created_at,
-        sourceAccount: tx.source_account,
-        // Horizon types `fee_charged` as `string | number`; preserve stroops.
-        fee: String(tx.fee_charged),
-        operationCount: tx.operation_count,
-        successful: tx.successful,
-        memo: tx.memo || undefined,
-        memoType: tx.memo_type,
-      };
+      // Never confirm (or definitively fail) a different transaction just
+      // because a transport returned a successful-looking object. Runtime
+      // Horizon adapters are untrusted even when the TS interface is correct.
+      if (
+        !tx ||
+        typeof tx.hash !== 'string' ||
+        tx.hash.toLowerCase() !== hash.toLowerCase() ||
+        typeof tx.successful !== 'boolean'
+      ) {
+        lastState = 'unknown';
+      } else {
+        const record: TransactionRecord = {
+          hash: tx.hash,
+          // `tx.ledger` is Horizon's link-follow helper, not the ledger number;
+          // the numeric sequence is exposed as `ledger_attr`.
+          ledger: tx.ledger_attr,
+          createdAt: tx.created_at,
+          sourceAccount: tx.source_account,
+          // Horizon types `fee_charged` as `string | number`; preserve stroops.
+          fee: String(tx.fee_charged),
+          operationCount: tx.operation_count,
+          successful: tx.successful,
+          memo: tx.memo || undefined,
+          memoType: tx.memo_type,
+        };
 
-      return {
-        status: tx.successful ? 'success' : 'failure',
-        state: tx.successful ? 'confirmed' : 'failed',
-        hash,
-        attempts,
-        transaction: record,
-      };
+        return {
+          status: tx.successful ? 'success' : 'failure',
+          state: tx.successful ? 'confirmed' : 'failed',
+          hash,
+          attempts,
+          transaction: record,
+        };
+      }
     } catch (error: any) {
       if (error?.name === 'AbortError') {
         throw error;
