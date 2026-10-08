@@ -52,6 +52,23 @@ describe('diagnostics redaction', () => {
     expect(redacted.nested.ok).toBe(true);
   });
 
+  it('redacts endpoint URLs with mixed-case and separator keys in nested diagnostics', () => {
+    const opaque = 'private-path-query-309';
+    const raw = `https://horizon.example.test/path/${opaque}?access=${opaque}`;
+    const input = {
+      horizonURL: raw,
+      nested: { soroban_rpc_url: raw, 'Horizon-URL': raw },
+      nonEndpointUrl: raw,
+    };
+    const safe = redactDiagnosticsValue(input);
+    expect(safe.horizonURL).toBe('https://horizon.example.test');
+    expect(safe.nested.soroban_rpc_url).toBe('https://horizon.example.test');
+    expect(safe.nested['Horizon-URL']).toBe('https://horizon.example.test');
+    // Other URL keys retain existing free-form behavior; callers should never
+    // export credential-bearing URLs under ambiguous metadata field names.
+    expect(safe.nonEndpointUrl).toBe(raw);
+  });
+
   it('scrubs Stellar secret keys embedded in free-form strings', () => {
     const secret = StellarSDK.Keypair.random().secret();
     const scrubbed = redactDiagnosticsString(`failed with key ${secret} end`);
