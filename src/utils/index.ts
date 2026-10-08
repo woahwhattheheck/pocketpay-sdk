@@ -566,7 +566,16 @@ export function wrapError(
   if (error instanceof PocketPayError) return sanitizePocketPayError(error);
 
   const cause = error instanceof Error ? sanitizeErrorCause(error) : undefined;
-  const message = cause?.message ?? redactSensitive(String(error));
+  let message = cause?.message;
+  if (message === undefined) {
+    try {
+      message = redactSensitive(String(error));
+    } catch {
+      // Arbitrary thrown objects may have a throwing toString/ToPrimitive hook.
+      // Never let diagnostics escape the structured failure-result boundary.
+      message = 'Non-renderable thrown value';
+    }
+  }
 
   return new PocketPayError(
     `${context}: ${message}`,
