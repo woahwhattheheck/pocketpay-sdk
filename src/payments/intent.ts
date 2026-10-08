@@ -80,7 +80,7 @@ export function createPaymentIntent(params: CreatePaymentIntentParams): PaymentI
     amount: params.amount ? params.amount.trim() : '',
     asset,
     assetMetadata,
-    memo: params.memo ? params.memo.trim() : undefined,
+    memo: typeof params.memo === 'string' ? (params.memo.trim() || undefined) : params.memo,
     status: assetState === 'unsupported' ? 'unsupported_asset' : 'created',
     assetState,
     trustlineStrategy,
