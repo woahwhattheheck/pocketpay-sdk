@@ -120,6 +120,19 @@ function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown):
       },
     );
   }
+
+  if ((unlockAt as number) <= Math.floor(Date.now() / 1000)) {
+    throw new PocketPayError(
+      'Vault lock previews require unlockAt to be in the future',
+      'INVALID_OPERATION',
+      {
+        validation: {
+          field: 'unlockAt',
+          reason: 'not_future',
+        },
+      },
+    );
+  }
 }
 
 /**
