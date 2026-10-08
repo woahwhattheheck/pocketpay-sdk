@@ -178,6 +178,17 @@ describe('Multi-Asset Payment Intent Model', () => {
       );
     });
 
+    it('rejects malformed falsey runtime memos instead of skipping validation', () => {
+      // External JavaScript/JSON inputs can violate the TypeScript MemoInput contract.
+      for (const memo of [0, false, NaN] as const) {
+        const intent = createPaymentIntent({ ...validParams, memo: memo as never });
+        expect(intent.status).toBe('invalid');
+        expect(intent.validationResult?.issues).toContainEqual(
+          expect.objectContaining({ field: 'memo', code: 'INVALID_MEMO' }),
+        );
+      }
+    });
+
     it('keeps the legacy string trim behavior and explicit no-memo shape', () => {
       const textIntent = createPaymentIntent({ ...validParams, memo: '  invoice  ' });
       expect(textIntent.memo).toBe('invoice');
