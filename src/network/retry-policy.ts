@@ -172,9 +172,10 @@ export async function withRetryPolicy(
       lastOutcome = classifySubmissionOutcome(undefined, txHash);
       return result;
     } catch (rawError) {
-      const classified = rawError instanceof PocketPayError
-        ? rawError
-        : classifySubmitError(rawError, transaction.hash().toString('hex'));
+      // The idempotency layer can surface already-wrapped network errors.
+      // Reclassify those too: an unacknowledged transport drop/timeout is an
+      // unknown submission outcome, not permission to resubmit the envelope.
+      const classified = classifySubmitError(rawError, transaction.hash().toString('hex'));
 
       lastError = classified;
       lastOutcome = classifySubmissionOutcome(classified);
