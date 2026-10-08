@@ -53,6 +53,31 @@ describe('account capability snapshot (#209)', () => {
     expect(getAccountCapabilities(account).canSign).toBe(false);
   });
 
+  it('keeps signing available when an optional probe is unset', () => {
+    const account = createAccountWithSigner({ publicKey: source.publicKey() }, {
+      publicKey: source.publicKey(),
+      isAvailable: undefined,
+      kind: 'hardware' as const,
+      async sign(tx) { return tx; },
+    });
+    expect(getAccountCapabilities(account).canSign).toBe(true);
+  });
+
+  it('fails closed when caller-provided capability getters throw', () => {
+    const transport = Object.defineProperty({}, 'submitSignedTransaction', {
+      get() { throw new Error('broken transport'); },
+    });
+    expect(hasSubmissionTransport(transport)).toBe(false);
+
+    const account = createAccountWithSigner({ publicKey: source.publicKey() }, {
+      publicKey: source.publicKey(),
+      kind: 'hardware' as const,
+      get isAvailable() { throw new Error('broken signer availability'); },
+      async sign(tx) { return tx; },
+    });
+    expect(getAccountCapabilities(account).canSign).toBe(false);
+  });
+
   it('rejects attaching an identity-mismatched signer without invoking it', () => {
     const sign = vi.fn(async (tx: StellarSDK.Transaction | StellarSDK.FeeBumpTransaction) => tx);
     expect(() => createAccountWithSigner(
