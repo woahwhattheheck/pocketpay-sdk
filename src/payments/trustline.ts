@@ -166,8 +166,10 @@ export async function checkDestinationTrustline(
     }
 
     const balObj = matchingBalance as any;
-    const currentBalance = balObj.balance ?? '0';
-    const limit = balObj.limit ?? '0';
+    // An absent Horizon balance/limit is unknown, not a zero balance or
+    // an authorized empty trustline. Exact-unit parsing below fails closed.
+    const currentBalance = balObj.balance;
+    const limit = balObj.limit;
     const isAuthorized = balObj.is_authorized !== false && balObj.is_authorized_to_maintain_liabilities !== false;
 
     if (!isAuthorized) {
