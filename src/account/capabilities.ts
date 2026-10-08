@@ -48,12 +48,25 @@ export function getAccountCapabilities(
   account: AccountAbstraction,
   transport?: AccountSubmissionTransport,
 ): AccountCapabilitySnapshot {
-  const signer = account.signer;
-  const matchedSigner =
-    account.canSign === true &&
-    signer !== undefined &&
-    typeof signer.sign === 'function' &&
-    signer.publicKey === account.publicKey;
+  let signer: typeof account.signer;
+  try {
+    signer = account.signer;
+  } catch {
+    // A caller-provided account accessor can become unreadable.
+    signer = undefined;
+  }
+  let matchedSigner = false;
+  try {
+    matchedSigner =
+      account.canSign === true &&
+      signer !== undefined &&
+      typeof signer.sign === 'function' &&
+      signer.publicKey === account.publicKey;
+  } catch {
+    // External signers may expose throwing identity/signature getters.
+    // A read-only capability snapshot must fail closed, not throw.
+    matchedSigner = false;
+  }
   let signerAvailable = false;
   if (signer !== undefined) {
     try {
