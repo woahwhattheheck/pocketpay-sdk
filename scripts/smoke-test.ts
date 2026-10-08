@@ -12,7 +12,12 @@ const assert = require('node:assert/strict');
 const path = require('node:path');
 
 function check(label: string, exercise: () => void): void {
-  exercise();
+  try {
+    exercise();
+  } catch {
+    // AssertionErrors may contain secret material: report the check name only.
+    throw new Error(`check failed: ${label}`);
+  }
   console.log(`PASS ${label}`);
 }
 
@@ -36,12 +41,12 @@ try {
     assert.equal(typeof SDK.ErrorCode, 'object');
   });
 
-  let source: { publicKey: string; secretKey: string };
-  let destination: { publicKey: string; secretKey: string };
+  let source!: { publicKey: string; secretKey: string };
+  let destination!: { publicKey: string; secretKey: string };
   check('wallet creation, local import and rejected public-key-only import', () => {
     source = SDK.createWallet();
     destination = SDK.createWallet();
-    assert.equal(SDK.validatePublicKey(source.publicKey), undefined);
+    assert.equal(SDK.validatePublicKey(source.publicKey), true);
     const restored = SDK.importWallet(source.secretKey);
     assert.equal(restored.publicKey, source.publicKey);
     assert.equal(restored.secretKey, source.secretKey);
