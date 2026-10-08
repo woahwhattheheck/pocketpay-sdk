@@ -6,6 +6,7 @@
  */
 
 import type { AccountBalance, BalanceResult, SDKConfig } from '../types';
+import { PocketPayError } from '../types';
 import { HORIZON_URLS } from '../config';
 import { isKnownErrorCode } from '../errors/codes';
 import { redactSensitive, validatePublicKey } from '../utils';
@@ -90,6 +91,34 @@ function readErrorCode(error: unknown): string | undefined {
 }
 
 /**
+ * Validates the public-key-only input without ever echoing caller material.
+ * The shared validator includes invalid values in its error metadata, which is
+ * useful for generic validation but unsafe for a diagnostics helper: callers
+ * can accidentally paste a secret seed into this field and then serialize the
+ * thrown error.
+ */
+function validateDiagnosticPublicKey(publicKey: unknown): asserts publicKey is string {
+  const reason =
+    typeof publicKey !== 'string'
+      ? 'not_a_string'
+      : publicKey.trim().toUpperCase().startsWith('S')
+        ? 'secret_key_not_allowed'
+        : 'invalid_format';
+
+  try {
+    validatePublicKey(publicKey as string);
+  } catch {
+    throw new PocketPayError(
+      reason === 'secret_key_not_allowed'
+        ? 'Testnet account diagnostics require a public Stellar address; secret keys are not accepted.'
+        : 'Invalid Stellar public key.',
+      'INVALID_PUBLIC_KEY',
+      { validation: { field: 'publicKey', reason } },
+    );
+  }
+}
+
+/**
  * Inspect a Stellar Testnet account and return a deterministic three-state
  * diagnostic: `funded`, `unfunded`, or `unavailable`.
  *
@@ -101,7 +130,7 @@ export async function diagnoseTestnetAccount(
   publicKey: string,
   options: DiagnoseTestnetAccountOptions = {},
 ): Promise<TestnetAccountDiagnostic> {
-  validatePublicKey(publicKey);
+  validateDiagnosticPublicKey(publicKey);
 
   const base: TestnetAccountDiagnosticBase = {
     publicKey,
