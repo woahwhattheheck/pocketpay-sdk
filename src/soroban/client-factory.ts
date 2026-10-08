@@ -13,7 +13,7 @@ import {
   SorobanInvocationStatus,
 } from '../types';
 import { withTimeout } from '../network';
-import { pollSorobanTransactionStatus } from './status-polling';
+import { pollSorobanTransactionStatus, submitSorobanWithKnownHash } from './status-polling';
 import { ErrorCode, ERROR_CODES } from '../errors/codes';
 import { UnsupportedFeatureError } from '../errors/unsupported';
 import {
@@ -368,12 +368,23 @@ export class ContractClient<
       prepared.sign(keypair);
 
       // Submit the transaction
-      const sendResult = await withTimeout(
-        'Soroban transaction submission',
+      const submitted = await submitSorobanWithKnownHash(
+        prepared.hash().toString('hex'),
+        () => this.sorobanServer.sendTransaction(prepared),
         this.config.timeout,
-        this.sorobanServer.sendTransaction(prepared),
       );
 
+      if (submitted.kind === 'unknown') {
+        return {
+          success: false,
+          status: 'pending',
+          hash: submitted.hash,
+          error: 'Transaction submission status is unknown; query this hash before retrying.',
+          errorCode: 'TX_STATUS_UNKNOWN',
+          simulationStatus: mapped.status,
+        };
+      }
+      const sendResult = submitted.response;
       if (sendResult.status === 'ERROR') {
         return {
           success: false,
