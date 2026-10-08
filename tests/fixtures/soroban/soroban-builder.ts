@@ -32,12 +32,12 @@ export class SorobanBuilder extends FixtureBuilder<SorobanFixture> {
   }
 
   withParams(params: any[]): this {
-    this.data.params = params;
+    this.data.params = cloneFixture(params);
     return this;
   }
 
   withResult(result: any): this {
-    this.data.result = result;
+    this.data.result = cloneFixture(result);
     return this;
   }
 
