@@ -7,7 +7,7 @@
 
 import type { AccountBalance, BalanceResult, SDKConfig } from '../types';
 import { HORIZON_URLS } from '../config';
-import { validatePublicKey } from '../utils';
+import { redactSensitive, validatePublicKey } from '../utils';
 import { getBalanceOrUnfunded } from '../wallet';
 
 export type TestnetAccountStatus = 'funded' | 'unfunded' | 'unavailable';
@@ -63,11 +63,26 @@ export interface DiagnoseTestnetAccountOptions {
 }
 
 function readErrorCode(error: unknown): string | undefined {
-  if (typeof error !== 'object' || error === null || !('code' in error)) {
+  try {
+    if (typeof error !== 'object' || error === null || !('code' in error)) {
+      return undefined;
+    }
+    const code = (error as { code?: unknown }).code;
+    // Diagnostic error codes are identifiers, not untrusted provider text.
+    // Keep typed SDK codes but never surface key-shaped or arbitrary data.
+    if (
+      typeof code !== 'string' ||
+      !/^[A-Z][A-Z0-9_]{0,47}$/.test(code) ||
+      redactSensitive(code) !== code
+    ) {
+      return undefined;
+    }
+    return code;
+  } catch {
+    // A thrown value may be an object with hostile getters or a Proxy.
+    // Diagnostics must still return the stable "unavailable" result.
     return undefined;
   }
-  const code = (error as { code?: unknown }).code;
-  return typeof code === 'string' ? code : undefined;
 }
 
 /**
