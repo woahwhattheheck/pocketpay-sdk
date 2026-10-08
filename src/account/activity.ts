@@ -213,7 +213,9 @@ export function mapPaymentReceiptToActivity(
         : 'neutral';
 
   const activity: AccountActivityRecord = {
-    id: stableId('receipt', receipt.transactionHash, receipt.createdAt),
+    id: receipt.transactionHash
+      ? stableId('receipt', receipt.transactionHash)
+      : receiptFallbackId(receipt),
     kind: 'payment',
     status: receipt.status,
     direction,
@@ -229,6 +231,34 @@ export function mapPaymentReceiptToActivity(
     memo: receipt.memo,
     operation: receipt.operation,
   });
+}
+
+/**
+ * Hash the observable receipt fields when Horizon has not assigned a
+ * transaction hash. Time alone is not an identity: independent pending
+ * submissions can be observed during the same millisecond.
+ *
+ * Use a deterministic fingerprint rather than embedding memos or destinations
+ * in UI keys. Identical source receipts remain indistinguishable until the
+ * caller supplies a transaction hash (no artificial sequence is invented).
+ */
+function receiptFallbackId(receipt: PaymentReceipt): string {
+  const fields = JSON.stringify([
+    receipt.createdAt,
+    receipt.source,
+    receipt.operation ?? null,
+    receipt.destination ?? null,
+    receipt.amount ?? null,
+    receipt.asset ?? null,
+    receipt.memo ?? null,
+    receipt.status,
+    receipt.actionRequired,
+  ]);
+  let fingerprint = 0x811c9dc5;
+  for (let i = 0; i < fields.length; i += 1) {
+    fingerprint = Math.imul(fingerprint ^ fields.charCodeAt(i), 0x01000193);
+  }
+  return `receipt:${receipt.createdAt}:${(fingerprint >>> 0).toString(16).padStart(8, '0')}`;
 }
 
 function vaultStatus(result: VaultMappedResult): TransactionStatus {
@@ -267,7 +297,7 @@ export function mapVaultResultToActivity(input: VaultActivityInput): AccountActi
   const { result, createdAt } = input;
   const activity: AccountActivityRecord = {
     id: result.hash
-      ? stableId('vault', result.hash)
+      ? `vault:${result.hash}:${result.operation}`
       : `vault:${result.operation}:${createdAt}`,
     kind: 'vault',
     status: vaultStatus(result),
