@@ -6,7 +6,8 @@
  */
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import * as StellarSDK from '@stellar/stellar-sdk';
-import { executeTransactionLifecycle } from '../src/transactions/orchestrator';
+// Import from the published package root: consumers must reach the guarded lifecycle.
+import { executeTransactionLifecycle } from '../src';
 
 afterEach(() => vi.restoreAllMocks());
 
