@@ -1,0 +1,153 @@
+/**
+ * Public root and package subpath export governance for #317.
+ * A deliberate --update commits the reviewed baseline; CI only checks it.
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import ts from 'typescript';
+
+type SurfaceEntry = { name: string; kind: 'type' | 'value' };
+type Snapshot = {
+  formatVersion: 1;
+  entrypoint: 'src/index.ts';
+  rootExports: SurfaceEntry[];
+  packageSurface: { main: unknown; types: unknown; exports: unknown };
+};
+
+const root = process.cwd();
+const snapshotFile = path.join(root, 'docs/public-api-surface.snapshot.json');
+
+function extractExports(code: string): SurfaceEntry[] {
+  const sf = ts.createSourceFile('src/index.ts', code, ts.ScriptTarget.Latest, true);
+  const found: SurfaceEntry[] = [];
+  const add = (name: string, kind: SurfaceEntry['kind']): void => {
+    if (!name) throw new Error('Unnamed public export');
+    found.push({ name, kind });
+  };
+
+  for (const node of sf.statements) {
+    if (ts.isExportDeclaration(node)) {
+      if (!node.exportClause || !ts.isNamedExports(node.exportClause)) {
+        throw new Error('Wildcard/namespace export requires explicit review in src/index.ts');
+      }
+      for (const element of node.exportClause.elements) {
+        add(element.name.text, node.isTypeOnly || element.isTypeOnly ? 'type' : 'value');
+      }
+      continue;
+    }
+
+    const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
+    if (!modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
+    const isDefault = modifiers.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword);
+    if (ts.isExportAssignment(node)) {
+      add('default', 'value');
+    } else if (ts.isVariableStatement(node)) {
+      for (const declaration of node.declarationList.declarations) {
+        if (!ts.isIdentifier(declaration.name)) throw new Error('Destructured public export needs review');
+        add(declaration.name.text, 'value');
+      }
+    } else if (ts.isFunctionDeclaration(node) || ts.isClassDeclaration(node) ||
+               ts.isEnumDeclaration(node) || ts.isInterfaceDeclaration(node) ||
+               ts.isTypeAliasDeclaration(node)) {
+      const name = isDefault ? 'default' : node.name?.text;
+      if (!name) throw new Error('Unnamed public declaration needs review');
+      add(name, ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node) ? 'type' : 'value');
+    } else {
+      throw new Error('Unknown public declaration syntax; inspect src/index.ts');
+    }
+  }
+
+  if (!found.length) throw new Error('No root exports found; refusing empty baseline');
+  const seen = new Set<string>();
+  for (const item of found) {
+    const key = item.kind + ':' + item.name;
+    if (seen.has(key)) throw new Error('Duplicate public export: ' + key);
+    seen.add(key);
+  }
+  return found.sort((a, b) => a.name.localeCompare(b.name) || a.kind.localeCompare(b.kind));
+}
+
+function normalize(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(normalize);
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value as Record<string, unknown>)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([k, v]) => [k, normalize(v)])
+    );
+  }
+  return value;
+}
+
+function currentSurface(): Snapshot {
+  const source = fs.readFileSync(path.join(root, 'src/index.ts'), 'utf8');
+  const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8')) as Record<string, unknown>;
+  if (!pkg.exports || !pkg.main || !pkg.types) {
+    throw new Error('Missing package export map / main / types; review publication contract');
+  }
+  return {
+    formatVersion: 1,
+    entrypoint: 'src/index.ts',
+    rootExports: extractExports(source),
+    packageSurface: normalize({ main: pkg.main, types: pkg.types, exports: pkg.exports }) as Snapshot['packageSurface'],
+  };
+}
+
+function format(value: unknown): string {
+  return JSON.stringify(value, null, 2) + '\n';
+}
+
+function selfTest(): void {
+  const sample = "export { A, type B as Alias } from './x';\nexport type { C } from './y';";
+  const result = extractExports(sample);
+  if (format(result) !== format([
+    { name: 'A', kind: 'value' },
+    { name: 'Alias', kind: 'type' },
+    { name: 'C', kind: 'type' },
+  ])) throw new Error('Alias/type export fixture failed');
+  if (format(normalize({ z: 1, a: { y: 2, x: 3 } })) !==
+      format({ a: { x: 3, y: 2 }, z: 1 })) {
+    throw new Error('Canonical package-export fixture failed');
+  }
+  for (const invalid of ["export * from './x';", "export * as X from './x';"]) {
+    let failed = false;
+    try { extractExports(invalid); } catch { failed = true; }
+    if (!failed) throw new Error('Unsafe wildcard fixture was accepted');
+  }
+  process.stdout.write('Public API governance fixtures passed\n');
+}
+
+function main(): void {
+  const args = process.argv.slice(2);
+  if (args.length > 1 || args.some((a) => !['--update', '--self-test'].includes(a))) {
+    throw new Error('Usage: tsx scripts/check-public-api.ts [--update|--self-test]');
+  }
+  if (args[0] === '--self-test') { selfTest(); return; }
+  const actual = currentSurface();
+  if (args[0] === '--update') {
+    fs.writeFileSync(snapshotFile, format(actual), 'utf8');
+    process.stdout.write('Updated reviewed public API baseline: ' + actual.rootExports.length + ' symbols\n');
+    return;
+  }
+  const previous = JSON.parse(fs.readFileSync(snapshotFile, 'utf8')) as Snapshot;
+  if (format(previous) === format(actual)) {
+    process.stdout.write('Public API unchanged (' + actual.rootExports.length + ' root exports and package entrypoints)\n');
+    return;
+  }
+  const oldSet = new Set((previous.rootExports || []).map((e) => e.kind + ':' + e.name));
+  const newSet = new Set(actual.rootExports.map((e) => e.kind + ':' + e.name));
+  const added = [...newSet].filter((e) => !oldSet.has(e));
+  const removed = [...oldSet].filter((e) => !newSet.has(e));
+  if (added.length) console.error('Added exports: ' + added.join(', '));
+  if (removed.length) console.error('Removed/changed-kind exports: ' + removed.join(', '));
+  if (format(previous.packageSurface) !== format(actual.packageSurface)) {
+    console.error('package.json main/types/exports changed');
+  }
+  console.error('Public API drift: review compatibility, then run npm run update:public-api and commit the snapshot.');
+  process.exitCode = 1;
+}
+
+try { main(); } catch (error) {
+  console.error(error instanceof Error ? error.message : String(error));
+  process.exitCode = 1;
+}
