@@ -39,9 +39,7 @@ The result intentionally exposes two related fields:
 A Horizon `404 Not Found` means the transaction is not visible in a ledger yet,
 so it is treated as `pending` and polling continues. Retryable lookup failures,
 such as rate limiting or an indeterminate network timeout, remain inside the
-same attempt and time bounds. A confirmed Horizon record maps to `confirmed` or
-`failed` from its `successful` field. Non-retryable lookup failures map to
-`unknown`.
+same attempt and time bounds. Only a Horizon record whose transaction hash matches the **requested hash** and whose `successful` field is a real boolean can establish `confirmed` or `failed`. Mismatched hashes, missing response objects, and malformed success flags are **unknown**, not evidence of settlement; polling may retry them within its existing attempt and deadline limits. Non-retryable transport lookup failures map to `unknown`. This protection does not submit or retry a transaction.
 
 When polling stops because of `timeout` or `maxAttempts`, inspect `state` to
 distinguish a transaction that was still pending from an indeterminate network
