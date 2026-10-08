@@ -206,6 +206,17 @@ describe('Trustline Validation Module', () => {
       expect(result.availableCapacity).toBe('0.0000001');
     });
 
+    it('fails closed when Horizon omits balance or limit even without an amount', async () => {
+      mockLoadAccount.mockResolvedValue({ balances: [{
+        asset_type: 'credit_alphanum4', asset_code: 'USDC', asset_issuer: validIssuer,
+        balance: '10.0000000', is_authorized: true,
+        // Horizon limit field is unexpectedly absent.
+      }] });
+      await expect(checkDestinationTrustline(
+        destPublicKey, { code: 'USDC', issuer: validIssuer },
+      )).rejects.toMatchObject({ code: 'TRUSTLINE_CHECK_ERROR' });
+    });
+
     it('fails closed for invalid Horizon balance decimals rather than approving a payment', async () => {
       mockLoadAccount.mockResolvedValue({ balances: [{
         asset_type: 'credit_alphanum4', asset_code: 'USDC', asset_issuer: validIssuer,
