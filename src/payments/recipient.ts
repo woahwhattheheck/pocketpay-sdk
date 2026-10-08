@@ -52,6 +52,11 @@ export type RecipientValidationResult =
 
 interface RecipientCandidate extends NormalizedRecipient {}
 
+function own(descriptor: Record<string, unknown>, key: string): unknown {
+  return Object.prototype.hasOwnProperty.call(descriptor, key)
+    ? descriptor[key] : undefined;
+}
+
 function trimmedOptional(value: unknown): string | undefined {
   if (typeof value !== 'string') return undefined;
   const trimmed = value.trim();
@@ -71,12 +76,12 @@ function hasInvalidOptionalString(
   descriptor: Record<string, unknown>,
   field: string,
 ): boolean {
-  const value = descriptor[field];
+  const value = own(descriptor, field);
   return value !== undefined && typeof value !== 'string';
 }
 
 function hasInvalidMetadata(descriptor: Record<string, unknown>): boolean {
-  const value = descriptor.metadata;
+  const value = own(descriptor, 'metadata');
   if (value === undefined) return false;
   if (value === null || typeof value !== 'object' || Array.isArray(value)) return true;
 
@@ -117,11 +122,18 @@ function candidateFromInput(
   }
 
   const descriptor = input as Record<string, unknown>;
+  // Only literal dictionary descriptors can supply a destination. Classes,
+  // inherited recipient fields and proxy traps must not impersonate user data.
+  const prototype = Object.getPrototypeOf(descriptor);
+  if (prototype !== null && prototype !== Object.prototype) {
+    return invalidRecipientShape('Recipient descriptor must be a plain object');
+  }
+  const kind = own(descriptor, 'kind');
 
-  if (descriptor.kind === 'saved_contact') {
+  if (kind === 'saved_contact') {
     if (
-      descriptor.publicKey !== undefined &&
-      typeof descriptor.publicKey !== 'string'
+      own(descriptor, 'publicKey') !== undefined &&
+      typeof own(descriptor, 'publicKey') !== 'string'
     ) {
       return invalidRecipientShape('Saved contact public key must be a string');
     }
@@ -138,7 +150,7 @@ function candidateFromInput(
       return invalidRecipientShape('Saved contact metadata must be an object');
     }
 
-    const publicKey = trimmedOptional(descriptor.publicKey);
+    const publicKey = trimmedOptional(own(descriptor, 'publicKey'));
     if (!publicKey) {
       return {
         valid: false,
@@ -151,20 +163,20 @@ function candidateFromInput(
     return {
       publicKey,
       source: 'saved_contact',
-      contactId: trimmedOptional(descriptor.contactId),
-      label: trimmedOptional(descriptor.name),
-      memo: typeof descriptor.memo === 'string' ? descriptor.memo : undefined,
+      contactId: trimmedOptional(own(descriptor, 'contactId')),
+      label: trimmedOptional(own(descriptor, 'name')),
+      memo: typeof own(descriptor, 'memo') === 'string' ? own(descriptor, 'memo') as string : undefined,
       metadata:
-        descriptor.metadata && typeof descriptor.metadata === 'object' && !Array.isArray(descriptor.metadata)
-          ? { ...(descriptor.metadata as Record<string, unknown>) }
+        own(descriptor, 'metadata') && typeof own(descriptor, 'metadata') === 'object'
+          ? { ...(own(descriptor, 'metadata') as Record<string, unknown>) }
           : undefined,
     };
   }
 
-  if (descriptor.kind === 'destination') {
+  if (kind === 'destination') {
     if (
-      descriptor.address !== undefined &&
-      typeof descriptor.address !== 'string'
+      own(descriptor, 'address') !== undefined &&
+      typeof own(descriptor, 'address') !== 'string'
     ) {
       return invalidRecipientShape('Payment destination address must be a string');
     }
@@ -181,7 +193,7 @@ function candidateFromInput(
       return invalidRecipientShape('Payment destination metadata must be an object');
     }
 
-    const publicKey = trimmedOptional(descriptor.address);
+    const publicKey = trimmedOptional(own(descriptor, 'address'));
     if (!publicKey) {
       return {
         valid: false,
@@ -194,11 +206,11 @@ function candidateFromInput(
     return {
       publicKey,
       source: 'destination_metadata',
-      label: trimmedOptional(descriptor.label),
-      memo: typeof descriptor.memo === 'string' ? descriptor.memo : undefined,
+      label: trimmedOptional(own(descriptor, 'label')),
+      memo: typeof own(descriptor, 'memo') === 'string' ? own(descriptor, 'memo') as string : undefined,
       metadata:
-        descriptor.metadata && typeof descriptor.metadata === 'object' && !Array.isArray(descriptor.metadata)
-          ? { ...(descriptor.metadata as Record<string, unknown>) }
+        own(descriptor, 'metadata') && typeof own(descriptor, 'metadata') === 'object'
+          ? { ...(own(descriptor, 'metadata') as Record<string, unknown>) }
           : undefined,
     };
   }
@@ -218,7 +230,14 @@ function candidateFromInput(
  * handling follows the same Stellar StrKey/checksum rules as payment flows.
  */
 export function validateRecipient(input: unknown): RecipientValidationResult {
-  const candidate = candidateFromInput(input);
+  // Public validation returns a typed result even if a JavaScript caller
+  // supplies an object with throwing accessors or Proxy traps.
+  let candidate: RecipientCandidate | RecipientValidationResult;
+  try {
+    candidate = candidateFromInput(input);
+  } catch {
+    return invalidRecipientShape('Recipient descriptor could not be read safely');
+  }
   if ('valid' in candidate) return candidate;
 
   const destination = validateDestinationLocal(candidate.publicKey);
