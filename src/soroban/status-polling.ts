@@ -73,7 +73,13 @@ export async function submitSorobanWithKnownHash<T>(
       response: await withTimeout('Soroban transaction submission', timeoutMs, send()),
     };
   } catch (error) {
-    if (classifySubmitError(error, signedHash).code === 'TX_STATUS_UNKNOWN') {
+    let classified;
+    try {
+      classified = classifySubmitError(error, signedHash);
+    } catch {
+      return { kind: 'unknown', hash: signedHash };
+    }
+    if (classified.code === 'TX_STATUS_UNKNOWN') {
       return { kind: 'unknown', hash: signedHash };
     }
     throw error;
