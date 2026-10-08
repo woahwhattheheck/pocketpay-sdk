@@ -3,6 +3,8 @@ import * as StellarSDK from '@stellar/stellar-sdk';
 import {
   buildVaultOperationPreview,
   PocketPayError,
+  resetDiagnosticsHooks,
+  setDiagnosticsHooks,
 } from '../src';
 
 const wallet = StellarSDK.Keypair.fromRawEd25519Seed(Buffer.alloc(32, 7)).publicKey();
@@ -25,6 +27,25 @@ describe('vault operation preview', () => {
     });
     expect(preview.warnings.join(' ')).toContain('does not imply native XLM custody');
     expect(JSON.stringify(preview)).not.toMatch(/secret|sourceSecret/i);
+  });
+
+  it('does not emit config diagnostics while building a side-effect-free preview', () => {
+    const events: string[] = [];
+    setDiagnosticsHooks({
+      onEvent(event) {
+        events.push(`${event.domain}:${event.type}`);
+      },
+    });
+
+    try {
+      buildVaultOperationPreview(
+        { operation: 'deposit', wallet, amount: '1' },
+        { network: 'testnet' },
+      );
+      expect(events).toEqual([]);
+    } finally {
+      resetDiagnosticsHooks();
+    }
   });
 
   it('returns the canonical public wallet in the review model', () => {

@@ -1,5 +1,5 @@
 import * as StellarSDK from '@stellar/stellar-sdk';
-import { resolveConfig } from '../config';
+import { resolveConfigWithoutDiagnostics } from '../config';
 import { PocketPayError } from '../types';
 import type { SDKConfig, StellarAssetSpec, StellarNetwork } from '../types';
 import { validateAmount, validatePublicKey } from '../utils';
@@ -237,7 +237,7 @@ export function buildVaultOperationPreview(
     runtimeOperation === 'createLock' ? readPreviewField(params, 'unlockAt') : undefined;
   validateLockUnlockAt(runtimeOperation, runtimeUnlockAt);
 
-  const resolved = resolveConfig(config);
+  const resolved = resolveConfigWithoutDiagnostics(config);
   const readiness = VAULT_ACTION_READINESS[runtimeOperation];
   const warnings: string[] = [];
 
