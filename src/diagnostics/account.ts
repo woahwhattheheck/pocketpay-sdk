@@ -46,12 +46,19 @@ interface NormalizedAccountError {
 }
 
 function httpStatusOf(error: object): number | undefined {
-  const candidate =
-    (error as { statusCode?: unknown }).statusCode ??
-    (error as { response?: { status?: unknown } }).response?.status;
-  return typeof candidate === 'number' && Number.isInteger(candidate)
-    ? candidate
-    : undefined;
+  // Provider/library Error objects may expose throwing getters. Never let an
+  // accessor failure break the support-safe account diagnostics fallback.
+  try {
+    const candidate =
+      (error as { statusCode?: unknown }).statusCode ??
+      (error as { response?: { status?: unknown } }).response?.status;
+    return typeof candidate === 'number' && Number.isInteger(candidate)
+      && candidate >= 100 && candidate <= 599
+      ? candidate
+      : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 function normalizeAccountError(error: unknown): NormalizedAccountError {
@@ -59,9 +66,13 @@ function normalizeAccountError(error: unknown): NormalizedAccountError {
   let httpStatus: number | undefined;
 
   if (error && typeof error === 'object') {
-    const candidate = (error as { code?: unknown }).code;
-    if (typeof candidate === 'string' && isKnownErrorCode(candidate)) {
-      code = candidate;
+    try {
+      const candidate = (error as { code?: unknown }).code;
+      if (typeof candidate === 'string' && isKnownErrorCode(candidate)) {
+        code = candidate;
+      }
+    } catch {
+      // Error code getter is untrusted; preserve the stable SDK fallback.
     }
     httpStatus = httpStatusOf(error);
   }
@@ -78,10 +89,12 @@ function normalizeAccountError(error: unknown): NormalizedAccountError {
 
 function isNotFound(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
-  return (
-    (error as { code?: unknown }).code === 'ACCOUNT_NOT_FOUND' ||
-    httpStatusOf(error) === 404
-  );
+  try {
+    if ((error as { code?: unknown }).code === 'ACCOUNT_NOT_FOUND') return true;
+  } catch {
+    // Still check a safe HTTP status, even when the code getter throws.
+  }
+  return httpStatusOf(error) === 404;
 }
 
 /**
