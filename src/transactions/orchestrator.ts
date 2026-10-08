@@ -19,6 +19,7 @@
  * only safe recovery is to poll, never to resubmit or rebuild blindly.
  */
 
+import { defaultSequenceProvider } from '../account/sequence';
 import { resolveConfig } from '../config';
 import { classifySubmissionOutcome, classifySubmitError } from '../errors';
 import { submitTransactionIdempotently, withTimeout } from '../network';
@@ -276,6 +277,11 @@ export function authorizeAndSign(
  * @param options - Polling budget for the unknown-status path.
  * @param config - Optional SDK config overrides.
  * @returns The reconciled lifecycle result. Never throws.
+ *
+ * Concurrent executions from one source account are serialized across the
+ * prepare/build/sign/submit stages by the shared, per-process SequenceProvider.
+ * A different process still needs an external lock, and an `unresolved`
+ * submission must be reconciled before starting another same-source intent.
  */
 export async function executeTransactionLifecycle(
   params: OfflineTransactionParams,
@@ -283,31 +289,33 @@ export async function executeTransactionLifecycle(
   options: GuardedSubmitOptions = {},
   config?: Partial<SDKConfig>,
 ): Promise<LifecycleResult> {
-  let stage: LifecycleStage = 'intent';
+  return defaultSequenceProvider.withSequence(params.sourcePublicKey, async () => {
+    let stage: LifecycleStage = 'intent';
 
-  try {
-    const prepared = prepareIntent(params);
+    try {
+      const prepared = prepareIntent(params);
 
-    stage = 'build';
-    const unsigned = await bindAndBuild(prepared, config);
+      stage = 'build';
+      const unsigned = await bindAndBuild(prepared, config);
 
-    stage = 'sign';
-    const signed = authorizeAndSign(unsigned, secretKey);
+      stage = 'sign';
+      const signed = authorizeAndSign(unsigned, secretKey);
 
-    stage = 'submit';
-    const { result } = await submitGuarded(signed.transaction, options, config);
-    return result;
-  } catch (error) {
-    // A failure before submission never leaves the network in an unknown
-    // state: nothing was sent, so the safe recovery is to fix the input and
-    // rebuild — never to poll for a transaction that does not exist.
-    const classified = classifySubmitError(error, '');
-    return {
-      state: 'rejected',
-      stage,
-      status: TransactionStatus.FAILED,
-      actionRequired: 'rebuild',
-      failure: toLifecycleFailure(classified),
-    };
-  }
+      stage = 'submit';
+      const { result } = await submitGuarded(signed.transaction, options, config);
+      return result;
+    } catch (error) {
+      // A failure before submission never leaves the network in an unknown
+      // state: nothing was sent, so the safe recovery is to fix the input and
+      // rebuild — never to poll for a transaction that does not exist.
+      const classified = classifySubmitError(error, '');
+      return {
+        state: 'rejected',
+        stage,
+        status: TransactionStatus.FAILED,
+        actionRequired: 'rebuild',
+        failure: toLifecycleFailure(classified),
+      };
+    }
+  });
 }
