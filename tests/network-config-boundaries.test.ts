@@ -134,4 +134,36 @@ describe('network configuration preset boundaries', () => {
     expect(validatePocketPayConfig({ contractId: '' }).valid).toBe(true);
   });
 
+  it('redacts sensitive configuration values from thrown errors and validation issues', () => {
+    const token = 'private-api-token-987654321';
+    const invalidUrl = `httpx://horizon.example.test/?api_key=${token}`;
+
+    try {
+      resolveConfig({ horizonUrl: invalidUrl });
+      throw new Error('Expected invalid Horizon URL');
+    } catch (error) {
+      expect(String(error)).not.toContain(token);
+      expect(JSON.stringify(error)).not.toContain(token);
+    }
+
+    const rejected = validatePocketPayConfig({
+      horizonUrl: invalidUrl,
+      sorobanRpcUrl: `httpsx://rpc.example.test/?token=${token}`,
+      contractId: token,
+      network: 'testnet',
+    });
+    expect(rejected.valid).toBe(false);
+    expect(JSON.stringify(rejected.issues)).not.toContain(token);
+
+    const warnings = validatePocketPayConfig({
+      horizonUrl: `http://horizon.example.test/?api_key=${token}`,
+    });
+    expect(warnings.warnings).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ code: 'INSECURE_HTTP_URL' }),
+      ])
+    );
+    expect(JSON.stringify(warnings.issues)).not.toContain(token);
+  });
+
 });
