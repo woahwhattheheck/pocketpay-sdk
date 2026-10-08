@@ -40,16 +40,26 @@ function failure(reason: WalletImportFailureReason): PocketPayError {
  */
 export function sanitizeWalletImportError(error: unknown): PocketPayError {
   let reason: WalletImportFailureReason = 'import_failed';
-  if (error instanceof PocketPayError && error.code === 'INVALID_SECRET_KEY') {
-    const candidate = error.validation?.reason;
-    if (candidate === 'invalid_prefix') {
-      reason = 'unsupported_format';
-    } else if (
-      typeof candidate === 'string' &&
-      Object.prototype.hasOwnProperty.call(FAILURE_MESSAGES, candidate)
-    ) {
-      reason = candidate as WalletImportFailureReason;
+  // Do not assume an Error received from another SDK boundary has benign
+  // metadata getters or a readable prototype. Even code/validation.reason can
+  // be accessor properties (or Proxy traps) that throw or expose the seed.
+  // Import failure sanitation must itself remain a nonthrowing operation.
+  try {
+    if (error instanceof PocketPayError && error.code === 'INVALID_SECRET_KEY') {
+      const candidate = error.validation?.reason;
+      if (candidate === 'invalid_prefix') {
+        reason = 'unsupported_format';
+      } else if (
+        typeof candidate === 'string' &&
+        Object.prototype.hasOwnProperty.call(FAILURE_MESSAGES, candidate)
+      ) {
+        reason = candidate as WalletImportFailureReason;
+      }
     }
+  } catch {
+    // Malformed/hostile metadata is not a trusted reason. Preserve only a
+    // fixed safe default; never echo raw error.message, cause or getter text.
+    reason = 'import_failed';
   }
   return failure(reason);
 }
