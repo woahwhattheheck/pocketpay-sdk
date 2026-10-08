@@ -103,6 +103,45 @@ describe('recipient validation and normalisation', () => {
     }
   });
 
+  it('fails closed when a recipient descriptor inherits or traps runtime fields', () => {
+    const inherited = Object.create({ kind: 'destination', address: VALID_DESTINATION_G });
+    const throwingKind = Object.defineProperty({}, 'kind', {
+      get() { throw new Error('untrusted getter'); },
+    });
+    const inaccessible = new Proxy({}, {
+      getPrototypeOf() { throw new Error('untrusted prototype trap'); },
+    });
+    const badMetadata = new Proxy({}, {
+      ownKeys() { throw new Error('untrusted metadata keys'); },
+    });
+    const hostile = [
+      inherited,
+      throwingKind,
+      inaccessible,
+      { kind: 'destination', address: VALID_DESTINATION_G, metadata: badMetadata },
+      Object.assign(new (class Recipient {})(), {
+        kind: 'destination', address: VALID_DESTINATION_G,
+      }),
+    ];
+
+    for (const descriptor of hostile) {
+      expect(validateRecipient(descriptor)).toMatchObject({
+        valid: false,
+        status: 'invalid_shape',
+        code: 'INVALID_RECIPIENT',
+      });
+      expect(() => normalizeRecipient(descriptor as never)).toThrow(PocketPayError);
+    }
+
+    // JSON-like dictionaries with no inherited prototype remain valid.
+    const nullProto = Object.assign(Object.create(null), {
+      kind: 'destination', address: VALID_DESTINATION_G,
+    });
+    const allowed = validateRecipient(nullProto);
+    expect(allowed.valid).toBe(true);
+    if (allowed.valid) expect(allowed.recipient.publicKey).toBe(VALID_DESTINATION_G);
+  });
+
   it('throws a typed PocketPayError from normalizeRecipient on invalid input', () => {
     expect(() => normalizeRecipient('bad-address')).toThrow(PocketPayError);
 
