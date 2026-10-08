@@ -129,6 +129,17 @@ explicitly if they may race with other intents. Exporting the lifecycle entry
 point does not extend the sequence lock across processes or resolve unknown
 network outcomes automatically.
 
+**Horizon response identity is now authoritative.** The guarded lifecycle no
+longer calls a response `confirmed` merely because it contains some hash or
+because a local envelope hash can be computed. The returned hash must match
+the exact signed transaction, and `successful` must be an explicit boolean
+from Horizon. A matching `successful: false` is `rejected` and requires
+rebuilding; a missing, malformed, conflicting, or incomplete response is
+`unresolved` and requires status polling before any resubmission. A matching
+`successful: true` is the only confirmed success path. This guards against
+unrelated ledger records and unknown transaction status being presented to a
+confirmation UI as settled.
+
 **Unknown submission status is not a successful settlement.** When the lifecycle
 returns `state: 'unresolved'` / `actionRequired: 'poll'`, do not initiate another
 same-account intent until the previous transaction hash has been resolved
