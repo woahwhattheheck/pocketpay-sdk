@@ -83,6 +83,29 @@ describe('diagnoseTestnetAccount', () => {
     }
   });
 
+  it('drops unrecognized provider codes and hostile getters from shareable diagnostics', async () => {
+    const invalidCodes: unknown[] = [
+      { code: 'PROVIDER_PRIVATE_METADATA' },
+      { code: 'S' + 'A'.repeat(55) },
+      Object.defineProperty({}, 'code', {
+        get() { throw new Error('private provider details'); },
+      }),
+    ];
+
+    for (const thrown of invalidCodes) {
+      const result = await diagnoseTestnetAccount(
+        testnetAccountFixtures.funded.publicKey,
+        { lookup: async () => { throw thrown; } },
+      );
+      expect(result.status).toBe('unavailable');
+      if (result.status === 'unavailable') {
+        expect(result.errorCode).toBeUndefined();
+        expect(result.message).toBe('Testnet account state could not be determined.');
+      }
+      expect(JSON.stringify(result)).not.toContain('PRIVATE');
+    }
+  });
+
   it('rejects malformed public keys before invoking a lookup', async () => {
     const lookup = vi.fn(async () => testnetAccountFixtures.unfunded.result);
 
