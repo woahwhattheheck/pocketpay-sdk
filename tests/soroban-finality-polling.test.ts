@@ -39,6 +39,21 @@ describe('Soroban submitted-transaction finality', () => {
     expect(getTransaction).toHaveBeenCalledOnce();
   });
 
+  it('keeps submitted finality unknown when RPC resolves malformed responses', async () => {
+    const nullResponse = vi.fn().mockResolvedValue(null);
+    await expect(pollSorobanTransactionStatus(nullResponse, 2500))
+      .resolves.toBeNull();
+    expect(nullResponse).toHaveBeenCalledOnce();
+
+    const throwingStatus = Object.defineProperty({}, 'status', {
+      get() { throw new Error('malformed RPC status getter'); },
+    });
+    const malformed = vi.fn().mockResolvedValue(throwingStatus);
+    await expect(pollSorobanTransactionStatus(malformed, 2500))
+      .resolves.toBeNull();
+    expect(malformed).toHaveBeenCalledOnce();
+  });
+
   it('fails closed for unexpected nonterminal RPC statuses', async () => {
     const getTransaction = vi.fn().mockResolvedValue({ status: 'TRY_AGAIN_LATER' });
     await expect(pollSorobanTransactionStatus(getTransaction, 2500))
