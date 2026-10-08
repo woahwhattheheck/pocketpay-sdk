@@ -129,16 +129,10 @@ export function buildVaultOperationPreview(
 
   const runtimeOperation = (params as { operation?: unknown }).operation;
   if (!isVaultPreviewAction(runtimeOperation)) {
-    const validationValue =
-      typeof runtimeOperation === 'string' || typeof runtimeOperation === 'number'
-        ? runtimeOperation
-        : undefined;
+    // The operation field is also untrusted JSON input. It may contain a
+    // mistyped seed/token, so never copy its value to a serializable error.
     throw new PocketPayError('Invalid vault preview operation', 'INVALID_OPERATION', {
-      validation: {
-        field: 'operation',
-        reason: 'unsupported_value',
-        ...(validationValue !== undefined ? { value: validationValue } : {}),
-      },
+      validation: { field: 'operation', reason: 'unsupported_value' },
     });
   }
 
@@ -161,7 +155,15 @@ export function buildVaultOperationPreview(
       },
     );
   }
-  validatePublicKey(runtimeWallet as string);
+  try {
+    validatePublicKey(runtimeWallet);
+  } catch {
+    // The shared validator deliberately includes its input in error metadata.
+    // Preview validation is safe to log, so don't forward arbitrary wallet text.
+    throw new PocketPayError('Invalid vault preview public address', 'INVALID_PUBLIC_KEY', {
+      validation: { field: 'publicKey', reason: 'invalid_format' },
+    });
+  }
   // validatePublicKey accepts surrounding whitespace, so return the exact
   // canonical value it validated instead of echoing a decorated caller string.
   const wallet = (runtimeWallet as string).trim();
@@ -182,7 +184,21 @@ export function buildVaultOperationPreview(
         validation: { field: 'amount', reason: 'secret_key_not_allowed' },
       });
     }
-    validateAmount(runtimeAmount);
+    try {
+      validateAmount(runtimeAmount);
+    } catch (error) {
+      // The shared amount validator quotes invalid input. Never forward a
+      // possibly mistyped credential from a side-effect-free preview.
+      const precise = error instanceof PocketPayError && error.code === 'INVALID_AMOUNT_PRECISION';
+      const reason = precise ? 'too_precise'
+        : error instanceof PocketPayError && error.validation?.reason === 'not_positive'
+        ? 'not_positive' : 'invalid_format';
+      throw new PocketPayError(
+        'Invalid vault preview amount',
+        precise ? 'INVALID_AMOUNT_PRECISION' : 'INVALID_AMOUNT',
+        { validation: { field: 'amount', reason } },
+      );
+    }
   }
   validateLockUnlockAt(params.operation, params.unlockAt);
 
