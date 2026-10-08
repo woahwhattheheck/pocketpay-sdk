@@ -109,7 +109,12 @@ payment validation still runs when you build and submit.
 
 For tests and offline tooling, inject the account source with
 `{ lookup }`. Any function returning a `BalanceResult` works, including
-`getBalanceOrUnfunded`.
+`getBalanceOrUnfunded`. The returned top-level public key and the nested
+funded-balance public key **must both match** the requested wallet; conflicting
+provider/cache records result in a fixed, redacted account error and
+`paymentReadiness.status: 'unknown'`, never another wallet's balance or a
+false-ready status. An unfunded result for a different public key is rejected
+the same way.
 
 ### Sharing the report safely
 
