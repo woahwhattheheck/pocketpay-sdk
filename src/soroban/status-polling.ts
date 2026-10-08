@@ -12,9 +12,11 @@ import { withTimeout } from '../network';
  */
 export async function pollSorobanTransactionStatus<T extends { status: string }>(
   getTransaction: () => Promise<T>,
-  budgetMs: number,
+  budgetMs?: number,
 ): Promise<T | null> {
-  const budget = Number.isFinite(budgetMs) && budgetMs > 0 ? budgetMs : 30_000;
+  const budget = typeof budgetMs === 'number' && Number.isFinite(budgetMs) && budgetMs > 0
+    ? budgetMs
+    : 30_000;
   const deadline = Date.now() + budget;
 
   // The time limit protects normal RPC use; this separate attempt fence
