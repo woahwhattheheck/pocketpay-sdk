@@ -127,7 +127,7 @@ export async function checkDestinationTrustline(
   validatePublicKey(destination);
   validateAssetSpec(asset);
 
-  if (options?.amount) {
+  if (options?.amount !== undefined) {
     validateAmount(options.amount);
   }
 
@@ -193,7 +193,7 @@ export async function checkDestinationTrustline(
     const capacityStroops = remainingTrustlineCapacity(limit, currentBalance);
     const availableCapacity = formatStroops(capacityStroops);
 
-    if (options?.amount) {
+    if (options?.amount !== undefined) {
       // options.amount passed validateAmount above, so the exact parse cannot throw.
       if (toStroops(options.amount) > capacityStroops) {
         return {

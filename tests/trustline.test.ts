@@ -90,6 +90,17 @@ describe('Trustline Validation Module', () => {
       expect(mockLoadAccount).not.toHaveBeenCalled();
     });
 
+    it('rejects an explicitly supplied empty amount before any Horizon lookup', async () => {
+      await expect(
+        checkDestinationTrustline(
+          destPublicKey,
+          { code: 'USDC', issuer: validIssuer },
+          { amount: '' },
+        ),
+      ).rejects.toMatchObject({ code: 'INVALID_AMOUNT' });
+      expect(mockLoadAccount).not.toHaveBeenCalled();
+    });
+
     it('returns account_not_found status when destination does not exist (404)', async () => {
       mockLoadAccount.mockRejectedValue(makeHorizon404Error(destPublicKey));
       const result = await checkDestinationTrustline(destPublicKey, { code: 'USDC', issuer: validIssuer });

@@ -283,7 +283,7 @@ export async function validateDestinationNetwork(
   // Same amount preflight as checkDestinationTrustline: a malformed, zero,
   // over-precise or above-maximum amount is rejected before any network call
   // rather than being compared as NaN against the trustline capacity.
-  if (options?.amount) {
+  if (options?.amount !== undefined) {
     validateAmount(options.amount);
   }
 
@@ -372,7 +372,7 @@ export async function validateDestinationNetwork(
         const availableCapacity = formatStroops(capacityStroops);
 
         // Capacity check when amount is provided
-        if (options?.amount) {
+        if (options?.amount !== undefined) {
           if (toStroops(options.amount) > capacityStroops) {
             return {
               valid: false,

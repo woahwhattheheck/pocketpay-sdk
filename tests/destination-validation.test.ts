@@ -317,6 +317,18 @@ describe('Destination Validation - Network Validation', () => {
       expect(result.metadata?.limit).toBe('1000');
     });
 
+    it('rejects an explicitly supplied empty amount before any Horizon lookup', async () => {
+      const options: DestinationValidationOptions = {
+        asset: { code: 'USDC', issuer: issuerPublicKey },
+        amount: '',
+      };
+
+      await expect(
+        validateDestinationNetwork(validPublicKey, options),
+      ).rejects.toMatchObject({ code: 'INVALID_AMOUNT' });
+      expect(mockLoadAccount).not.toHaveBeenCalled();
+    });
+
     it('should detect trustline limit exceeded', async () => {
       mockLoadAccount.mockResolvedValue({
         sequence: '123456789',
