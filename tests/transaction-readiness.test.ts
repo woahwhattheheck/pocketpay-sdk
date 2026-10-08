@@ -331,6 +331,39 @@ describe('checkTransactionReadiness — asset blockers', () => {
     expect(codes(result)).toEqual(['SOURCE_TRUSTLINE_NOT_AUTHORIZED']);
   });
 
+  it('fails closed when Horizon trustline authorization is missing or non-boolean', async () => {
+    accounts.set(
+      SOURCE,
+      account(SOURCE, [
+        nativeLine('10.0000000'),
+        assetLine('USDC', ISSUER, '50.0000000', { is_authorized: 'false' as unknown as boolean }),
+      ], { subentry_count: 1 }),
+    );
+    accounts.set(
+      DESTINATION,
+      account(DESTINATION, [nativeLine('5.0000000'), assetLine('USDC', ISSUER, '0.0000000')]),
+    );
+
+    expect(codes(await check({ asset: USDC }))).toEqual(['SOURCE_TRUSTLINE_NOT_AUTHORIZED']);
+
+    accounts.set(
+      SOURCE,
+      account(SOURCE, [
+        nativeLine('10.0000000'),
+        assetLine('USDC', ISSUER, '50.0000000'),
+      ], { subentry_count: 1 }),
+    );
+    accounts.set(
+      DESTINATION,
+      account(DESTINATION, [
+        nativeLine('5.0000000'),
+        assetLine('USDC', ISSUER, '0.0000000', { is_authorized: undefined as unknown as boolean }),
+      ]),
+    );
+
+    expect(codes(await check({ asset: USDC }))).toEqual(['DESTINATION_TRUSTLINE_NOT_AUTHORIZED']);
+  });
+
   it('DESTINATION_TRUSTLINE_MISSING when the destination does not hold the asset', async () => {
     accounts.set(SOURCE, account(SOURCE, [nativeLine('10.0000000'), assetLine('USDC', ISSUER, '50.0000000')], { subentry_count: 1 }));
     const result = await check({ asset: USDC });
