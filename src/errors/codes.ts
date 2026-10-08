@@ -399,7 +399,87 @@ export const ERROR_CODES: Record<ErrorCodeValue, ErrorCodeSpec> = {
   },
 };
 
-/** Returns true if the given string is a known public error code. */
+/** Returns true if the given string is a known canonical public error code. */
 export function isKnownErrorCode(code: string): code is ErrorCodeValue {
   return Object.values(ErrorCode).includes(code as ErrorCodeValue);
+}
+
+/**
+ * Compatibility map for public error strings emitted by older SDK paths.
+ *
+ * Keep these aliases stable while legacy throw sites are migrated. New
+ * integrations should branch on the canonical code returned by
+ * `resolveErrorCode()` / `describeError().canonicalCode`.
+ */
+export const LEGACY_ERROR_CODE_ALIASES: Readonly<Record<string, ErrorCodeValue>> =
+  Object.freeze({
+    // Wallet / account
+    INVALID_SECRET_KEY: ErrorCode.WALLET_INVALID_SECRET,
+    INVALID_PUBLIC_KEY: ErrorCode.WALLET_INVALID_PUBLIC_KEY,
+    ACCOUNT_NOT_FOUND: ErrorCode.WALLET_ACCOUNT_UNFUNDED,
+    BALANCE_ERROR: ErrorCode.NET_UNREACHABLE,
+    FRIENDBOT_ERROR: ErrorCode.NET_HTTP,
+    FUND_ERROR: ErrorCode.NET_UNREACHABLE,
+
+    // Payments / transactions
+    INVALID_AMOUNT: ErrorCode.PAYMENT_INVALID_AMOUNT,
+    INVALID_AMOUNT_PRECISION: ErrorCode.PAYMENT_INVALID_AMOUNT,
+    SELF_PAYMENT: ErrorCode.PAYMENT_SELF,
+    PAYMENT_FAILED: ErrorCode.TX_FAILED,
+    SEND_ERROR: ErrorCode.TX_FAILED,
+    INVALID_ASSET: ErrorCode.TX_INVALID_ASSET,
+    INVALID_ASSET_CODE: ErrorCode.TX_INVALID_ASSET_CODE,
+    MISSING_ASSET_ISSUER: ErrorCode.TX_INVALID_ASSET,
+    MISSING_TRUSTLINE: ErrorCode.PAYMENT_TRUSTLINE_MISSING,
+    TRUSTLINE_NOT_AUTHORIZED: ErrorCode.PAYMENT_TRUSTLINE_MISSING,
+    TRUSTLINE_LIMIT_EXCEEDED: ErrorCode.PAYMENT_INVALID_AMOUNT,
+    UNFUNDED_DESTINATION: ErrorCode.WALLET_ACCOUNT_UNFUNDED,
+    INVALID_MEMO: ErrorCode.TX_INVALID_MEMO,
+    INVALID_TRANSACTION_HASH: ErrorCode.TX_FAILED,
+    TX_FETCH_ERROR: ErrorCode.NET_UNREACHABLE,
+    PAYMENTS_FETCH_ERROR: ErrorCode.NET_UNREACHABLE,
+
+    // Network
+    NETWORK_ERROR: ErrorCode.NET_UNREACHABLE,
+    HORIZON_ERROR: ErrorCode.NET_UNREACHABLE,
+    NOT_FOUND: ErrorCode.NET_HTTP,
+
+    // Configuration
+    INVALID_NETWORK: ErrorCode.SDK_CONFIG_INVALID,
+    INVALID_HORIZON_URL: ErrorCode.SDK_CONFIG_INVALID,
+    INVALID_SOROBAN_RPC_URL: ErrorCode.SDK_CONFIG_INVALID,
+    INVALID_TIMEOUT: ErrorCode.SDK_CONFIG_INVALID,
+    INVALID_CONTRACT_ID: ErrorCode.SDK_CONFIG_INVALID,
+    INSECURE_HTTP_URL: ErrorCode.SDK_CONFIG_INVALID,
+    NETWORK_MISMATCH: ErrorCode.SDK_CONFIG_INVALID,
+    EXTREME_TIMEOUT: ErrorCode.SDK_CONFIG_INVALID,
+
+    // Soroban / vault
+    CONTRACT_READONLY_ERROR: ErrorCode.SOROBAN_CONTRACT_ERROR,
+    CONTRACT_INVOKE_ERROR: ErrorCode.SOROBAN_CONTRACT_ERROR,
+    MISSING_CONTRACT_PARAM: ErrorCode.SOROBAN_CONTRACT_ERROR,
+    MISSING_CONTRACT_PARAM_TYPES: ErrorCode.SOROBAN_CONTRACT_ERROR,
+    MISSING_CONTRACT_ID: ErrorCode.VAULT_CONTRACT_NOT_CONFIGURED,
+    VAULT_DEPOSIT_ERROR: ErrorCode.VAULT_DEPOSIT_FAILED,
+    VAULT_WITHDRAW_ERROR: ErrorCode.VAULT_WITHDRAW_FAILED,
+    VAULT_BALANCE_ERROR: ErrorCode.SOROBAN_CONTRACT_ERROR,
+  });
+
+/**
+ * Resolve a canonical public code without breaking callers that still receive
+ * a legacy `PocketPayError.code` string.
+ *
+ * Dynamic HTTP/status wrapper codes are normalized by family. Unknown values
+ * return `undefined` so callers can use the SDK fallback deliberately.
+ */
+export function resolveErrorCode(code: string): ErrorCodeValue | undefined {
+  if (isKnownErrorCode(code)) return code;
+
+  const aliased = LEGACY_ERROR_CODE_ALIASES[code];
+  if (aliased) return aliased;
+
+  if (/^HTTP_ERROR_\d{3}$/.test(code)) return ErrorCode.NET_HTTP;
+  if (/^TX_STATUS_/.test(code)) return ErrorCode.TX_STATUS_UNKNOWN;
+
+  return undefined;
 }
