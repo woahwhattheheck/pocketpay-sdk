@@ -25,7 +25,7 @@ export class NetworkBuilder extends FixtureBuilder<NetworkFixture> {
   }
 
   withData(data: any): this {
-    this.data.data = data;
+    this.data.data = cloneFixture(data);
     return this;
   }
 
@@ -35,7 +35,7 @@ export class NetworkBuilder extends FixtureBuilder<NetworkFixture> {
   }
 
   withHeaders(headers: Record<string, string>): this {
-    this.data.headers = headers;
+    this.data.headers = cloneFixture(headers);
     return this;
   }
 
