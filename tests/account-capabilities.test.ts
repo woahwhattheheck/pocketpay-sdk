@@ -63,6 +63,22 @@ describe('account capability snapshot (#209)', () => {
     expect(getAccountCapabilities(account).canSign).toBe(true);
   });
 
+  it('observes a mutable availability getter only once per capability snapshot', () => {
+    let probeReads = 0;
+    const account = createAccountWithSigner({ publicKey: source.publicKey() }, {
+      publicKey: source.publicKey(),
+      kind: 'hardware' as const,
+      get isAvailable() {
+        probeReads += 1;
+        return probeReads === 1 ? false : true;
+      },
+      async sign(tx) { return tx; },
+    });
+
+    expect(getAccountCapabilities(account).canSign).toBe(false);
+    expect(probeReads).toBe(1);
+  });
+
   it('fails closed when caller-provided capability getters throw', () => {
     const transport = Object.defineProperty({}, 'submitSignedTransaction', {
       get() { throw new Error('broken transport'); },
