@@ -169,12 +169,25 @@ export async function diagnoseTestnetAccount(
 
     if (result.status === 'funded') {
       const balance = result.balance;
+      const amountPattern = /^[0-9]+(?:[.][0-9]{1,7})?$/;
+      const nativeEntries = Array.isArray(balance?.balances)
+        ? balance.balances.filter(
+            (entry) =>
+              entry?.asset === 'XLM' &&
+              entry.issuer === '' &&
+              typeof entry.balance === 'string' &&
+              amountPattern.test(entry.balance),
+          )
+        : [];
+
       if (
         !balance ||
         balance.publicKey !== publicKey ||
         typeof balance.nativeBalance !== 'string' ||
-        !/^[0-9]+(?:[.][0-9]{1,7})?$/.test(balance.nativeBalance) ||
-        !Array.isArray(balance.balances)
+        !amountPattern.test(balance.nativeBalance) ||
+        !Array.isArray(balance.balances) ||
+        nativeEntries.length !== 1 ||
+        nativeEntries[0]?.balance !== balance.nativeBalance
       ) {
         throw new Error('Testnet account lookup returned malformed funded balance');
       }
