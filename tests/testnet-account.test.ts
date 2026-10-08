@@ -178,11 +178,9 @@ describe('diagnoseTestnetAccount', () => {
       diagnoseTestnetAccount(padded, { lookup }),
     ).rejects.toMatchObject({
       code: 'INVALID_PUBLIC_KEY',
-      metadata: {
-        validation: {
-          field: 'publicKey',
-          reason: 'surrounding_whitespace',
-        },
+      validation: {
+        field: 'publicKey',
+        reason: 'surrounding_whitespace',
       },
     });
     expect(lookup).not.toHaveBeenCalled();
