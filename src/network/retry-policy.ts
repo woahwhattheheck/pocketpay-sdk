@@ -100,9 +100,9 @@ function exhaustedError(
  *
  * `withRetryPolicy` distinguishes three failure modes:
  *
- * 1. **Retryable failure** — transient error (e.g. HTTP 429, 503). The same
- *    envelope is resubmitted after an exponential back-off.
- * 2. **Unknown status** — timeout or network drop. {@link submitTransactionIdempotently}
+ * 1. **Retryable failure** — explicit pre-processing rate limit (HTTP 429).
+ *    The same envelope is resubmitted after an exponential back-off.
+ * 2. **Unknown status** — timeout, HTTP 408/5xx, or network drop. {@link submitTransactionIdempotently}
  *    is called internally to poll for the real outcome before any re-try
  *    decision is made. This prevents blind double-submissions.
  * 3. **Non-retryable failure** — definitive rejection or expiry. The policy
