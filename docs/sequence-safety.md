@@ -99,6 +99,28 @@ await Promise.all([
 Different accounts do not block each other, and a failing task does not cascade
 into the ones queued behind it — each caller sees only its own rejection.
 
+### End-to-end lifecycle safety
+
+`executeTransactionLifecycle(params, secretKey, options, config)` now uses
+the SDK's shared `defaultSequenceProvider.withSequence(params.sourcePublicKey, ...)`
+around its entire prepare/build/sign/guarded-submit sequence. Two concurrent
+calls within one process for the **same** account no longer build against the
+same pre-submit Horizon sequence; the next call waits until the previous
+submission/polling attempt completes, then re-reads network state. Calls for
+different accounts remain independent.
+
+This uses the already-shipped `SequenceProvider`, not a second lock or a
+sequence-number allocator. Standalone `bindAndBuild`, manually assembled
+transactions, and one-shot helpers still require callers to use a shared
+`SequenceProvider.withSequence` explicitly if they may race with other intents.
+
+**Unknown submission status is not a successful settlement.** When the lifecycle
+returns `state: 'unresolved'` / `actionRequired: 'poll'`, do not initiate another
+same-account intent until the previous transaction hash has been resolved
+against the ledger. The process-local queue serializes calls but cannot make
+an unresolved ledger outcome final. Cross-process and externally submitted
+transactions still need separate coordination.
+
 ### ⚠️ The guarantee is per process
 
 `withSequence` is backed by an in-memory promise chain. It coordinates intents
