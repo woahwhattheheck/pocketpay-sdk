@@ -228,6 +228,46 @@ describe('payment error classification', () => {
     expect(direct.validation?.value).not.toContain(secret);
     expect(originalCause.message).toContain(secret);
   });
+
+  it('contains throwing provider response getters and still classifies the HTTP/network failure', () => {
+    const provider = {
+      get response(): never { throw new Error('provider-private-response'); },
+      statusCode: 503,
+      code: 'ECONNRESET',
+    };
+    const classified = classifyPaymentError(provider);
+    expect(classified).toBeInstanceOf(PaymentError);
+    expect(classified.paymentCategory).toBe(PaymentFailureCategory.Network);
+    expect(classified.statusCode).toBe(503);
+    expect(JSON.stringify(classified)).not.toContain('provider-private-response');
+  });
+
+  it('does not escape error normalization for a throwing Error.message getter', () => {
+    const provider = new Error('provider details');
+    Object.defineProperty(provider, 'message', {
+      get() { throw new Error('private-provider-key'); },
+    });
+    const classified = classifyPaymentError(provider);
+    expect(classified).toBeInstanceOf(PaymentError);
+    expect(classified.code).toBe('SEND_ERROR');
+    expect(classified.message).toContain('Unexpected payment failure');
+    expect(classified.cause?.message).not.toContain('private-provider-key');
+  });
+
+  it('ignores throwing nested Horizon result-code getters while retaining the HTTP status', () => {
+    const provider = {
+      response: {
+        status: 400,
+        data: { extras: {
+          get result_codes(): never { throw new Error('private-provider-field'); },
+        } },
+      },
+    };
+    const classified = classifyPaymentError(provider);
+    expect(classified.paymentCategory).toBe(PaymentFailureCategory.Submission);
+    expect(classified.statusCode).toBe(400);
+    expect(classified.message).not.toContain('private-provider-field');
+  });
 });
 
 async function sourceAccountFor(publicKey: string, sequence = '100') {
