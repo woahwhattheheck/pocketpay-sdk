@@ -105,6 +105,13 @@ describe('network configuration preset boundaries', () => {
     });
   });
 
+  it('resolves the ambient network passphrase without requiring unrelated RPC config', () => {
+    process.env.STELLAR_NETWORK = 'mainnet';
+    delete process.env.STELLAR_SOROBAN_RPC_URL;
+
+    expect(getNetworkPassphrase()).toBe(getNetworkPassphrase('mainnet'));
+  });
+
   it('preserves a valid explicit passphrase and its override source', () => {
     const config = resolveConfig({
       network: 'mainnet',
