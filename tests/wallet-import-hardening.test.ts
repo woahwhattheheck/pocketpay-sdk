@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { StrKey } from '@stellar/stellar-sdk';
 import {
   PocketPayError,
   createWallet,
@@ -47,13 +48,20 @@ describe('wallet import hardening (#334)', () => {
     }
   });
 
-  it('distinguishes empty/nonstring and unsupported M/C material without coercion', () => {
+  it('distinguishes empty/nonstring, valid non-secret material, and malformed lookalikes', () => {
     expect(invalidReason('  ')).toBe('missing');
     for (const input of [undefined, null, false, 0, { toString() { throw new Error('Do not invoke'); } }]) {
       expect(invalidReason(input)).toBe('not_a_string');
     }
-    expect(invalidReason('M' + 'A'.repeat(55))).toBe('unsupported_account_material');
-    expect(invalidReason('C' + 'A'.repeat(55))).toBe('unsupported_account_material');
+
+    const muxed = StrKey.encodeMed25519PublicKey(Buffer.alloc(40));
+    const contract = StrKey.encodeContract(Buffer.alloc(32));
+    expect(invalidReason(muxed)).toBe('unsupported_account_material');
+    expect(invalidReason(contract)).toBe('unsupported_account_material');
+
+    expect(invalidReason('G' + 'A'.repeat(55))).toBe('invalid_format');
+    expect(invalidReason('M' + 'A'.repeat(55))).toBe('invalid_format');
+    expect(invalidReason('C' + 'A'.repeat(55))).toBe('invalid_format');
     expect(invalidReason('B' + 'A'.repeat(55))).toBe('unsupported_format');
   });
 
