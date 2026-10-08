@@ -93,6 +93,15 @@ describe('validateMemoInput — rejected input', () => {
       validateMemoInput({ type: 'none', value: 'unexpected' })
     );
     expect(err.validation?.reason).toBe('unexpected_payload');
+    expect(err.validation?.value).toBeUndefined();
+  });
+
+  it('does not echo an unexpected none memo payload through error metadata', () => {
+    const sensitiveValue = 'private-memo-payload-marker';
+    const err = capture(() => validateMemoInput({ type: 'none', value: sensitiveValue }));
+    expect(err.validation?.reason).toBe('unexpected_payload');
+    expect(err.validation?.value).toBeUndefined();
+    expect(JSON.stringify(err)).not.toContain(sensitiveValue);
   });
 
   it('rejects a text memo one byte over the limit', () => {
@@ -229,6 +238,8 @@ describe('formatMemoForDisplay', () => {
     expect(
       formatMemoForDisplay({ type: 'text', value: 'left\u2028middle\u2029right' })
     ).toBe('left\\u2028middle\\u2029right');
+    expect(formatMemoForDisplay({ type: 'text', value: 'left\u0085right' }))
+      .toBe('left\\u0085right');
   });
 
   it('rejects invalid values before formatting', () => {
