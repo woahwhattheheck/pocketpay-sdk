@@ -35,7 +35,7 @@ Payment history is relative to the supplied account:
 - self-payment -> self
 - unrelated/incomplete records -> neutral
 
-Transaction summaries prefer an explicit mapper direction, then fall back to their source account. Vault deposits are outgoing, withdrawals incoming, and balance reads neutral.
+Transaction summaries prefer an explicit mapper direction. When it is absent, `sourceAccount === account` establishes outgoing activity; a different source alone **does not establish incoming** because the transaction may contain unrelated operations, so the direction stays neutral. Use actual payment-operation `from`/`to` fields or an explicitly mapped transaction direction to establish received activity. Vault deposits are outgoing, withdrawals incoming, and balance reads neutral.
 
 ## Deterministic history
 
