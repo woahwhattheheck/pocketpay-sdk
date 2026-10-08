@@ -9,7 +9,9 @@ import {
   ErrorCategory,
   ErrorCode,
   ERROR_CODES,
+  LEGACY_ERROR_CODE_ALIASES,
   isKnownErrorCode,
+  resolveErrorCode,
   describeError,
   getErrorCategory,
   redactSensitive,
@@ -72,6 +74,48 @@ describe('error code standard', () => {
     expect(isKnownErrorCode(ErrorCode.VAULT_WITHDRAW_FAILED)).toBe(true);
     expect(isKnownErrorCode('NOPE')).toBe(false);
   });
+
+  it('normalizes legacy module error strings to stable canonical codes', () => {
+    const representative = {
+      // wallet / account
+      INVALID_SECRET_KEY: ErrorCode.WALLET_INVALID_SECRET,
+      INVALID_PUBLIC_KEY: ErrorCode.WALLET_INVALID_PUBLIC_KEY,
+      ACCOUNT_NOT_FOUND: ErrorCode.WALLET_ACCOUNT_UNFUNDED,
+      // payments / transactions
+      INVALID_AMOUNT: ErrorCode.PAYMENT_INVALID_AMOUNT,
+      SELF_PAYMENT: ErrorCode.PAYMENT_SELF,
+      PAYMENT_FAILED: ErrorCode.TX_FAILED,
+      // network / config
+      HORIZON_ERROR: ErrorCode.NET_UNREACHABLE,
+      INVALID_NETWORK: ErrorCode.SDK_CONFIG_INVALID,
+      // Soroban / vault
+      CONTRACT_INVOKE_ERROR: ErrorCode.SOROBAN_CONTRACT_ERROR,
+      VAULT_DEPOSIT_ERROR: ErrorCode.VAULT_DEPOSIT_FAILED,
+    } as const;
+
+    for (const [legacy, canonical] of Object.entries(representative)) {
+      expect(LEGACY_ERROR_CODE_ALIASES[legacy]).toBe(canonical);
+      expect(resolveErrorCode(legacy)).toBe(canonical);
+
+      const description = describeError(legacy);
+      expect(description.known).toBe(true);
+      expect(description.legacyAlias).toBe(true);
+      expect(description.canonicalCode).toBe(canonical);
+      expect(description.safeMessage).toBe(ERROR_CODES[canonical].safeMessage);
+    }
+
+    expect(resolveErrorCode('HTTP_ERROR_503')).toBe(ErrorCode.NET_HTTP);
+    expect(resolveErrorCode('TX_STATUS_NOT_FOUND')).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+  });
+
+  it('returns SDK_INTERNAL metadata for truly unknown codes', () => {
+    const d = describeError('TOTALLY_UNKNOWN');
+    expect(d.known).toBe(false);
+    expect(d.legacyAlias).toBe(false);
+    expect(d.canonicalCode).toBe(ErrorCode.SDK_INTERNAL);
+    expect(d.category).toBe(ErrorCategory.SDK);
+    expect(d.safeMessage).toBe(ERROR_CODES[ErrorCode.SDK_INTERNAL].safeMessage);
+  });
 });
 
 describe('redaction', () => {
@@ -88,6 +132,7 @@ describe('redaction', () => {
     const safe = redactError(err);
     expect(safe.message).not.toContain(fakeKey);
     expect(safe.code).toBe(ErrorCode.SDK_INTERNAL);
+    expect(safe.canonicalCode).toBe(ErrorCode.SDK_INTERNAL);
     expect(safe.safeMessage).toBeTruthy();
   });
 
