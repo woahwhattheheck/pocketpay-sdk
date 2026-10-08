@@ -88,6 +88,29 @@ describe('validateMemoInput — supported types', () => {
 });
 
 describe('validateMemoInput — rejected input', () => {
+  it('redacts rejected memo payloads from error strings and validation metadata', () => {
+    const privateText = 'private-memo-body-marker-\\n\\u202e';
+    const privateId = 'unsafe-id-marker-\\n';
+    const privateHash = 'z'.repeat(MEMO_HASH_HEX_LENGTH);
+    const invalidCases: Array<[MemoInput, string, string]> = [
+      [{ type: 'text', value: privateText.repeat(2) }, privateText, 'too_long'],
+      [{ type: 'id', value: privateId }, privateId, 'not_unsigned_integer'],
+      [{ type: 'hash', value: privateHash }, privateHash, 'not_hexadecimal'],
+      [{ type: 'unsupported-private-type' as MemoInput['type'], value: 'x' }, 'unsupported-private-type', 'unsupported_type'],
+    ];
+
+    for (const [input, secret, reason] of invalidCases) {
+      const error = capture(() => validateMemoInput(input));
+      expect(error.code).toBe(ErrorCode.TX_INVALID_MEMO);
+      expect(error.validation?.field).toBe('memo');
+      expect(error.validation?.reason).toBe(reason);
+      expect(error.validation?.value).toBeUndefined();
+      expect(JSON.stringify(error)).not.toContain(secret);
+      expect(error.message).not.toContain(secret);
+    }
+  });
+
+
   it('rejects a payload-bearing none memo', () => {
     const err = capture(() =>
       validateMemoInput({ type: 'none', value: 'unexpected' })
