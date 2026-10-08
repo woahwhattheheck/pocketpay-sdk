@@ -68,6 +68,7 @@ npm install @axionvera/pocketpay-sdk
 - [Network Resilience Layer](./docs/network-resilience.md) - The `NetworkClient` abstraction, typed timeout/rate-limit/unreachable errors, and endpoint reachability diagnostics
 - [Safe Retry Policy](./docs/retry-policy.md) - Classifying submission outcomes, safe retry rules, and the `withRetryPolicy` API
 - [Account Sequence & Concurrency Safety](./docs/sequence-safety.md) - Account sequence number handling, caching, stale sequence error classification, and in-process concurrency safety with SequenceProvider
+- [Transaction Queue Abstraction](./docs/transaction-queue.md) - FIFO per-account ordering, cancellation boundaries, failure policy, consumer responsibilities, and integration examples
 - [Meaningful Change Review Guide](./docs/meaningful-change-review.md) - what counts as real SDK work: behaviour, modules, tests, acceptance criteria + reviewer checks
 - [Evaluation Readiness Index](./docs/evaluation-readiness.md) - one page linking payment expectations, testing standard, CI guidance, acceptance criteria audit, self-assessment, and reviewer checklist before you open a PR or ask about payment status
 - [Error Handling](./docs/error-handling.md) - SDK error handling overview
