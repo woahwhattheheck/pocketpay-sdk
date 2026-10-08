@@ -56,7 +56,11 @@ describe('orchestrated same-account submissions', () => {
           await firstGate;
         }
         networkSequence = BigInt(tx.sequence);
-        return { hash: tx.hash().toString('hex'), ledger: 123 } as never;
+        return {
+          hash: tx.hash().toString('hex'),
+          ledger: 123,
+          successful: true,
+        } as never;
       });
 
     // Without the orchestrator lock, both requests reach loadAccount before
@@ -73,5 +77,73 @@ describe('orchestrated same-account submissions', () => {
     expect(readsWhileFirstPending).toBe(1);
     expect(loadAccount).toHaveBeenCalledTimes(2);
     expect(sequences).toEqual(['101', '102']);
+  });
+
+  it.each([
+    {
+      name: 'explicit rejection',
+      response: (transaction: StellarSDK.Transaction) => ({
+        hash: transaction.hash().toString('hex'),
+        successful: false,
+      }),
+      state: 'rejected',
+    },
+    {
+      name: 'mismatched transaction hash',
+      response: () => ({
+        hash: '0'.repeat(64),
+        successful: true,
+      }),
+      state: 'unresolved',
+    },
+    {
+      name: 'missing successful flag',
+      response: (transaction: StellarSDK.Transaction) => ({
+        hash: transaction.hash().toString('hex'),
+      }),
+      state: 'unresolved',
+    },
+    {
+      name: 'verified matching success',
+      response: (transaction: StellarSDK.Transaction) => ({
+        hash: transaction.hash().toString('hex'),
+        successful: true,
+      }),
+      state: 'confirmed',
+    },
+  ])('classifies $name ledger evidence as $state', async ({ response, state }) => {
+    const source = StellarSDK.Keypair.random();
+    const recipient = StellarSDK.Keypair.random().publicKey();
+
+    vi.spyOn(StellarSDK.Horizon.Server.prototype, 'loadAccount')
+      .mockResolvedValue(new StellarSDK.Horizon.AccountResponse({
+        id: source.publicKey(),
+        account_id: source.publicKey(),
+        sequence: '100',
+        balances: [],
+      } as never));
+    vi.spyOn(StellarSDK.Horizon.Server.prototype, 'feeStats')
+      .mockResolvedValue({
+        ledger_capacity_usage: '0.1',
+        max_fee: { p10: '100', p50: '100', p95: '100' },
+        last_ledger_base_fee: '100',
+      } as never);
+    vi.spyOn(StellarSDK.Horizon.Server.prototype, 'submitTransaction')
+      .mockImplementation(async (transaction) =>
+        response(transaction as StellarSDK.Transaction) as never);
+
+    const result = await executeTransactionLifecycle(
+      {
+        sourcePublicKey: source.publicKey(),
+        operations: [{
+          destination: recipient,
+          amount: '1',
+          asset: { code: 'XLM' },
+        }],
+      },
+      source.secret(),
+    );
+
+    expect(result.state).toBe(state);
   });
 });
