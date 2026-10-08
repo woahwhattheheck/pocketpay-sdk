@@ -37,6 +37,11 @@ Successful validation returns a `NormalizedRecipient` with a trimmed
 `INVALID_PUBLIC_KEY`; malformed descriptor shapes return
 `INVALID_RECIPIENT`.
 
+Recipient `metadata` must be a plain key/value record (a normal object or
+null-prototype dictionary). Runtime `Date`, `Map`, `Set`, arrays and custom
+class instances are rejected as `INVALID_RECIPIENT` instead of being silently
+flattened into empty or incomplete metadata.
+
 Use `normalizeRecipient` when a call site requires the canonical value or
 `validateRecipient` when it wants a non-throwing result.
 
