@@ -36,10 +36,16 @@ export async function pollSorobanTransactionStatus<T extends { status: string }>
       return null;
     }
 
-    if (response.status === 'SUCCESS' || response.status === 'FAILED') {
-      return response;
+    // Runtime RPC adapters can violate their TypeScript response contract:
+    // a null result or a throwing status accessor must never turn an already
+    // submitted transfer into a generic exception that loses its hash.
+    try {
+      const status = response?.status;
+      if (status === 'SUCCESS' || status === 'FAILED') return response;
+      if (status !== 'NOT_FOUND') return null;
+    } catch {
+      return null;
     }
-    if (response.status !== 'NOT_FOUND') return null;
 
     const delay = Math.min(1000, deadline - Date.now());
     if (delay <= 0) return null;
