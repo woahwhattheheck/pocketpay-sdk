@@ -161,6 +161,27 @@ describe('classifySubmitError taxonomy wiring', () => {
     expect(classifySubmitError(limited)).toBe(limited);
   });
 
+  it('treats wrapped transport failure and cause-less fetch failure as unknown after submit', () => {
+    for (const code of [ErrorCode.NET_UNREACHABLE, ErrorCode.NET_TIMEOUT, ErrorCode.REQUEST_TIMEOUT]) {
+      const wrapped = new PocketPayError(
+        'Unacknowledged network failure', code, { statusCode: undefined }, undefined, true,
+      );
+      const classified = classifySubmitError(wrapped, 'known-tx-hash');
+      expect(classified.code, code).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+      expect(classified.transactionHash, code).toBe('known-tx-hash');
+      expect(classified.retryable, code).toBe(false);
+    }
+    const bareFetch = classifySubmitError(new TypeError('fetch failed'), 'known-tx-hash');
+    expect(bareFetch.code).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+    expect(classifySubmissionOutcome(bareFetch).kind).toBe('unknown_status');
+
+    // A definite HTTP 404 wrapped as NET_HTTP is not an uncertain 5xx.
+    const definitive = new PocketPayError(
+      'Not found', ErrorCode.NET_HTTP, { statusCode: 404 }, undefined, false,
+    );
+    expect(classifySubmitError(definitive)).toBe(definitive);
+  });
+
   it('redacts secrets leaking from raw submission errors', () => {
     const fakeKey = makeFakeKey();
     const err = classifySubmitError(new Error(`boom ${fakeKey}`));
