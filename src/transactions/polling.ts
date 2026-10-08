@@ -194,16 +194,20 @@ export async function pollTransaction(
       // Never confirm (or definitively fail) a different transaction just
       // because a transport returned a successful-looking object. Runtime
       // Horizon adapters are untrusted even when the TS interface is correct.
+      // Snapshot decision fields exactly once: stateful getters/Proxy traps
+      // must not change identity or success after validation.
+      const txHash = safeErrorField(tx, 'hash');
+      const txSuccessful = safeErrorField(tx, 'successful');
       if (
         !tx ||
-        typeof tx.hash !== 'string' ||
-        tx.hash.toLowerCase() !== hash.toLowerCase() ||
-        typeof tx.successful !== 'boolean'
+        typeof txHash !== 'string' ||
+        txHash.toLowerCase() !== hash.toLowerCase() ||
+        typeof txSuccessful !== 'boolean'
       ) {
         lastState = 'unknown';
       } else {
         const record: TransactionRecord = {
-          hash: tx.hash,
+          hash: txHash,
           // `tx.ledger` is Horizon's link-follow helper, not the ledger number;
           // the numeric sequence is exposed as `ledger_attr`.
           ledger: tx.ledger_attr,
@@ -212,14 +216,14 @@ export async function pollTransaction(
           // Horizon types `fee_charged` as `string | number`; preserve stroops.
           fee: String(tx.fee_charged),
           operationCount: tx.operation_count,
-          successful: tx.successful,
+          successful: txSuccessful,
           memo: tx.memo || undefined,
           memoType: tx.memo_type,
         };
 
         return {
-          status: tx.successful ? 'success' : 'failure',
-          state: tx.successful ? 'confirmed' : 'failed',
+          status: txSuccessful ? 'success' : 'failure',
+          state: txSuccessful ? 'confirmed' : 'failed',
           hash,
           attempts,
           transaction: record,
