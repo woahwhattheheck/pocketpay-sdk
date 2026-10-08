@@ -157,6 +157,28 @@ describe('pollTransaction request and cancellation lifecycle', () => {
     }
   });
 
+  it('preserves a prior pending ledger observation across retryable transport errors', async () => {
+    const call = vi.fn()
+      .mockRejectedValueOnce({ response: { status: 404 } })
+      .mockRejectedValueOnce({ response: { status: 429 } });
+    installLookup(call);
+
+    const completed = pollTransaction(HASH, {
+      interval: 2,
+      timeout: 40,
+      maxAttempts: 2,
+    });
+    await vi.advanceTimersByTimeAsync(3);
+
+    expect(await completed).toMatchObject({
+      status: 'timeout',
+      state: 'pending',
+      attempts: 2,
+    });
+    expect(call).toHaveBeenCalledTimes(2);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('cancels an in-flight lookup and handles its later rejection', async () => {
     const controller = new AbortController();
     const add = vi.spyOn(controller.signal, 'addEventListener');
