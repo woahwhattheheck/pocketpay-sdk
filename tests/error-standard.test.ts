@@ -102,6 +102,12 @@ describe('redaction', () => {
     const fakeKey = makeFakeKey();
     expect(redactError(`failure: ${fakeKey}`).message).not.toContain(fakeKey);
 
+    // Public error-code fields must not leak arbitrary values passed to the constructor.
+    const unrecognizedCode = new PocketPayError('failed', `UNREGISTERED_${fakeKey}`);
+    const redactedCode = redactError(unrecognizedCode);
+    expect(redactedCode.code).toBe(ErrorCode.SDK_INTERNAL);
+    expect(JSON.stringify(redactedCode)).not.toContain(fakeKey);
+
     const unexpected = new Error('failed');
     unexpected.name = `SDKError_${fakeKey}`;
     expect(redactError(unexpected).name).not.toContain(fakeKey);
