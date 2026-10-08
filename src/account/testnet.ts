@@ -7,6 +7,7 @@
 
 import type { AccountBalance, BalanceResult, SDKConfig } from '../types';
 import { HORIZON_URLS } from '../config';
+import { isKnownErrorCode } from '../errors/codes';
 import { redactSensitive, validatePublicKey } from '../utils';
 import { getBalanceOrUnfunded } from '../wallet';
 
@@ -69,10 +70,13 @@ function readErrorCode(error: unknown): string | undefined {
     }
     const code = (error as { code?: unknown }).code;
     // Diagnostic error codes are identifiers, not untrusted provider text.
-    // Keep typed SDK codes but never surface key-shaped or arbitrary data.
+    // Keep ONLY known public SDK codes; matching an identifier shape is
+    // insufficient because an upstream provider can manufacture uppercase
+    // tokens that look like SDK codes or encode private metadata.
     if (
       typeof code !== 'string' ||
       !/^[A-Z][A-Z0-9_]{0,47}$/.test(code) ||
+      !isKnownErrorCode(code) ||
       redactSensitive(code) !== code
     ) {
       return undefined;
