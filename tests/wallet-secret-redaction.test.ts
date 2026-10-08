@@ -138,6 +138,10 @@ describe('wallet secret redaction boundaries', () => {
         validation: { field: 'secretKey', reason: 'invalid_format', value: secret },
         category: 'wallet',
         safeMessage: `Transaction failed ${secret}`,
+        timeout: Object.assign(
+          { stage: 'submission' as const, operation: `Waited for ${secret}`, timeoutMs: 1000 },
+          { internalSecret: secret },
+        ),
       }),
       { extraPayload: { secret } },
     );
@@ -149,10 +153,12 @@ describe('wallet secret redaction boundaries', () => {
       expect(failed.error.code).toBe('TX_SUBMISSION_ERROR');
       expect(failed.error.validation?.value).toBe('S[REDACTED]');
       expect(failed.error.cause?.message).toContain('S[REDACTED]');
+      expect(failed.error.timeout?.operation).toContain('S[REDACTED]');
       expectSecretAbsent(failed.error, secret);
       expect(JSON.stringify(failed)).not.toContain(secret);
       expect(Object.prototype.hasOwnProperty.call(failed.error, 'extraPayload')).toBe(false);
       expect(Object.prototype.hasOwnProperty.call(failed.error.cause!, 'unsafeDiagnostic')).toBe(false);
+      expect(Object.prototype.hasOwnProperty.call(failed.error.timeout!, 'internalSecret')).toBe(false);
     }
 
     const enhanced = await toEnhancedResult(async () => { throw raw; });
