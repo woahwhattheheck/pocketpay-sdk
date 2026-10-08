@@ -451,12 +451,90 @@ function sanitizeErrorCause(error: Error): Error {
   return sanitized;
 }
 
+/**
+ * A PocketPayError may be thrown by an SDK or downstream caller with unsafe
+ * message, cause, validation, or custom diagnostic metadata. Leave ordinary
+ * errors unchanged, but clone unsafe ones before exposing them from a safe
+ * result or an error wrapper. Cloning also drops unrecognized metadata.
+ */
+function sanitizePocketPayError(error: PocketPayError): PocketPayError {
+  const textFields = [
+    error.name,
+    error.message,
+    error.stack,
+    error.code,
+    error.category,
+    error.safeMessage,
+    error.transactionHash,
+    error.validation?.field,
+    error.validation?.reason,
+    error.validation?.value,
+    error.timeout?.operation,
+    error.cause?.name,
+    error.cause?.message,
+    error.cause?.stack,
+  ];
+  const hasSecret = textFields.some(
+    (value) => typeof value === 'string' && redactSensitive(value) !== value,
+  );
+  const expected = new Set([
+    'name', 'message', 'stack', 'code', 'statusCode', 'cause',
+    'validation', 'transactionHash', 'retryable', 'category',
+    'safeMessage', 'timeout',
+  ]);
+  const extraErrorMetadata = Object.getOwnPropertyNames(error).some(
+    (key) => !expected.has(key),
+  ) || Object.getOwnPropertySymbols(error).length > 0;
+  const extraCauseMetadata = error.cause !== undefined && (
+    Object.getOwnPropertyNames(error.cause).some(
+      (key) => !['name', 'message', 'stack'].includes(key),
+    ) || Object.getOwnPropertySymbols(error.cause).length > 0
+  );
+  const extraValidationMetadata = error.validation !== undefined &&
+    Object.keys(error.validation).some((key) => !['field', 'reason', 'value'].includes(key));
+  const extraTimeoutMetadata = error.timeout !== undefined &&
+    Object.keys(error.timeout).some((key) => !['stage', 'operation', 'timeoutMs'].includes(key));
+
+  if (!hasSecret && !extraErrorMetadata && !extraCauseMetadata &&
+      !extraValidationMetadata && !extraTimeoutMetadata) {
+    return error;
+  }
+
+  const validation = error.validation && {
+    field: redactSensitive(error.validation.field),
+    reason: redactSensitive(error.validation.reason),
+    value: typeof error.validation.value === 'string'
+      ? redactSensitive(error.validation.value)
+      : error.validation.value,
+  };
+  const safe = new PocketPayError(
+    redactSensitive(error.message),
+    redactSensitive(error.code),
+    {
+      statusCode: error.statusCode,
+      cause: error.cause ? sanitizeErrorCause(error.cause) : undefined,
+      validation,
+      category: error.category ? redactSensitive(error.category) : undefined,
+      safeMessage: error.safeMessage ? redactSensitive(error.safeMessage) : undefined,
+      timeout: error.timeout && {
+        ...error.timeout,
+        operation: redactSensitive(error.timeout.operation),
+      },
+    },
+    error.transactionHash ? redactSensitive(error.transactionHash) : undefined,
+    error.retryable,
+  );
+  safe.name = redactSensitive(error.name);
+  if (error.stack) safe.stack = redactSensitive(error.stack);
+  return safe;
+}
+
 export function wrapError(
   error: unknown,
   context: string,
   code: string
 ): PocketPayError {
-  if (error instanceof PocketPayError) return error;
+  if (error instanceof PocketPayError) return sanitizePocketPayError(error);
 
   const cause = error instanceof Error ? sanitizeErrorCause(error) : undefined;
   const message = cause?.message ?? redactSensitive(String(error));
@@ -482,7 +560,7 @@ export function toSuccessResult<T>(value: T): SuccessResult<T> {
 }
 
 export function toFailureResult(error: PocketPayError): FailureResult {
-  return { ok: false, error };
+  return { ok: false, error: sanitizePocketPayError(error) };
 }
 
 export async function toResult<T>(
@@ -518,7 +596,7 @@ export function toEnhancedFailureResult(
   warnings?: ResultWarning[],
   recoveryHints?: RecoveryHint[],
 ): EnhancedFailureResult {
-  const result: EnhancedFailureResult = { ok: false, error };
+  const result: EnhancedFailureResult = { ok: false, error: sanitizePocketPayError(error) };
   if (warnings && warnings.length > 0) result.warnings = warnings;
   if (recoveryHints && recoveryHints.length > 0) result.recoveryHints = recoveryHints;
   return result;
