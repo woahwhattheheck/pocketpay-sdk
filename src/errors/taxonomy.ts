@@ -107,21 +107,24 @@ export function redactError(error: unknown): {
   if (error instanceof PocketPayError) {
     const desc = describeError(error.code);
     return {
-      name: error.name,
+      name: redactSensitive(error.name),
       code: error.code,
       category: desc.category,
       retryable: desc.retryable,
       safeMessage: desc.safeMessage,
       message: redactSensitive(error.message),
       statusCode: error.statusCode,
-      transactionHash: error.transactionHash,
+      // Keep valid ledger hashes intact; scrub non-hash values supplied by callers.
+      transactionHash: error.transactionHash && /^[0-9a-f]{64}$/i.test(error.transactionHash)
+        ? error.transactionHash
+        : error.transactionHash && redactSensitive(error.transactionHash),
     };
   }
 
   // Non-PocketPayError: still redact whatever text we have.
   const message = redactSensitive(error instanceof Error ? error.message : String(error));
   return {
-    name: error instanceof Error ? error.name : 'Error',
+    name: error instanceof Error ? redactSensitive(error.name) : 'Error',
     code: ErrorCode.SDK_INTERNAL,
     category: ErrorCategory.SDK,
     retryable: false,
