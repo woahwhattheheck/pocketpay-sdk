@@ -122,6 +122,44 @@ describe('pollTransaction request and cancellation lifecycle', () => {
     expect(vi.getTimerCount()).toBe(0);
   });
 
+  it('keeps hostile or malformed resolved metadata inside an unknown observation', async () => {
+    const secret = 'resolved-metadata-secret';
+    const hostile = { ...CONFIRMED };
+    Object.defineProperty(hostile, 'created_at', {
+      get() { throw new Error(secret); },
+    });
+    const firstCall = vi.fn().mockResolvedValue(hostile);
+    installLookup(firstCall);
+
+    const hostileResult = await pollTransaction(HASH, { timeout: 40, maxAttempts: 1 });
+    expect(hostileResult).toMatchObject({
+      status: 'timeout',
+      state: 'unknown',
+      hash: HASH,
+      attempts: 1,
+    });
+    expect(JSON.stringify(hostileResult)).not.toContain(secret);
+    expect(firstCall).toHaveBeenCalledOnce();
+    expect(vi.getTimerCount()).toBe(0);
+
+    vi.restoreAllMocks();
+    const malformedCall = vi.fn().mockResolvedValue({
+      ...CONFIRMED,
+      fee_charged: { toString: () => secret },
+    });
+    installLookup(malformedCall);
+    const malformedResult = await pollTransaction(HASH, { timeout: 40, maxAttempts: 1 });
+    expect(malformedResult).toMatchObject({
+      status: 'timeout',
+      state: 'unknown',
+      hash: HASH,
+      attempts: 1,
+    });
+    expect(JSON.stringify(malformedResult)).not.toContain(secret);
+    expect(malformedCall).toHaveBeenCalledOnce();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('retries a mismatched transaction response and accepts the matching one', async () => {
     const call = vi.fn()
       .mockResolvedValueOnce({ ...CONFIRMED, hash: 'f'.repeat(64) })
