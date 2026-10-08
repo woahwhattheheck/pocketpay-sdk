@@ -26,6 +26,8 @@ The model reuses `TransactionStatus`; it does not create a competing outcome tax
 
 Unknown submission state is intentionally **not** rendered as failure. Consumers should preserve the receipt's `actionRequired` behavior in their transaction workflow and poll when the originating receipt says the status is unknown.
 
+Malformed/unrecognized runtime status values become `unknown`, not a new arbitrary status. A transaction record saying both `status: completed` and `successful: false` (or the converse) becomes `unknown` rather than reporting contradictory ledger finality. Vault results must agree between `success` and `status` before a result is rendered completed or failed; conflicting flags remain `unknown` until reconciled.
+
 ## Direction rules
 
 Payment history is relative to the supplied account:
@@ -36,6 +38,8 @@ Payment history is relative to the supplied account:
 - unrelated/incomplete records -> neutral
 
 Transaction summaries prefer an explicit mapper direction. When it is absent, `sourceAccount === account` establishes outgoing activity; a different source alone **does not establish incoming** because the transaction may contain unrelated operations, so the direction stays neutral. Use actual payment-operation `from`/`to` fields or an explicitly mapped transaction direction to establish received activity. Vault deposits are outgoing, withdrawals incoming, and balance reads neutral.
+
+**Receipts carry a destination but no source-account identity.** A receipt addressed to the displayed account therefore cannot prove a *self* transfer; it stays `neutral` and does not invent a counterparty. A different destination is displayed as outgoing under the caller's convention that these are that account's own submitted receipts; do not use receipt direction as independent account-ownership or ledger evidence. Use Horizon payment records for confirmed sender/receiver identity.
 
 ## Deterministic history
 
