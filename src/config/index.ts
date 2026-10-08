@@ -778,7 +778,7 @@ export function validatePocketPayConfig(
         severity: 'error',
         field: 'contractId',
         code: 'INVALID_CONTRACT_ID',
-        message: `Invalid contract ID: "${rawContractId}". Contract ID must be a non-empty string.`,
+        message: `Invalid contract ID: "[REDACTED]". Contract ID must be a non-empty string.`,
         value: sanitizeValue(rawContractId),
       });
     } else if (
@@ -790,7 +790,7 @@ export function validatePocketPayConfig(
         severity: 'error',
         field: 'contractId',
         code: 'INVALID_CONTRACT_ID',
-        message: `Invalid contract ID: "${rawContractId}". Contract ID must be a 56-character base32 string starting with 'C'.`,
+        message: `Invalid contract ID: "[REDACTED]". Contract ID must be a 56-character base32 string starting with 'C'.`,
         value: sanitizeValue(rawContractId),
       });
     }
