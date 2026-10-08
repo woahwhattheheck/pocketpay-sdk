@@ -370,7 +370,7 @@ function isNativeSpec(asset: StellarAssetSpec): boolean {
   return code.toUpperCase() === 'XLM' || code.toLowerCase() === 'native';
 }
 
-/** Exact stroops for a Horizon decimal string; anything unparseable reads as zero. */
+/** Exact stroops for a Horizon decimal string; callers validate provider data first. */
 function stroopsOf(value: unknown): bigint {
   if (typeof value !== 'string') return 0n;
   const parsed = safeParseAmount(value);
@@ -379,6 +379,65 @@ function stroopsOf(value: unknown): bigint {
 
 function integerOf(value: unknown): number {
   return typeof value === 'number' && Number.isFinite(value) ? Math.trunc(value) : 0;
+}
+
+function isValidProviderAmount(value: unknown): boolean {
+  if (typeof value !== 'string') return false;
+  const parsed = safeParseAmount(value);
+  return parsed.valid && parsed.amount.stroops >= 0n;
+}
+
+function isValidProviderCount(value: unknown): boolean {
+  return typeof value === 'number' && Number.isSafeInteger(value) && value >= 0;
+}
+
+function hasValidSourceNumericData(
+  account: AccountLike,
+  asset: StellarAssetSpec,
+  source: string,
+  issuer: string | undefined,
+): boolean {
+  const nativeLine = balanceLines(account).find((line) => line.asset_type === 'native');
+  if (
+    !nativeLine ||
+    !isValidProviderAmount(nativeLine.balance) ||
+    !isValidProviderAmount(nativeLine.selling_liabilities) ||
+    !isValidProviderCount(account.subentry_count) ||
+    !isValidProviderCount(account.num_sponsoring) ||
+    !isValidProviderCount(account.num_sponsored)
+  ) {
+    return false;
+  }
+
+  if (!isNativeSpec(asset) && source !== issuer) {
+    const line = findAssetLine(account, asset);
+    if (
+      line &&
+      (!isValidProviderAmount(line.balance) ||
+        !isValidProviderAmount(line.selling_liabilities))
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function hasValidDestinationNumericData(
+  account: AccountLike,
+  asset: StellarAssetSpec,
+  destination: string,
+  issuer: string | undefined,
+): boolean {
+  if (isNativeSpec(asset) || destination === issuer) return true;
+
+  const line = findAssetLine(account, asset);
+  return (
+    !line ||
+    (isValidProviderAmount(line.balance) &&
+      isValidProviderAmount(line.limit) &&
+      isValidProviderAmount(line.buying_liabilities))
+  );
 }
 
 function balanceLines(account: AccountLike): BalanceLineLike[] {
@@ -727,7 +786,23 @@ export async function checkTransactionReadiness(
   }
 
   // ─── 1b. source (network) ─────────────────────────────────────────────────
-  const sourceAccount = sourceLookup?.status === 'found' ? sourceLookup.account : undefined;
+  let sourceAccount = sourceLookup?.status === 'found' ? sourceLookup.account : undefined;
+  if (
+    sourceAccount &&
+    source !== undefined &&
+    asset !== undefined &&
+    !hasValidSourceNumericData(sourceAccount, asset, source, issuer)
+  ) {
+    c.block({
+      check: 'source',
+      code: 'SOURCE_LOOKUP_FAILED',
+      field: 'sourceAccount',
+      message: 'Horizon returned malformed numeric account data for the source account.',
+      retryable: true,
+    });
+    sourceAccount = undefined;
+  }
+
   if (sourceLookup?.status === 'not_found') {
     c.block({
       check: 'source',
@@ -749,8 +824,24 @@ export async function checkTransactionReadiness(
   }
 
   // ─── 2b. destination (network) and 5b. memo-required ──────────────────────
-  const destinationAccount =
+  let destinationAccount =
     destinationLookup?.status === 'found' ? destinationLookup.account : undefined;
+  if (
+    destinationAccount &&
+    destination !== undefined &&
+    asset !== undefined &&
+    !hasValidDestinationNumericData(destinationAccount, asset, destination, issuer)
+  ) {
+    c.block({
+      check: 'destination',
+      code: 'DESTINATION_LOOKUP_FAILED',
+      field: 'destination',
+      message: 'Horizon returned malformed numeric account data for the destination account.',
+      retryable: true,
+    });
+    destinationAccount = undefined;
+  }
+
   if (destinationLookup?.status === 'not_found') {
     c.block({
       check: 'destination',
