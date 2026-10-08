@@ -8,7 +8,7 @@ This SDK can be configured via environment variables. If you also pass configura
 |---|---|---:|---|---|
 | `STELLAR_NETWORK` | Selects the Stellar network to connect to. | No | `testnet` | `STELLAR_NETWORK=testnet` |
 | `STELLAR_HORIZON_URL` | Overrides the Horizon server URL used for ledger queries. | No | Based on `STELLAR_NETWORK` | `STELLAR_HORIZON_URL=https://horizon-testnet.stellar.org` |
-| `STELLAR_SOROBAN_RPC_URL` | Overrides the Soroban RPC endpoint used for Soroban contract interactions. | No | Based on `STELLAR_NETWORK` | `STELLAR_SOROBAN_RPC_URL=https://soroban-testnet.stellar.org` |
+| `STELLAR_SOROBAN_RPC_URL` | Overrides the Soroban RPC endpoint used for Soroban contract interactions. | Required on `mainnet` | Testnet SDF endpoint; no Mainnet SDF default | `STELLAR_SOROBAN_RPC_URL=https://soroban-testnet.stellar.org` |
 | `STELLAR_TIMEOUT` | Request timeout in milliseconds. | No | `30000` | `STELLAR_TIMEOUT=45000` |
 | `STELLAR_CONTRACT_ID` | Optional Soroban contract id used when resolving config (validated if provided). | No | Not set | `STELLAR_CONTRACT_ID=C...` |
 | `VAULT_CONTRACT_ID` | Vault contract id used by vault functions when `contractId` is not provided via params. | Conditional | No default — must be provided for vault ops without param | `VAULT_CONTRACT_ID=C...` |
@@ -17,14 +17,16 @@ This SDK can be configured via environment variables. If you also pass configura
 
 ## Supported network presets
 
-The SDK supports two canonical presets. Selecting a network fills the endpoint and network-passphrase defaults below.
+The SDK supports Testnet and Mainnet network/passphrase presets. Testnet also has an SDF Soroban RPC default; Mainnet requires an explicit ecosystem-provider RPC URL.
 
 | Network | Horizon URL | Soroban RPC URL | Network passphrase |
 |---|---|---|---|
 | `testnet` | `https://horizon-testnet.stellar.org` | `https://soroban-testnet.stellar.org` | `getNetworkPassphrase('testnet')` (`Networks.TESTNET`) |
-| `mainnet` | `https://horizon.stellar.org` | `https://soroban.stellar.org` | `getNetworkPassphrase('mainnet')` (`Networks.PUBLIC`) |
+| `mainnet` | `https://horizon.stellar.org` | **Provider required** (no public SDF Mainnet RPC) | `getNetworkPassphrase('mainnet')` (`Networks.PUBLIC`) |
 
 Only exact `http:` and `https:` endpoint schemes are accepted. Similar-looking schemes such as `httpx:` or `httpsx:` are invalid.
+
+SDF publishes public Stellar RPC endpoints for Testnet/Futurenet, not Mainnet. Mainnet consumers must choose an ecosystem RPC provider and set `STELLAR_SOROBAN_RPC_URL` or pass `sorobanRpcUrl` programmatically. `resolveConfig({ network: 'mainnet' })` therefore fails closed when neither is supplied instead of advertising an unavailable default.
 
 A programmatic `networkPassphrase` is optional. When supplied, it must exactly match the selected network preset; otherwise both `resolveConfig` and `validatePocketPayConfig` report `INVALID_NETWORK_PASSPHRASE`. Explicit invalid values such as `null` are rejected rather than replaced with a default.
 
@@ -38,6 +40,7 @@ import {
 const mainnet = resolveConfig({
   network: 'mainnet',
   networkPassphrase: getNetworkPassphrase('mainnet'),
+  sorobanRpcUrl: 'https://rpc.mainnet.example.com',
 });
 
 const validation = validatePocketPayConfig({
