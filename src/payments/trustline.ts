@@ -23,7 +23,7 @@ import { withTimeout } from '../network';
 const TRUSTLINE_SCALE = 10_000_000n;
 
 function parseHorizonUnits(value: unknown): bigint {
-  if (typeof value !== 'string' || !/^\\d+(?:\\.\\d{1,7})?$/.test(value)) {
+  if (typeof value !== 'string' || !/^\d+(?:\.\d{1,7})?$/.test(value)) {
     throw new PocketPayError(
       'Cannot verify destination trustline capacity from the Horizon response',
       'TRUSTLINE_CHECK_ERROR',
