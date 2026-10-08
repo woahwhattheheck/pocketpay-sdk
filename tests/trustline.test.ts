@@ -174,6 +174,42 @@ describe('Trustline Validation Module', () => {
       expect(result.limit).toBe('1000.0000000');
       expect(result.availableCapacity).toBe('900.0000000');
     });
+
+    it('compares trustline capacity in exact stroops, not floats (#307)', async () => {
+      const trustline = (balance: string, limit: string) => ({
+        balances: [
+          {
+            asset_type: 'credit_alphanum4',
+            asset_code: 'USDC',
+            asset_issuer: validIssuer,
+            balance,
+            limit,
+            is_authorized: true,
+          },
+        ],
+      });
+      const usdc = { code: 'USDC', issuer: validIssuer };
+
+      // Default (maximum) trustline limit: parseFloat reported 922337203685.4775391.
+      mockLoadAccount.mockResolvedValueOnce(trustline('0.0000000', '922337203685.4775807'));
+      const fresh = await checkDestinationTrustline(destPublicKey, usdc, { amount: '1' });
+      expect(fresh.valid).toBe(true);
+      expect(fresh.availableCapacity).toBe('922337203685.4775807');
+
+      // A payment that exactly fills the remaining capacity is accepted (0.3 - 0.1 < 0.2 in floats).
+      mockLoadAccount.mockResolvedValueOnce(trustline('0.1000000', '0.3000000'));
+      const exactFill = await checkDestinationTrustline(destPublicKey, usdc, { amount: '0.2' });
+      expect(exactFill.valid).toBe(true);
+      expect(exactFill.status).toBe('valid');
+      expect(exactFill.availableCapacity).toBe('0.2000000');
+
+      // Near the top of the range a float subtraction overstates capacity and let this through.
+      mockLoadAccount.mockResolvedValueOnce(trustline('899999999999.9999000', '900000000000.0000000'));
+      const overflow = await checkDestinationTrustline(destPublicKey, usdc, { amount: '0.00011' });
+      expect(overflow.valid).toBe(false);
+      expect(overflow.status).toBe('limit_exceeded');
+      expect(overflow.availableCapacity).toBe('0.0001000');
+    });
   });
 
   describe('safeCheckDestinationTrustline', () => {

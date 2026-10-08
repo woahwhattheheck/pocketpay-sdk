@@ -113,6 +113,15 @@ Both vault paths — `depositToVault` and `withdrawFromVault` in
 directly as `i128`. They previously used
 `Math.round(parseFloat(amount) * 10_000_000)`.
 
+The destination trustline capacity checks — `checkDestinationTrustline` in
+`src/payments/trustline.ts` and `validateDestinationNetwork` in
+`src/payments/destination-validation.ts` — read Horizon's `balance` and `limit`
+with the shared parser and compare `limit - balance` against the payment amount
+in stroops. `availableCapacity` is formatted with `formatStroops`, so the default
+trustline limit reports `922337203685.4775807` rather than a float-rounded value,
+and a payment that exactly fills the remaining capacity is accepted. Both helpers
+run `validateAmount` on the amount before the Horizon lookup.
+
 ## See also
 
 - [Error Standard](./error-standard.md) — the published error code registry.
