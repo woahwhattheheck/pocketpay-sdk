@@ -230,6 +230,76 @@ describe('vault operation preview', () => {
     }
   });
 
+  it('snapshots stateful preview getters exactly once before building review output', () => {
+    const privateValue = 'private-token-after-validation';
+    const reads = { operation: 0, wallet: 0, amount: 0 };
+    const params: Record<string, unknown> = {};
+
+    Object.defineProperties(params, {
+      operation: {
+        enumerable: true,
+        get() {
+          reads.operation += 1;
+          return reads.operation === 1 ? 'deposit' : privateValue;
+        },
+      },
+      wallet: {
+        enumerable: true,
+        get() {
+          reads.wallet += 1;
+          return reads.wallet === 1 ? wallet : privateValue;
+        },
+      },
+      amount: {
+        enumerable: true,
+        get() {
+          reads.amount += 1;
+          return reads.amount === 1 ? '1.25' : privateValue;
+        },
+      },
+    });
+
+    const preview = buildVaultOperationPreview(params as never);
+
+    expect(reads).toEqual({ operation: 1, wallet: 1, amount: 1 });
+    expect(preview).toMatchObject({
+      operation: 'deposit',
+      wallet,
+      amount: '1.25',
+    });
+    expect(JSON.stringify(preview)).not.toContain(privateValue);
+  });
+
+  it('converts throwing preview getters into typed non-leaking errors', () => {
+    const privateValue = 'private-token-from-throwing-getter';
+    const params: Record<string, unknown> = {
+      operation: 'deposit',
+      wallet,
+    };
+
+    Object.defineProperty(params, 'amount', {
+      enumerable: true,
+      get() {
+        throw new Error(privateValue);
+      },
+    });
+
+    let thrown: unknown;
+    try {
+      buildVaultOperationPreview(params as never);
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_OPERATION',
+      validation: { field: 'amount', reason: 'unreadable' },
+    });
+    expect((thrown as Error).message).not.toContain(privateValue);
+    expect(JSON.stringify(thrown)).not.toContain(privateValue);
+  });
+
   it('returns the SDK typed validation error when a write preview has no amount', () => {
     expect(() =>
       buildVaultOperationPreview({ operation: 'withdraw', wallet } as never),
