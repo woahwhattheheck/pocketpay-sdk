@@ -50,8 +50,12 @@ console.log(preview.warnings);
 
 Previews accept a **public wallet address only**. Do not pass a secret key.
 The preview object contains no signing material, transaction XDR, or submitted
-transaction hash. Invalid public keys and required amounts use the SDK's existing
-typed `PocketPayError` validation path.
+transaction hash. Invalid operations, public keys, and required amounts use the SDK's typed
+`PocketPayError` validation codes. Unlike the general-purpose validators, this
+support-safe preview **never repeats rejected input values** in its exception
+message or serializable `validation` metadata: a mistakenly supplied API token,
+seed or other secret stays out of logging/reporting output. Precision-specific
+`INVALID_AMOUNT_PRECISION` remains available to callers.
 
 A preview is informational. It never calls `depositToVault`,
 `withdrawFromVault`, `getVaultBalance`, a Soroban RPC endpoint, or any
