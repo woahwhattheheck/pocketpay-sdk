@@ -97,7 +97,9 @@ function transactionDirection(
     return record.direction as TransactionDirection;
   }
   if (record.sourceAccount === account) return TransactionDirection.OUTGOING;
-  if (record.sourceAccount) return TransactionDirection.INCOMING;
+  // Another source account proves only who initiated the transaction, not
+  // that this account received value. Incoming requires explicit direction
+  // from the mapper or a payment operation with a verified destination.
   return 'neutral';
 }
 
