@@ -19,12 +19,16 @@ Do **not** add consumer examples that import `src/`, `dist/`, or other private d
 
 ## Review and change policy
 
-1. **Check first:** `npm run check:public-api`. This compares all named root exports (including type/value distinctions) and the `package.json` `main`, `types`, and `exports` contract to the committed `docs/public-api-surface.snapshot.json` baseline. CI runs the same focused check.
+1. **Check first:** `npm run check:public-api`. This compares all named and default root exports (including type/value distinctions) and the `package.json` `main`, `types`, and `exports` contract to the committed `docs/public-api-surface.snapshot.json` baseline. CI runs the same focused check.
 2. **Review differences:** Removed or renamed exports, changes from runtime values to type-only exports, and removed/redirected package subpaths are potentially **breaking**. Unless expressly approved as a breaking major release, retain the old entrypoint and add a compatibility alias or deprecation period instead.
 3. **Check declarations and behavior:** The snapshot checks names and availability, **not** function parameter types, generic constraints, return types, declared class shape, runtime semantics, or transitive types. Compare generated `.d.ts` declarations / changed source signatures before approval. An incompatible required parameter, narrower accepted input, removed enum value, changed error behavior, or altered return contract can be breaking even when this check passes. Runtime/behavior changes require their own narrowly relevant regression coverage.
 4. **Classify release impact:** Additive exports ordinarily qualify for a minor version; backward-compatible fixes normally for patch; incompatible exports, signatures, semantics or paths require deliberate major-version planning and migration notes. A pre-1.0 or testnet-only version does not excuse unexplained breaking changes. Update changelog/release notes and affected public examples alongside the change.
 5. **Update baseline only after review:** Run `npm run update:public-api`, inspect the resulting snapshot diff, and commit it **with** the intentional public-surface change. Never blindly refresh the baseline to silence CI or to ratify an accidental removal. Reviewers should explicitly approve breaking changes and document consumer migration.
-6. **Validate the governance script itself:** `npm run check:public-api:smoke` runs a small in-memory fixture covering type/value aliases, deterministic package key ordering, and rejection of wildcard/namespace exports. It does not launch the repository-wide test suite.
+6. **Validate the governance script itself:** `npm run check:public-api:smoke` runs a small in-memory fixture covering type/value aliases, default declarations and expressions, nested conditional-export precedence, and rejection of wildcard/namespace/CommonJS export assignments. It does not launch the repository-wide test suite.
+
+## Conditional package exports
+
+Package export-map key order is part of the snapshot. Node evaluates conditional exports in insertion order, including nested conditions; moving a general `default` condition before a specific condition can change which module consumers load. Review order-only export-map diffs as compatibility changes. See [Node conditional exports](https://nodejs.org/api/packages.html#conditional-exports).
 
 ## Why use explicit exports?
 

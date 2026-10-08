@@ -26,6 +26,12 @@ function extractExports(code: string): SurfaceEntry[] {
   };
 
   for (const node of sf.statements) {
+    // Export assignments have no ExportKeyword modifier in the TypeScript AST.
+    if (ts.isExportAssignment(node)) {
+      if (node.isExportEquals) throw new Error('CommonJS export assignment needs explicit review');
+      add('default', 'value');
+      continue;
+    }
     if (ts.isExportDeclaration(node)) {
       if (!node.exportClause || !ts.isNamedExports(node.exportClause)) {
         throw new Error('Wildcard/namespace export requires explicit review in src/index.ts');
@@ -39,9 +45,7 @@ function extractExports(code: string): SurfaceEntry[] {
     const modifiers = ts.canHaveModifiers(node) ? ts.getModifiers(node) : undefined;
     if (!modifiers?.some((m) => m.kind === ts.SyntaxKind.ExportKeyword)) continue;
     const isDefault = modifiers.some((m) => m.kind === ts.SyntaxKind.DefaultKeyword);
-    if (ts.isExportAssignment(node)) {
-      add('default', 'value');
-    } else if (ts.isVariableStatement(node)) {
+    if (ts.isVariableStatement(node)) {
       for (const declaration of node.declarationList.declarations) {
         if (!ts.isIdentifier(declaration.name)) throw new Error('Destructured public export needs review');
         add(declaration.name.text, 'value');
@@ -67,16 +71,10 @@ function extractExports(code: string): SurfaceEntry[] {
   return found.sort((a, b) => a.name.localeCompare(b.name) || a.kind.localeCompare(b.kind));
 }
 
-function normalize(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(normalize);
-  if (value !== null && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value as Record<string, unknown>)
-        .sort(([a], [b]) => a.localeCompare(b))
-        .map(([k, v]) => [k, normalize(v)])
-    );
-  }
-  return value;
+function packageSurface(pkg: Record<string, unknown>): Snapshot['packageSurface'] {
+  // Conditional exports resolve in insertion order, including nested conditions.
+  // Keep that order so a precedence change cannot disappear from the snapshot.
+  return { main: pkg.main, types: pkg.types, exports: pkg.exports };
 }
 
 function currentSurface(): Snapshot {
@@ -89,7 +87,7 @@ function currentSurface(): Snapshot {
     formatVersion: 1,
     entrypoint: 'src/index.ts',
     rootExports: extractExports(source),
-    packageSurface: normalize({ main: pkg.main, types: pkg.types, exports: pkg.exports }) as Snapshot['packageSurface'],
+    packageSurface: packageSurface(pkg),
   };
 }
 
@@ -105,14 +103,29 @@ function selfTest(): void {
     { name: 'Alias', kind: 'type' },
     { name: 'C', kind: 'type' },
   ])) throw new Error('Alias/type export fixture failed');
-  if (format(normalize({ z: 1, a: { y: 2, x: 3 } })) !==
-      format({ a: { x: 3, y: 2 }, z: 1 })) {
-    throw new Error('Canonical package-export fixture failed');
+  for (const source of [
+    'const value = 1; export default value;',
+    'export default 42;',
+    'export default function () {}',
+    'export default class {}',
+  ]) {
+    if (format(extractExports(source)) !== format([{ name: 'default', kind: 'value' }])) {
+      throw new Error('Default export fixture failed');
+    }
   }
-  for (const invalid of ["export * from './x';", "export * as X from './x';"]) {
+  const before = { main: './index.js', types: './index.d.ts', exports: {
+    '.': { node: { import: './node.mjs', default: './node.js' }, default: './fallback.js' },
+  } };
+  const reordered = { ...before, exports: {
+    '.': { node: { default: './node.js', import: './node.mjs' }, default: './fallback.js' },
+  } };
+  if (format(packageSurface(before)) === format(packageSurface(reordered))) {
+    throw new Error('Conditional export precedence change was ignored');
+  }
+  for (const invalid of ["export * from './x';", "export * as X from './x';", "const x = {}; export = x;"]) {
     let failed = false;
     try { extractExports(invalid); } catch { failed = true; }
-    if (!failed) throw new Error('Unsafe wildcard fixture was accepted');
+    if (!failed) throw new Error('Unsupported export fixture was accepted');
   }
   process.stdout.write('Public API governance fixtures passed\n');
 }
