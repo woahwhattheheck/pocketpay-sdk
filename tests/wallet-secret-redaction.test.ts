@@ -151,8 +151,8 @@ describe('wallet secret redaction boundaries', () => {
       expect(failed.error.cause?.message).toContain('S[REDACTED]');
       expectSecretAbsent(failed.error, secret);
       expect(JSON.stringify(failed)).not.toContain(secret);
-      expect(Object.hasOwn(failed.error, 'extraPayload')).toBe(false);
-      expect(Object.hasOwn(failed.error.cause!, 'unsafeDiagnostic')).toBe(false);
+      expect(Object.prototype.hasOwnProperty.call(failed.error, 'extraPayload')).toBe(false);
+      expect(Object.prototype.hasOwnProperty.call(failed.error.cause!, 'unsafeDiagnostic')).toBe(false);
     }
 
     const enhanced = await toEnhancedResult(async () => { throw raw; });
