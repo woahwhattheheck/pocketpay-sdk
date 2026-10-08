@@ -437,6 +437,34 @@ describe('checkTransactionReadiness — network blockers', () => {
       expect.objectContaining({ code: 'NETWORK_LOOKUP_FAILED', retryable: true }),
     ]);
   });
+  it('does not echo credentials from mismatched endpoint warnings', async () => {
+    const credential = 'private-preview-password-441';
+    const result = await check({}, {
+      network: 'testnet',
+      horizonUrl: `https://username:${credential}@horizon.stellar.org/secret/${credential}`,
+    });
+
+    expect(result.warnings).toEqual([
+      expect.objectContaining({ code: 'NETWORK_ENDPOINT_MISMATCH', field: 'config' }),
+    ]);
+    expect(JSON.stringify(result)).not.toContain(credential);
+  });
+
+  it('does not echo invalid endpoint input from configuration blockers', async () => {
+    const credential = 'private-url-token-441';
+    const result = await check({}, {
+      network: 'testnet',
+      horizonUrl: `not-a-url-${credential}`,
+    });
+
+    expect(codes(result)).toContain('NETWORK_CONFIG_INVALID');
+    expect(result.blockers).toContainEqual(expect.objectContaining({
+      code: 'NETWORK_CONFIG_INVALID',
+      cause: 'INVALID_HORIZON_URL',
+    }));
+    expect(JSON.stringify(result)).not.toContain(credential);
+  });
+
 });
 
 // ─── Blockers: fee and balance ──────────────────────────────────────────────
