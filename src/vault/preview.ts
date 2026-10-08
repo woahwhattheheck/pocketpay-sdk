@@ -106,8 +106,8 @@ function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown):
   if (operation !== 'createLock') return;
 
   if (!Number.isSafeInteger(unlockAt) || (unlockAt as number) <= 0) {
-    const validationValue =
-      typeof unlockAt === 'number' && Number.isFinite(unlockAt) ? unlockAt : undefined;
+    // Preview validation is support-safe: rejected input values are never
+    // copied into serializable error metadata, including numeric timestamps.
     throw new PocketPayError(
       'Vault lock previews require unlockAt as a positive integer Unix timestamp',
       'INVALID_OPERATION',
@@ -115,7 +115,6 @@ function validateLockUnlockAt(operation: VaultPreviewAction, unlockAt: unknown):
         validation: {
           field: 'unlockAt',
           reason: unlockAt === undefined ? 'missing' : 'invalid_timestamp',
-          ...(validationValue !== undefined ? { value: validationValue } : {}),
         },
       },
     );
