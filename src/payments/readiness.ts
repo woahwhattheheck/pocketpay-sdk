@@ -43,6 +43,7 @@ import { formatStroops, safeParseAmount } from '../utils/amount';
 import { normalizeMemo, safeValidateMemo } from '../utils/memo';
 import { withTimeout } from '../network';
 import { calculateNativeReserves } from '../wallet/multi-asset';
+import { isKnownErrorCode } from '../errors/codes';
 import { validateAssetSpec } from './trustline';
 
 // ─── Public types ───────────────────────────────────────────────────────────
@@ -322,17 +323,25 @@ function createCollector() {
   };
 }
 
-/** Runs a throwing SDK validator; returns the error code it raised, or undefined on success. */
-function failureCode(run: () => unknown): { code?: string; message: string } | undefined {
+/** Never leak provider-defined error metadata into shareable readiness snapshots. */
+function publicCause(error: unknown): string | undefined {
+  try {
+    if ((typeof error !== 'object' || error === null) && typeof error !== 'function') return undefined;
+    const code = (error as { code?: unknown }).code;
+    return typeof code === 'string' && isKnownErrorCode(code) ? code : undefined;
+  } catch {
+    // Third-party errors and Proxies can expose throwing accessors.
+    return undefined;
+  }
+}
+
+/** Runs an SDK validator without forwarding its input-echoing error message. */
+function failureCode(run: () => unknown): { code?: string } | undefined {
   try {
     run();
     return undefined;
   } catch (error) {
-    const err = error as { code?: unknown; message?: unknown } | undefined;
-    return {
-      code: typeof err?.code === 'string' ? err.code : undefined,
-      message: typeof err?.message === 'string' ? err.message : 'Validation failed.',
-    };
+    return { code: publicCause(error) };
   }
 }
 
@@ -408,11 +417,18 @@ async function lookupAccount(
     const account = await withTimeout(label, cfg.timeout, server.loadAccount(accountId));
     return { status: 'found', account: account as unknown as AccountLike };
   } catch (error) {
-    const err = error as { response?: { status?: unknown }; name?: unknown; code?: unknown };
-    if (err?.response?.status === 404 || err?.name === 'NotFoundError') {
-      return { status: 'not_found' };
+    // Catching a network failure must not invoke untrusted throwing getters
+    // outside the catch, nor copy arbitrary provider codes into UI models.
+    let notFound = false;
+    try {
+      const err = error as { response?: { status?: unknown }; name?: unknown };
+      notFound = err?.response?.status === 404 || err?.name === 'NotFoundError';
+    } catch {
+      // Treat a hostile response accessor as an unknown, retryable failure.
     }
-    return { status: 'failed', cause: typeof err?.code === 'string' ? err.code : undefined };
+    return notFound
+      ? { status: 'not_found' }
+      : { status: 'failed', cause: publicCause(error) };
   }
 }
 
@@ -523,7 +539,7 @@ export async function checkTransactionReadiness(
       check: 'amount',
       code: amountFailure.code === 'INVALID_AMOUNT_PRECISION' ? 'AMOUNT_PRECISION' : 'AMOUNT_INVALID',
       field: 'amount',
-      message: amountFailure.message,
+      message: 'Amount must be a valid positive decimal number with at most seven fractional digits.',
       cause: amountFailure.code,
     });
   } else {
@@ -537,7 +553,7 @@ export async function checkTransactionReadiness(
         check: 'amount',
         code: 'AMOUNT_INVALID',
         field: 'amount',
-        message: parsed.error.message,
+        message: 'Amount is outside the supported Stellar payment range or precision.',
         cause: parsed.error.code,
       });
     }
@@ -551,7 +567,7 @@ export async function checkTransactionReadiness(
       check: 'asset',
       code: 'ASSET_INVALID',
       field: 'asset',
-      message: assetFailure.message,
+      message: 'Asset must be native XLM or a valid issued asset code and issuer.',
       cause: assetFailure.code,
     });
   }
@@ -567,7 +583,7 @@ export async function checkTransactionReadiness(
       check: 'memo',
       code: 'MEMO_INVALID',
       field: 'memo',
-      message: memoResult.error.message,
+      message: 'Memo type or value is invalid for the Stellar protocol.',
       cause: memoResult.error.code,
     });
   } else {
@@ -612,15 +628,11 @@ export async function checkTransactionReadiness(
   let cfg: ResolvedSDKConfig | undefined;
   let passphrase: string | undefined;
   let configResult: ReturnType<typeof validatePocketPayConfig> | undefined;
-  let configThrew: { code?: string; message: string } | undefined;
+  let configThrew: { code?: string } | undefined;
   try {
     configResult = validatePocketPayConfig(config);
   } catch (error) {
-    const err = error as { code?: unknown; message?: unknown };
-    configThrew = {
-      code: typeof err?.code === 'string' ? err.code : undefined,
-      message: typeof err?.message === 'string' ? err.message : 'SDK configuration is invalid.',
-    };
+    configThrew = { code: publicCause(error) };
   }
 
   if (configResult?.valid && configResult.config) {
@@ -678,8 +690,7 @@ export async function checkTransactionReadiness(
             );
             return { passphrase: (root as { network_passphrase?: unknown })?.network_passphrase };
           } catch (error) {
-            const code = (error as { code?: unknown })?.code;
-            return { failed: true, cause: typeof code === 'string' ? code : undefined };
+            return { failed: true, cause: publicCause(error) };
           }
         })()
       : Promise.resolve(undefined);
