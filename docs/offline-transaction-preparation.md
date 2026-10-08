@@ -30,6 +30,41 @@ The following requires network access or must be provided manually:
 - **Fee estimation** (optional - can use default BASE_FEE)
 - **Trustline verification** for issued assets (optional but recommended)
 
+## Inspect the exact signing payload before approval
+
+The SDK exports `getTransactionSigningSummary(preparedOrUnsigned)` from its
+public package root. Use it to display the source, network, fee, memo,
+destination and asset issuer **before asking a signer to authorize**:
+
+```typescript
+import { getTransactionSigningSummary } from 'stellar-pocketpay-sdk';
+
+const review = getTransactionSigningSummary(unsigned);
+showApprovalScreen({
+  source: review.source,
+  network: review.networkName,
+  feeXlm: review.feeInXlm,
+  operations: review.operations,
+  memo: review.memo,
+  transactionHash: review.transactionHash,
+});
+```
+
+For an already-built `UnsignedTransaction`, review fields come from the
+**actual Stellar transaction envelope** rather than independently supplied
+wrapper values. This prevents a stale or mismatched source, network passphrase,
+or hash wrapper from changing what the confirmation UI describes. Issued assets
+retain their issuer even when their code is `XLM`; native XLM has no issuer.
+The fee is displayed using exact integer stroops with seven decimal places,
+including amounts beyond JavaScript's safe integer limit.
+
+A prepared-but-unbuilt transaction is only a planning snapshot:
+`canSign: false`, and its inputs/network state still need verification.
+For built transactions, compare the exact hash and signing principal with the
+signer before proceeding. This read-only summary does **not** sign, submit,
+authorize, or guarantee on-chain success, and it does not replace account
+sequence freshness checks, trustline verification, or application approval.
+
 ## Transaction Preparation Workflow
 
 ### Complete Workflow
