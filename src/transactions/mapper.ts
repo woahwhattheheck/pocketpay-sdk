@@ -6,7 +6,7 @@ import {
   RawHorizonOperation,
   TransactionMapperOptions,
 } from '../types/transaction';
-import { formatMemoForDisplay } from '../utils/memo';
+import { formatHorizonMemoForDisplay } from '../utils/memo';
 
 /**
  * Maps a raw Horizon transaction to a transaction summary
@@ -62,10 +62,7 @@ export function mapTransactionToSummary(
     amountDisplay,
     asset,
     counterparty,
-    memo:
-      rawTransaction.memo_type === 'text' && typeof rawTransaction.memo === 'string'
-        ? formatMemoForDisplay({ type: 'text', value: rawTransaction.memo })
-        : rawTransaction.memo,
+    memo: formatHorizonMemoForDisplay(rawTransaction.memo_type, rawTransaction.memo),
     memoType: rawTransaction.memo_type,
     status,
     createdAt: rawTransaction.created_at,
