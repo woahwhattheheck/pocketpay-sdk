@@ -73,12 +73,14 @@ export class PaymentError extends PocketPayError {
       timeout?: PocketPayError['timeout'];
     } = {
       category: options.sdkCategory ?? sdkCategoryFor(paymentCategory),
-      safeMessage: options.safeMessage ?? safeMessageFor(paymentCategory),
+      safeMessage: options.safeMessage !== undefined
+        ? redactSensitive(options.safeMessage)
+        : safeMessageFor(paymentCategory),
     };
 
     if (options.statusCode !== undefined) details.statusCode = options.statusCode;
-    if (options.cause !== undefined) details.cause = options.cause;
-    if (options.validation !== undefined) details.validation = options.validation;
+    if (options.cause !== undefined) details.cause = sanitizeCause(options.cause);
+    if (options.validation !== undefined) details.validation = sanitizeValidation(options.validation);
     if (options.timeout !== undefined) details.timeout = options.timeout;
 
     const standard = describeError(code);
@@ -89,7 +91,7 @@ export class PaymentError extends PocketPayError {
         : paymentCategory === PaymentFailureCategory.Network);
 
     super(
-      message,
+      redactSensitive(message),
       code,
       details,
       options.transactionHash,
@@ -241,7 +243,7 @@ function networkLike(error: unknown): boolean {
 function sanitizeCause(cause: Error | undefined): Error | undefined {
   if (!cause) return undefined;
   const safe = new Error(redactSensitive(cause.message));
-  safe.name = cause.name;
+  safe.name = redactSensitive(cause.name);
   return safe;
 }
 
@@ -251,6 +253,8 @@ function sanitizeValidation(
   if (!validation) return undefined;
   return {
     ...validation,
+    field: redactSensitive(validation.field),
+    reason: redactSensitive(validation.reason),
     ...(typeof validation.value === 'string'
       ? { value: redactSensitive(validation.value) }
       : {}),
