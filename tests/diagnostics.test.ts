@@ -162,6 +162,41 @@ describe('diagnostics hooks (opt-in)', () => {
       emitDiagnosticsEvent('config', 'config.resolved', { network: 'testnet' }),
     ).not.toThrow();
   });
+
+  it('does not propagate hostile diagnostic getter failures into SDK operations', () => {
+    const events: DiagnosticsEvent[] = [];
+    enableDiagnostics({ hooks: { onEvent: (event) => { events.push(event); } } });
+    const data: Record<string, unknown> = {};
+    Object.defineProperty(data, 'network', {
+      enumerable: true,
+      get: () => { throw new Error('diagnostics getter failure'); },
+    });
+    expect(() => emitDiagnosticsEvent('network', 'probe', data)).not.toThrow();
+    expect(events).toHaveLength(0);
+
+    emitDiagnosticsEvent('network', 'probe', { ok: true });
+    expect(events).toHaveLength(1);
+  });
+
+  it('observes rejected async diagnostics hooks without blocking subsequent calls', async () => {
+    let calls = 0;
+    enableDiagnostics({
+      hooks: {
+        onEvent: async () => {
+          calls += 1;
+          throw new Error('async hook failure');
+        },
+      },
+    });
+    expect(() =>
+      emitDiagnosticsEvent('transaction', 'transaction.submit.succeeded', { txHash: 'public' }),
+    ).not.toThrow();
+    await Promise.resolve();
+
+    emitDiagnosticsEvent('wallet', 'wallet.created', { publicKey: 'GTEST' });
+    await Promise.resolve();
+    expect(calls).toBe(2);
+  });
 });
 
 describe('diagnostics report', () => {

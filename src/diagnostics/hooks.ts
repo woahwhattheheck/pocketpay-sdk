@@ -79,21 +79,28 @@ export function emitDiagnosticsEvent(
   type: string,
   data: Record<string, unknown> = {},
 ): void {
-  if (!isDiagnosticsEnabled()) return;
-  const onEvent = hooks?.onEvent;
-  if (!onEvent) return;
-
-  const event: DiagnosticsEvent = {
-    schemaVersion: 1,
-    domain,
-    type,
-    timestamp: new Date().toISOString(),
-    data: redactDiagnosticsValue(data) as Record<string, unknown>,
-  };
-
+  // This is best-effort observability, not part of any wallet or transaction
+  // result. Even a hostile getter in diagnostic data must not break callers.
   try {
-    onEvent(event);
+    if (!isDiagnosticsEnabled()) return;
+    const onEvent = hooks?.onEvent;
+    if (!onEvent) return;
+
+    const event: DiagnosticsEvent = {
+      schemaVersion: 1,
+      domain,
+      type,
+      timestamp: new Date().toISOString(),
+      data: redactDiagnosticsValue(data) as Record<string, unknown>,
+    };
+
+    // Attach the rejection observer immediately. Do not await consumer code
+    // or let an async hook's rejection escape as an unhandled promise.
+    void Promise.resolve(onEvent(event)).catch(() => {
+      // Diagnostics callbacks must never determine SDK success or failure.
+    });
   } catch {
-    // Never let a broken consumer hook fail the SDK operation.
+    // Includes environment lookup, callback lookup, redaction and sync hooks.
+    // Diagnostics errors do not change authoritative SDK operation results.
   }
 }

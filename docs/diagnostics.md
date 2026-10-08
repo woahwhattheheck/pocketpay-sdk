@@ -47,6 +47,16 @@ events. You must still call `enableDiagnostics` / `setDiagnosticsHooks`. Debug
 mode expectations for application loggers remain documented in
 [logging-payloads-and-debug.md](./logging-payloads-and-debug.md).
 
+## Hook failure isolation
+
+Diagnostics are best-effort and must never change wallet, transaction, or
+network operation results. Event construction, deep redaction, and consumer
+callbacks are isolated from the SDK call path: throwing diagnostic getters and
+synchronous callback errors are suppressed, and rejected asynchronous `onEvent`
+promises are observed without awaiting them. A failed hook is not a failed
+transaction. For authoritative receipts, use the SDK operation response and
+on-chain verification, not delivery of an optional diagnostic event.
+
 ## What is safe vs never shared
 
 | Value | In events / report? |
