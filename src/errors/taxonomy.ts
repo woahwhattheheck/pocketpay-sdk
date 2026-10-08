@@ -122,7 +122,12 @@ export function redactError(error: unknown): {
   }
 
   // Non-PocketPayError: still redact whatever text we have.
-  const message = redactSensitive(error instanceof Error ? error.message : String(error));
+  let message: string;
+  try {
+    message = redactSensitive(error instanceof Error ? error.message : String(error));
+  } catch {
+    message = 'Unable to format thrown error value.';
+  }
   return {
     name: error instanceof Error ? redactSensitive(error.name) : 'Error',
     code: ErrorCode.SDK_INTERNAL,
