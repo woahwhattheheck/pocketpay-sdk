@@ -1,4 +1,4 @@
-import { FixtureBuilder } from '../builders/fixture-builder';
+import { FixtureBuilder, cloneFixture } from '../builders/fixture-builder';
 
 export interface NetworkFixture {
   status: number;
@@ -50,14 +50,14 @@ export class NetworkBuilder extends FixtureBuilder<NetworkFixture> {
   }
 
   build(): NetworkFixture {
-    return {
+    return cloneFixture({
       status: this.data.status!,
       data: this.data.data,
       error: this.data.error,
       headers: this.data.headers,
       timeout: this.data.timeout!,
       latency: this.data.latency!,
-    };
+    });
   }
 
   validate(): boolean {
