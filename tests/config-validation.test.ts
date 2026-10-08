@@ -64,7 +64,7 @@ describe('validatePocketPayConfig', () => {
         network: 'mainnet',
         networkPassphrase: getNetworkPassphrase('mainnet'),
         horizonUrl: 'https://horizon.stellar.org',
-        sorobanRpcUrl: 'https://soroban.stellar.org',
+        sorobanRpcUrl: 'https://rpc.mainnet.example.com',
         timeout: 30000,
       });
 
