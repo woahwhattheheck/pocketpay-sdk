@@ -71,10 +71,10 @@ export function getAccountCapabilities(
   if (signer !== undefined) {
     try {
       // A missing or undefined optional probe is not an explicit denial.
-      signerAvailable =
-        !('isAvailable' in signer) ||
-        signer.isAvailable === undefined ||
-        signer.isAvailable === true;
+      // Snapshot optional caller-controlled readiness once. A getter must not
+      // turn an explicit denial into approval between repeated reads.
+      const observedAvailability = 'isAvailable' in signer ? signer.isAvailable : undefined;
+      signerAvailable = observedAvailability === undefined || observedAvailability === true;
     } catch {
       // Unreadable hardware/remote availability must fail closed.
       signerAvailable = false;
