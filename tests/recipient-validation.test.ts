@@ -114,7 +114,19 @@ describe('recipient validation and normalisation', () => {
     const badMetadata = new Proxy({}, {
       ownKeys() { throw new Error('untrusted metadata keys'); },
     });
+    let getterCalls = 0;
+    const accessorRecipient = { kind: 'destination' };
+    Object.defineProperty(accessorRecipient, 'address', {
+      enumerable: true,
+      get() { getterCalls += 1; return VALID_DESTINATION_G; },
+    });
+    const accessorMetadata = Object.defineProperty({}, 'token', {
+      enumerable: true,
+      get() { getterCalls += 1; return 'secret'; },
+    });
     const hostile = [
+      accessorRecipient,
+      { kind: 'destination', address: VALID_DESTINATION_G, metadata: accessorMetadata },
       inherited,
       throwingKind,
       inaccessible,
@@ -132,6 +144,8 @@ describe('recipient validation and normalisation', () => {
       });
       expect(() => normalizeRecipient(descriptor as never)).toThrow(PocketPayError);
     }
+
+    expect(getterCalls).toBe(0);
 
     // JSON-like dictionaries with no inherited prototype remain valid.
     const nullProto = Object.assign(Object.create(null), {
