@@ -9,7 +9,8 @@
 
 import type * as StellarSDK from '@stellar/stellar-sdk';
 import { getHorizonServer, resolveConfig } from '../config';
-import { classifySubmitError } from '../errors';
+import { classifySubmitError, ErrorCategory, ErrorCode, ERROR_CODES } from '../errors';
+import { PocketPayError } from '../types';
 import { pollTransactionStatus, withTimeout } from '../network';
 import type { SDKConfig } from '../types';
 
@@ -54,6 +55,21 @@ export async function submitWithGuard(
   options: GuardedSubmitOptions = {},
   config?: Partial<SDKConfig>,
 ): Promise<unknown> {
+  // The public transaction type does not prove that the envelope was signed.
+  // Reject missing signatures locally: Horizon must never be the first place
+  // we discover a caller supplied a read-only/unsigned transaction.
+  if (!Array.isArray(transaction.signatures) || transaction.signatures.length === 0) {
+    throw new PocketPayError(
+      'Cannot submit an unsigned transaction; sign before submission.',
+      ErrorCode.TX_SIGNER_MISSING,
+      {
+        category: ErrorCategory.Transaction,
+        safeMessage: ERROR_CODES[ErrorCode.TX_SIGNER_MISSING].safeMessage,
+        validation: { field: 'signatures', reason: 'missing' },
+      },
+    );
+  }
+
   const cfg = resolveConfig(config);
   const server = getHorizonServer(config);
 
