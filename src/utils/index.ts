@@ -470,6 +470,7 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
     error.validation?.reason,
     error.validation?.value,
     error.timeout?.operation,
+    error.timeout?.stage,
     error.cause?.name,
     error.cause?.message,
     error.cause?.stack,
@@ -491,12 +492,19 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
     ) || Object.getOwnPropertySymbols(error.cause).length > 0
   );
   const extraValidationMetadata = error.validation !== undefined &&
-    Object.keys(error.validation).some((key) => !['field', 'reason', 'value'].includes(key));
+    Reflect.ownKeys(error.validation).some(
+      (key) => typeof key !== 'string' || !['field', 'reason', 'value'].includes(key),
+    );
   const extraTimeoutMetadata = error.timeout !== undefined &&
-    Object.keys(error.timeout).some((key) => !['stage', 'operation', 'timeoutMs'].includes(key));
+    Reflect.ownKeys(error.timeout).some(
+      (key) => typeof key !== 'string' || !['stage', 'operation', 'timeoutMs'].includes(key),
+    );
+  const invalidValidationValue = error.validation?.value !== undefined &&
+    typeof error.validation.value !== 'string' &&
+    typeof error.validation.value !== 'number';
 
   if (!hasSecret && !extraErrorMetadata && !extraCauseMetadata &&
-      !extraValidationMetadata && !extraTimeoutMetadata) {
+      !extraValidationMetadata && !extraTimeoutMetadata && !invalidValidationValue) {
     return error;
   }
 
@@ -505,7 +513,9 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
     reason: redactSensitive(error.validation.reason),
     value: typeof error.validation.value === 'string'
       ? redactSensitive(error.validation.value)
-      : error.validation.value,
+      : typeof error.validation.value === 'number'
+        ? error.validation.value
+        : undefined,
   };
   const safe = new PocketPayError(
     redactSensitive(error.message),
@@ -517,8 +527,11 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
       category: error.category ? redactSensitive(error.category) : undefined,
       safeMessage: error.safeMessage ? redactSensitive(error.safeMessage) : undefined,
       timeout: error.timeout && {
-        ...error.timeout,
+        stage: ['preparation', 'submission', 'confirmation', 'unknown'].includes(
+          error.timeout.stage,
+        ) ? error.timeout.stage : 'unknown',
         operation: redactSensitive(error.timeout.operation),
+        timeoutMs: error.timeout.timeoutMs,
       },
     },
     error.transactionHash ? redactSensitive(error.transactionHash) : undefined,
