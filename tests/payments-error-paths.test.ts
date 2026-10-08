@@ -197,6 +197,37 @@ describe('payment error classification', () => {
     expect(classified.message).not.toContain(secret);
     expect(classified.cause?.message).not.toContain(secret);
   });
+
+  it('redacts diagnostics from directly constructed PaymentError instances', () => {
+    const secret = `S${'B'.repeat(55)}`;
+    const originalCause = new Error(`provider response contains ${secret}`);
+    originalCause.name = `Provider ${secret}`;
+
+    const direct = new PaymentError(
+      `Payment failed for ${secret}`,
+      'SEND_ERROR',
+      PaymentFailureCategory.Submission,
+      {
+        cause: originalCause,
+        safeMessage: `Payment unavailable ${secret}`,
+        validation: {
+          field: `memo ${secret}`,
+          reason: `invalid ${secret}`,
+          value: secret,
+        },
+      },
+    );
+
+    expect(classifyPaymentError(direct)).toBe(direct);
+    expect(direct.message).not.toContain(secret);
+    expect(direct.safeMessage).not.toContain(secret);
+    expect(direct.cause?.message).not.toContain(secret);
+    expect(direct.cause?.name).not.toContain(secret);
+    expect(direct.validation?.field).not.toContain(secret);
+    expect(direct.validation?.reason).not.toContain(secret);
+    expect(direct.validation?.value).not.toContain(secret);
+    expect(originalCause.message).toContain(secret);
+  });
 });
 
 async function sourceAccountFor(publicKey: string, sequence = '100') {
