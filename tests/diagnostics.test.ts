@@ -169,6 +169,21 @@ describe('diagnostics report', () => {
     resetDiagnosticsHooks();
   });
 
+  it('reports only the endpoint origin in config events and support exports', () => {
+    const marker = 'sample-opaque-path-309';
+    const endpoint = `https://horizon.example.test/${marker}?parameter=${marker}`;
+    const events: DiagnosticsEvent[] = [];
+    enableDiagnostics({ hooks: { onEvent: (event) => events.push(event) } });
+    const report = buildDiagnosticsReport({ horizonUrl: endpoint });
+    expect(report.config.horizonUrl).toBe('https://horizon.example.test');
+    expect(report.network.horizonUrl).toBe('https://horizon.example.test');
+    expect(JSON.stringify(report)).not.toContain(marker);
+    const configEvent = events.find((event) => event.type === 'config.resolved');
+    expect(configEvent).toBeDefined();
+    expect(configEvent!.data.horizonUrl).toBe('https://horizon.example.test');
+    expect(JSON.stringify(configEvent)).not.toContain(marker);
+  });
+
   it('builds a support-safe report without secrets', () => {
     const report = buildDiagnosticsReport({ network: 'testnet' });
 
