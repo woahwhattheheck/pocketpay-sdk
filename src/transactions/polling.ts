@@ -29,6 +29,16 @@ function positiveInteger(value: number | undefined, fallback: number): number {
     : fallback;
 }
 
+/** Untrusted Horizon adapter errors may implement getters or Proxy traps. */
+function safeErrorField(error: unknown, field: string): unknown {
+  if (error === null || (typeof error !== 'object' && typeof error !== 'function')) return undefined;
+  try {
+    return (error as Record<string, unknown>)[field];
+  } catch {
+    return undefined;
+  }
+}
+
 function abortError(): Error {
   const error = new Error('Transaction polling cancelled');
   error.name = 'AbortError';
@@ -143,6 +153,18 @@ export async function pollTransaction(
   config: TransactionPollConfig = {},
   sdkConfig?: Partial<SDKConfig>
 ): Promise<TransactionPollResult> {
+  // A malformed input can never represent a Horizon transaction. Do not
+  // perform network reads or echo secret-like/invalid strings in a result.
+  if (typeof hash !== 'string' || !/^[a-f0-9]{64}$/i.test(hash)) {
+    return {
+      status: 'unknown',
+      state: 'unknown',
+      hash: '',
+      attempts: 0,
+      error: 'A 64-character hexadecimal transaction hash is required.',
+    };
+  }
+
   const server = getHorizonServer(sdkConfig);
   const interval = positiveInteger(config.interval, DEFAULT_INTERVAL_MS);
   const timeout = positiveInteger(config.timeout, DEFAULT_TIMEOUT_MS);
@@ -203,19 +225,30 @@ export async function pollTransaction(
           transaction: record,
         };
       }
-    } catch (error: any) {
-      if (error?.name === 'AbortError') {
-        throw error;
-      }
-      if (error?.name === 'PollingTimeoutError') {
-        break;
-      }
+    } catch (error: unknown) {
+      const name = safeErrorField(error, 'name');
+      if (name === 'AbortError') throw error;
+      if (name === 'PollingTimeoutError') break;
 
-      const isNotFound = error?.response?.status === 404 || error?.status === 404;
-      if (isNotFound) {
+      const response = safeErrorField(error, 'response');
+      const status = safeErrorField(response, 'status') ?? safeErrorField(error, 'status');
+      if (status === 404) {
         lastState = 'pending';
       } else {
-        const classified = classifySubmitError(error, hash);
+        let classified: ReturnType<typeof classifySubmitError>;
+        try {
+          classified = classifySubmitError(error, hash);
+        } catch {
+          // A hostile/unexpected provider error must never escape through
+          // diagnosis or become a false confirmation/pending result.
+          return {
+            status: 'unknown',
+            state: 'unknown',
+            hash,
+            attempts,
+            error: 'Transaction status could not be determined.',
+          };
+        }
         const retryable =
           classified.code === 'TX_STATUS_UNKNOWN' || classified.retryable === true;
         if (!retryable) {
