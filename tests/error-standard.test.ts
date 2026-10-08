@@ -98,6 +98,44 @@ describe('redaction', () => {
     expect(safe.category).toBe(ErrorCategory.SDK);
   });
 
+  it('never leaks malformed typed metadata or evaluates throwing diagnostic getters', () => {
+    const secret = makeFakeKey();
+    const malformed = new PocketPayError('Safe error', ErrorCode.SDK_INTERNAL);
+    Object.defineProperty(malformed, 'statusCode', {
+      value: { diagnostic: secret },
+      configurable: true,
+    });
+    Object.defineProperty(malformed, 'transactionHash', {
+      value: { diagnostic: secret },
+      configurable: true,
+    });
+    for (const field of ['name', 'message', 'code']) {
+      Object.defineProperty(malformed, field, {
+        configurable: true,
+        get() { throw new Error(`Unsafe diagnostic ${secret}`); },
+      });
+    }
+
+    const safe = redactError(malformed);
+    expect(safe).toMatchObject({
+      name: 'PocketPayError',
+      code: ErrorCode.SDK_INTERNAL,
+      message: 'An unexpected error occurred.',
+      safeMessage: expect.any(String),
+    });
+    expect(safe.statusCode).toBeUndefined();
+    expect(safe.transactionHash).toBeUndefined();
+    expect(JSON.stringify(safe)).not.toContain(secret);
+
+    const plain = new Error('Benign');
+    Object.defineProperty(plain, 'name', {
+      get() { throw new Error(secret); },
+    });
+    expect(redactError(plain)).toMatchObject({
+      name: 'Error', message: 'Benign',
+    });
+  });
+
   it('redacts raw thrown strings and custom metadata but preserves real transaction hashes', () => {
     const fakeKey = makeFakeKey();
     expect(redactError(`failure: ${fakeKey}`).message).not.toContain(fakeKey);
