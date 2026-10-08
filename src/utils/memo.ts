@@ -46,12 +46,13 @@ export const SUPPORTED_MEMO_TYPES: readonly MemoType[] = [
 const HEX_PATTERN = /^[0-9a-fA-F]+$/;
 
 /** Builds the typed error used for every memo failure. */
-function memoError(reason: string, message: string, value?: string): PocketPayError {
+function memoError(reason: string, message: string): PocketPayError {
   const spec = ERROR_CODES[ErrorCode.TX_INVALID_MEMO];
   return new PocketPayError(message, ErrorCode.TX_INVALID_MEMO, {
     category: spec.category,
     safeMessage: spec.safeMessage,
-    validation: { field: 'memo', reason, value },
+    // A failed validation must not copy untrusted memo text into logs or UI error metadata.
+    validation: { field: 'memo', reason },
   });
 }
 
@@ -101,8 +102,7 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
   if (!SUPPORTED_MEMO_TYPES.includes(type)) {
     throw memoError(
       'unsupported_type',
-      `Unsupported memo type: "${type}". Supported types: ${SUPPORTED_MEMO_TYPES.join(', ')}.`,
-      String(type)
+      `Unsupported memo type. Supported types: ${SUPPORTED_MEMO_TYPES.join(', ')}.`
     );
   }
 
@@ -124,8 +124,7 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
       if (byteLength > MEMO_TEXT_MAX_BYTES) {
         throw memoError(
           'too_long',
-          `Memo text exceeds ${MEMO_TEXT_MAX_BYTES}-byte limit (got ${byteLength} bytes): "${value}"`,
-          value
+          `Memo text exceeds ${MEMO_TEXT_MAX_BYTES}-byte limit (got ${byteLength} bytes).`
         );
       }
       return true;
@@ -146,15 +145,13 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
       if (!/^\d+$/.test(raw)) {
         throw memoError(
           'not_unsigned_integer',
-          `An id memo must be an unsigned 64-bit integer, got "${raw}".`,
-          raw
+          'An id memo must be an unsigned 64-bit integer.'
         );
       }
       if (BigInt(raw) > MEMO_ID_MAX) {
         throw memoError(
           'out_of_range',
-          `An id memo must not exceed ${MEMO_ID_MAX} (2^64 - 1), got "${raw}".`,
-          raw
+          `An id memo must not exceed ${MEMO_ID_MAX} (2^64 - 1).`
         );
       }
       return true;
@@ -169,15 +166,13 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
         throw memoError(
           'invalid_length',
           `A ${type} memo must be ${MEMO_HASH_HEX_LENGTH} hex characters (32 bytes), ` +
-            `got ${value.length}.`,
-          value
+            `got ${value.length}.`
         );
       }
       if (!HEX_PATTERN.test(value)) {
         throw memoError(
           'not_hexadecimal',
-          `A ${type} memo must contain only hexadecimal characters.`,
-          value
+          `A ${type} memo must contain only hexadecimal characters.`
         );
       }
       return true;
