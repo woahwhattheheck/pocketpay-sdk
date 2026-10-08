@@ -63,7 +63,7 @@ const unresolved = filterAccountActivity(history, {
 
 ## Display guidance and limitations
 
-- Treat `amount` as a decimal string. Do not round it through JavaScript `number` before rendering.
+- Treat display `amount` as a decimal string; do not round it through JavaScript `number`. `TransactionSummary.amount` is in smallest units, so activity records use `amountDisplay` as display `amount` and preserve the original units as `rawAmount`. If `amountDisplay` is missing, display `amount` is omitted; never present `rawAmount` as an already scaled quantity.
 - `assetIssuer` is present only where the source record provides one.
 - A plain transaction history row may not include payment amount/counterparty details; fetch or supply payment operations when the UI needs those fields.
 - A payment receipt is an attempt/result model, while Horizon payment history is confirmed ledger history. Both may refer to the same transaction hash; consumers that merge persistent history with transient receipts may deduplicate by transaction hash when that matches their product semantics.
