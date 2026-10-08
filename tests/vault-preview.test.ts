@@ -82,6 +82,30 @@ describe('vault operation preview', () => {
     });
   });
 
+  it('rejects a lock preview whose unlock time is already in the past', () => {
+    let thrown: unknown;
+    try {
+      buildVaultOperationPreview({
+        operation: 'createLock',
+        wallet,
+        amount: '4',
+        unlockAt: 1,
+      });
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_OPERATION',
+      validation: {
+        field: 'unlockAt',
+        reason: 'not_future',
+      },
+    });
+    expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+  });
+
   it('returns a typed validation error for an unknown runtime operation', () => {
     let thrown: unknown;
     try {
