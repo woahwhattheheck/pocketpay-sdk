@@ -42,13 +42,15 @@ describe('orchestrated same-account submissions', () => {
     const sequences: string[] = [];
     vi.spyOn(StellarSDK.Horizon.Server.prototype, 'submitTransaction')
       .mockImplementation(async (transaction) => {
-        sequences.push(transaction.sequence);
+        // This lifecycle builds plain transactions, not fee-bump wrappers.
+        const tx = transaction as StellarSDK.Transaction;
+        sequences.push(tx.sequence);
         if (sequences.length === 1) {
           markFirstSubmit();
           await firstGate;
         }
-        networkSequence = BigInt(transaction.sequence);
-        return { hash: transaction.hash().toString('hex'), ledger: 123 } as never;
+        networkSequence = BigInt(tx.sequence);
+        return { hash: tx.hash().toString('hex'), ledger: 123 } as never;
       });
 
     // Without the orchestrator lock, both requests reach loadAccount before
