@@ -82,6 +82,33 @@ describe('vault operation preview', () => {
     });
   });
 
+  it('does not serialize rejected numeric unlock times in validation metadata', () => {
+    for (const unlockAt of [-123456789, 1.5, Number.MAX_SAFE_INTEGER + 1]) {
+      let thrown: unknown;
+      try {
+        buildVaultOperationPreview({
+          operation: 'createLock',
+          wallet,
+          amount: '4',
+          unlockAt,
+        });
+      } catch (error) {
+        thrown = error;
+      }
+
+      expect(thrown).toBeInstanceOf(PocketPayError);
+      expect(thrown).toMatchObject({
+        code: 'INVALID_OPERATION',
+        validation: {
+          field: 'unlockAt',
+          reason: 'invalid_timestamp',
+        },
+      });
+      expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+      expect(JSON.stringify(thrown)).not.toContain(String(unlockAt));
+    }
+  });
+
   it('rejects a lock preview whose unlock time is already in the past', () => {
     let thrown: unknown;
     try {
