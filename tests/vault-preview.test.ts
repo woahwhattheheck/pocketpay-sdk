@@ -141,6 +141,63 @@ describe('vault operation preview', () => {
     }
   });
 
+  it('returns typed invalid-input errors for non-object preview parameters', () => {
+    for (const malformed of [null, undefined, false, 7, [], 'deposit']) {
+      let thrown: unknown;
+      try {
+        buildVaultOperationPreview(malformed as never);
+      } catch (error) {
+        thrown = error;
+      }
+      expect(thrown).toBeInstanceOf(PocketPayError);
+      expect(thrown).toMatchObject({
+        code: 'INVALID_OPERATION',
+        validation: { field: 'params', reason: 'invalid_type' },
+      });
+      expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+    }
+  });
+
+  it('does not echo arbitrary runtime wallet objects into validation errors', () => {
+    const secret = StellarSDK.Keypair.fromRawEd25519Seed(Buffer.alloc(32, 11)).secret();
+    let thrown: unknown;
+    try {
+      buildVaultOperationPreview({
+        operation: 'deposit',
+        wallet: { privateInput: secret } as never,
+        amount: '1',
+      });
+    } catch (error) {
+      thrown = error;
+    }
+    expect(thrown).toBeInstanceOf(PocketPayError);
+    expect(thrown).toMatchObject({
+      code: 'INVALID_PUBLIC_KEY',
+      validation: { field: 'publicKey', reason: 'not_a_string' },
+    });
+    expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+    expect(JSON.stringify(thrown)).not.toContain(secret);
+  });
+
+  it('rejects invalid runtime amount types and secret-shaped amounts safely', () => {
+    const secret = StellarSDK.Keypair.fromRawEd25519Seed(Buffer.alloc(32, 13)).secret();
+    for (const amount of [undefined, Symbol('invalid'), { privateInput: secret }, secret]) {
+      let thrown: unknown;
+      try {
+        buildVaultOperationPreview({ operation: 'deposit', wallet, amount } as never);
+      } catch (error) {
+        thrown = error;
+      }
+      expect(thrown).toBeInstanceOf(PocketPayError);
+      expect(thrown).toMatchObject({
+        code: 'INVALID_AMOUNT',
+        validation: { field: 'amount' },
+      });
+      expect((thrown as PocketPayError).validation).not.toHaveProperty('value');
+      expect(JSON.stringify(thrown)).not.toContain(secret);
+    }
+  });
+
   it('returns the SDK typed validation error when a write preview has no amount', () => {
     expect(() =>
       buildVaultOperationPreview({ operation: 'withdraw', wallet } as never),
