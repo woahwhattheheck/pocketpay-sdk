@@ -61,11 +61,14 @@ export async function pollSorobanTransactionStatus<T extends { status: string }>
  * when the transport times out before returning a server-side response.
  * An unknown submission may ALREADY be on-chain and is never retried here.
  * Definitive rejections propagate unchanged to the caller.
+ *
+ * `timeoutMs` is the SDK's optional request timeout; when it is unset the
+ * shared network fallback applies, as for every other Soroban RPC call.
  */
 export async function submitSorobanWithKnownHash<T>(
   signedHash: string,
   send: () => Promise<T>,
-  timeoutMs: number,
+  timeoutMs?: number,
 ): Promise<{ kind: 'response'; response: T } | { kind: 'unknown'; hash: string }> {
   try {
     const response = await withTimeout(
