@@ -104,7 +104,7 @@ export function validateNetworkPassphrase(
 export function validateUrl(url: string, fieldName: string, errorCode: string, field: string): void {
   try {
     const parsed = new URL(url);
-    if (!parsed.protocol.startsWith('http')) {
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
       throw new Error('Protocol must be http or https');
     }
   } catch (error) {
@@ -376,7 +376,9 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
   const networkPassphraseSource: ConfigSource =
     overrides?.networkPassphrase !== undefined ? 'override' : 'default';
   const networkPassphrase =
-    overrides?.networkPassphrase ?? NETWORK_PASSPHRASES[network];
+    overrides?.networkPassphrase !== undefined
+      ? overrides.networkPassphrase
+      : NETWORK_PASSPHRASES[network];
   validateNetworkPassphrase(network, networkPassphrase);
 
   const horizonUrlSource: ConfigSource =
@@ -417,8 +419,9 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
 
   // Timeout: explicit override > env var > SDK default.
   const timeout =
-    overrides?.timeout ??
-    (process.env.STELLAR_TIMEOUT
+    overrides?.timeout !== undefined
+      ? overrides.timeout
+      : (process.env.STELLAR_TIMEOUT
       ? parseInt(process.env.STELLAR_TIMEOUT, 10)
       : DEFAULT_TIMEOUT_MS);
   validateTimeout(timeout);
@@ -437,7 +440,7 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
     overrides?.contractId !== undefined
       ? overrides.contractId
       : process.env.STELLAR_CONTRACT_ID;
-  if (contractId !== undefined && contractId.length > 0) {
+  if (contractId !== undefined && contractId !== '') {
     validateContractId(contractId);
   }
 
@@ -571,7 +574,7 @@ export function validatePocketPayConfig(
   } else {
     try {
       const parsed = new URL(rawHorizonUrl);
-      if (!parsed.protocol.startsWith('http')) {
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
         issues.push({
           severity: 'error',
           field: 'horizonUrl',
@@ -647,7 +650,7 @@ export function validatePocketPayConfig(
   } else {
     try {
       const parsed = new URL(rawSorobanRpcUrl);
-      if (!parsed.protocol.startsWith('http')) {
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
         issues.push({
           severity: 'error',
           field: 'sorobanRpcUrl',
@@ -708,8 +711,9 @@ export function validatePocketPayConfig(
 
   // 4. Timeout Validation & Warnings
   const rawTimeout: unknown =
-    overrides?.timeout ??
-    (process.env.STELLAR_TIMEOUT
+    overrides?.timeout !== undefined
+      ? overrides.timeout
+      : (process.env.STELLAR_TIMEOUT
       ? parseInt(process.env.STELLAR_TIMEOUT, 10)
       : DEFAULT_TIMEOUT_MS);
 
@@ -765,7 +769,6 @@ export function validatePocketPayConfig(
 
   if (
     rawContractId !== undefined &&
-    rawContractId !== null &&
     rawContractId !== ''
   ) {
     if (typeof rawContractId !== 'string') {
