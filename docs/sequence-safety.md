@@ -110,9 +110,24 @@ submission/polling attempt completes, then re-reads network state. Calls for
 different accounts remain independent.
 
 This uses the already-shipped `SequenceProvider`, not a second lock or a
-sequence-number allocator. Standalone `bindAndBuild`, manually assembled
-transactions, and one-shot helpers still require callers to use a shared
-`SequenceProvider.withSequence` explicitly if they may race with other intents.
+sequence-number allocator. The guarded end-to-end API is exported from the
+package root, so application code can use it without importing private
+`src/transactions/orchestrator` internals:
+
+```ts
+import { executeTransactionLifecycle } from 'stellar-pocketpay-sdk';
+
+const outcome = await executeTransactionLifecycle(params, signerSecret);
+if (outcome.state === 'unresolved') {
+  // Poll the original transaction hash before starting another same-account intent.
+}
+```
+
+Standalone `bindAndBuild`, manually assembled transactions, and one-shot
+helpers still require callers to use a shared `SequenceProvider.withSequence`
+explicitly if they may race with other intents. Exporting the lifecycle entry
+point does not extend the sequence lock across processes or resolve unknown
+network outcomes automatically.
 
 **Unknown submission status is not a successful settlement.** When the lifecycle
 returns `state: 'unresolved'` / `actionRequired: 'poll'`, do not initiate another
