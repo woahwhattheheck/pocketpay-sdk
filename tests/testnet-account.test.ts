@@ -121,6 +121,21 @@ describe('diagnoseTestnetAccount', () => {
       expect(result.status).toBe('unavailable');
     }
 
+    const inconsistentNativeEntry = await diagnoseTestnetAccount(publicKey, {
+      lookup: async () => ({
+        ...funded,
+        balance: {
+          ...funded.balance,
+          balances: funded.balance.balances.map((entry) =>
+            entry.asset === 'XLM'
+              ? { ...entry, balance: '24.0000000' }
+              : entry,
+          ),
+        },
+      }),
+    });
+    expect(inconsistentNativeEntry.status).toBe('unavailable');
+
     const valid = await diagnoseTestnetAccount(publicKey, {
       lookup: async () => ({
         ...funded,
