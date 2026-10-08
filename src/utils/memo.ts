@@ -264,5 +264,10 @@ export function formatMemoForDisplay(memo?: string | MemoInput): string | undefi
   return JSON.stringify(value).slice(1, -1)
     .replace(/\u0085/g, '\\u0085')
     .replace(/\u2028/g, '\\u2028')
-    .replace(/\u2029/g, '\\u2029');
+    .replace(/\u2029/g, '\\u2029')
+    // JSON.stringify does not escape bidi formatting marks; render them as ASCII
+    // escapes to keep memo text from visually reordering adjacent UI labels.
+    .replace(/[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]/g, (mark) =>
+      '\\u' + mark.charCodeAt(0).toString(16).padStart(4, '0')
+    );
 }
