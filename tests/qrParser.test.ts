@@ -22,6 +22,20 @@ describe('QR Parser', () => {
     expect(parseQRPayload(url).metadata).toEqual({ url: 'https://example.com:8443/a:b' });
   });
 
+  test('retains reserved JavaScript property names as ordinary QR metadata keys', () => {
+    const url = 'pocketpay://pay?address=GBRPYHIL2CI3FNQ4BXLFMNDLFJUNPU2HY3ZMFSHONUCEOASW7QC7OX2H&amount=1&metadata=__proto__%3Aa%2Cconstructor%3Ab%2CtoString%3Ac';
+    const metadata = parseQRPayload(url).metadata;
+    expect(metadata).toBeDefined();
+    expect(Object.getPrototypeOf(metadata)).toBeNull();
+    expect(Object.keys(metadata!)).toEqual(['__proto__', 'constructor', 'toString']);
+    expect(metadata!['__proto__']).toBe('a');
+    expect(metadata!['constructor']).toBe('b');
+    expect(metadata!['toString']).toBe('c');
+    expect(JSON.parse(JSON.stringify(metadata))).toEqual({
+      ['__proto__']: 'a', constructor: 'b', toString: 'c',
+    });
+  });
+
   test('throws on malformed URL', () => {
     const badUrl = 'pocketpay://pay?address=invalid&amount=abc';
     expect(() => parseQRPayload(badUrl)).toThrow(PaymentParseError);
