@@ -1,66 +1,108 @@
 /**
-* Smoke Test Script
-*
-* Verifies that the SDK builds correctly and that the compiled output
-* can be imported and executed without errors. Focuses on non-network
-* helpers to ensure tests are fast and reliable.
-*/
+ * Offline SDK package-consumer smoke check (#339).
+ *
+ * Intentionally resolves the package by its published name rather than
+ * importing src/ or dist/ directly. This exercises package.json "exports"
+ * and the compiled CommonJS entrypoint that consumers actually load.
+ *
+ * Run through `npm run test:smoke` (builds first). No Horizon/Friendbot/RPC
+ * calls, real account funding, transaction submission or secret logging.
+ */
+const assert = require('node:assert/strict');
+const path = require('node:path');
 
-// Import from the built output to verify packaging, not the source.
-// We use require to verify CommonJS compatibility, which the compiler emits.
-const path = require('path');
-const fs = require('fs');
-
-const distPath = path.resolve(__dirname, '../dist/index.js');
-
-if (!fs.existsSync(distPath)) {
-  console.error('❌ Smoke test failed: dist/index.js not found. Did you run npm run build?');
-  process.exit(1);
+function check(label: string, exercise: () => void): void {
+  exercise();
+  console.log(`PASS ${label}`);
 }
 
 try {
-  console.log('📦 Loading compiled SDK...');
-  const PocketPay = require(distPath);
+  const entry = require.resolve('stellar-pocketpay-sdk');
+  assert.match(entry.replace(/\\/g, '/'), /\/dist\/index\.js$/, 'package self-reference must resolve to built dist/index.js');
+  const SDK = require('stellar-pocketpay-sdk');
 
-  console.log('🧪 Running non-network smoke tests...');
-
-  // 1. Test basic wallet creation
-  const wallet = PocketPay.createWallet();
-  if (!wallet.publicKey.startsWith('G') || !wallet.secretKey.startsWith('S')) {
-    throw new Error('createWallet returned an invalid keypair format');
-  }
-  console.log('   ✅ createWallet() generated a valid keypair');
-
-  // 2. Test unit conversion helpers
-  const stroops = PocketPay.xlmToStroops('10.5');
-  if (stroops !== 105000000) {
-    throw new Error(`xlmToStroops calculation failed. Expected 105000000, got ${stroops}`);
-  }
-  console.log('   ✅ xlmToStroops() converted successfully');
-
-  // 3. Test string formatting helper
-  const truncated = PocketPay.truncateAddress('GABC1234567890XYZ', 4, 4);
-  if (truncated !== 'GABC...0XYZ') {
-    throw new Error(`truncateAddress formatting failed. Expected "GABC...0XYZ", got "${truncated}"`);
-  }
-  console.log('   ✅ truncateAddress() formatted successfully');
-
-  // 4. Test validation logic
-  try {
-    PocketPay.validateAmount('-10');
-    throw new Error('validateAmount should have thrown for a negative amount');
-  } catch (error: any) {
-    if (error.name !== 'PocketPayError') {
-      throw new Error(`validateAmount threw unexpected error type: ${error.name}`);
+  check('public package exports', () => {
+    const publicHelpers = [
+      'createWallet', 'importWallet', 'validatePublicKey', 'validateSecretKey',
+      'createPaymentIntent', 'validatePaymentIntent', 'xlmToStroops',
+      'resolveConfig', 'validateNetwork', 'classifySubmitError',
+      'isUnknownStatusError',
+    ];
+    for (const name of publicHelpers) {
+      assert.equal(typeof SDK[name], 'function', `missing public export ${name}`);
     }
-  }
-  console.log('   ✅ validateAmount() rejected invalid input successfully');
+    assert.equal(typeof SDK.PocketPayError, 'function');
+    assert.equal(typeof SDK.NATIVE_ASSET, 'object');
+    assert.equal(typeof SDK.ErrorCode, 'object');
+  });
 
-  console.log('🎉 Smoke test passed! The SDK imports and runs properly.');
-  process.exit(0);
+  let source: { publicKey: string; secretKey: string };
+  let destination: { publicKey: string; secretKey: string };
+  check('wallet creation, local import and rejected public-key-only import', () => {
+    source = SDK.createWallet();
+    destination = SDK.createWallet();
+    assert.equal(SDK.validatePublicKey(source.publicKey), undefined);
+    const restored = SDK.importWallet(source.secretKey);
+    assert.equal(restored.publicKey, source.publicKey);
+    assert.equal(restored.secretKey, source.secretKey);
+    assert.throws(
+      () => SDK.importWallet(source.publicKey),
+      (error: unknown) => error instanceof SDK.PocketPayError &&
+        (error as { code?: string }).code === 'INVALID_SECRET_KEY',
+      'a public key must not be accepted as secret account material',
+    );
+  });
 
-} catch (error) {
-  console.error('\n❌ Smoke test failed with an error:');
-  console.error(error);
-  process.exit(1);
+  check('offline native payment-intent lifecycle and invalid destination', () => {
+    const valid = SDK.createPaymentIntent({
+      source: source.publicKey,
+      destination: destination.publicKey,
+      amount: '1.5000000',
+      asset: SDK.NATIVE_ASSET,
+    });
+    assert.equal(valid.status, 'valid');
+    assert.equal(valid.assetState, 'supported');
+    assert.equal(valid.validationResult?.valid, true);
+    assert.equal(SDK.xlmToStroops('1.5'), 15_000_000);
+
+    const invalid = SDK.createPaymentIntent({
+      source: source.publicKey,
+      destination: 'NOT_A_STELLAR_ADDRESS',
+      amount: '1.5000000',
+      asset: SDK.NATIVE_ASSET,
+    });
+    assert.equal(invalid.status, 'invalid');
+    assert.equal(invalid.validationResult?.valid, false);
+  });
+
+  check('explicit testnet configuration and typed validation error', () => {
+    const config = SDK.resolveConfig({ network: 'testnet' });
+    assert.equal(config.network, 'testnet');
+    SDK.validateNetwork('testnet');
+    assert.throws(
+      () => SDK.validateNetwork('unsupported-network'),
+      (error: unknown) => error instanceof SDK.PocketPayError &&
+        (error as { code?: string }).code === 'INVALID_NETWORK',
+    );
+  });
+
+  check('error classification and uncertain-submission handling', () => {
+    const limited = SDK.classifySubmitError({ status: 429 });
+    assert.ok(limited instanceof SDK.PocketPayError);
+    assert.equal(limited.code, SDK.ErrorCode.NET_RATE_LIMITED);
+    assert.equal(limited.retryable, true);
+
+    const unknown = SDK.classifySubmitError({ code: 'ETIMEDOUT' });
+    assert.equal(unknown.code, SDK.ErrorCode.TX_STATUS_UNKNOWN);
+    assert.equal(SDK.isUnknownStatusError(unknown), true);
+    assert.equal(unknown.retryable, false);
+  });
+
+  console.log('PocketPay package-consumer smoke passed (offline).');
+} catch (error: unknown) {
+  // Never print a possibly sensitive thrown object or wallet material.
+  const kind = error instanceof Error ? error.name : typeof error;
+  const message = error instanceof Error ? error.message : 'unknown failure';
+  console.error(`PocketPay package-consumer smoke FAILED (${kind}): ${message}`);
+  process.exitCode = 1;
 }
