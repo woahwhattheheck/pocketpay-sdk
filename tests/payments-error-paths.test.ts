@@ -229,6 +229,39 @@ describe('payment error classification', () => {
     expect(originalCause.message).toContain(secret);
   });
 
+  it('allowlists validation diagnostics and contains hostile metadata traps', () => {
+    const secret = `S${'C'.repeat(55)}`;
+    const validation = new Proxy(
+      {
+        field: `amount ${secret}`,
+        reason: `invalid ${secret}`,
+        value: secret,
+        extra: secret,
+      } as any,
+      {
+        get(target, property, receiver) {
+          if (property === 'value') throw new Error(`private validation ${secret}`);
+          return Reflect.get(target, property, receiver);
+        },
+        ownKeys() {
+          throw new Error(`validation enumeration ${secret}`);
+        },
+      },
+    );
+
+    const direct = new PaymentError(
+      'Payment validation failed',
+      'INVALID_AMOUNT',
+      PaymentFailureCategory.Validation,
+      { validation },
+    );
+
+    expect(direct.validation?.field).not.toContain(secret);
+    expect(direct.validation?.reason).not.toContain(secret);
+    expect(direct.validation?.value).toBeUndefined();
+    expect((direct.validation as Record<string, unknown> | undefined)?.extra).toBeUndefined();
+  });
+
   it('contains throwing provider response getters and still classifies the HTTP/network failure', () => {
     const provider = {
       get response(): never { throw new Error('provider-private-response'); },
