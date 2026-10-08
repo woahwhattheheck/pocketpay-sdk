@@ -25,10 +25,15 @@ describe('orchestrated same-account submissions', () => {
     };
 
     let networkSequence = 100n;
+    // Actual Horizon AccountResponse.sequence is decimal text, unlike
+    // the BigNumber exposed by a bare SDK Account constructor.
     const loadAccount = vi.spyOn(StellarSDK.Horizon.Server.prototype, 'loadAccount')
-      .mockImplementation(async () => new StellarSDK.Account(
-        source.publicKey(), networkSequence.toString(),
-      ) as never);
+      .mockImplementation(async () => new StellarSDK.Horizon.AccountResponse({
+        id: source.publicKey(),
+        account_id: source.publicKey(),
+        sequence: networkSequence.toString(),
+        balances: [],
+      } as never));
     vi.spyOn(StellarSDK.Horizon.Server.prototype, 'feeStats')
       .mockResolvedValue({
         ledger_capacity_usage: '0.1',
