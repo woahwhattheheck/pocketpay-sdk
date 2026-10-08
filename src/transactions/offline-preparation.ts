@@ -47,7 +47,7 @@ import {
   PocketPayResult,
   FeeEstimate,
 } from '../types';
-import { validatePublicKey, validateSecretKey, validateAmount, validateMemoInput, buildMemo, wrapError, toResult } from '../utils';
+import { validatePublicKey, validateSecretKey, validateAmount, validateMemoInput, buildMemo, wrapError, toResult, fromStroops } from '../utils';
 import { withTimeout, fetchFeeEstimate } from '../network';
 import { submitWithGuard } from './guarded-submit';
 import { ErrorCategory, ErrorCode, ERROR_CODES } from '../errors';
@@ -245,11 +245,13 @@ export function getTransactionSigningSummary(
 
   if ('transaction' in payload) {
     // This is an UnsignedTransaction
-    sourcePublicKey = payload.sourcePublicKey;
-    networkPassphrase = payload.networkPassphrase;
+    // Approval metadata must come from the actual envelope. Caller-provided
+    // wrapper metadata can be stale or disagree with the transaction to sign.
+    sourcePublicKey = payload.transaction.source;
+    networkPassphrase = payload.transaction.networkPassphrase;
     baseFee = String(payload.transaction.fee);
     memo = payload.transaction.memo?.value?.toString();
-    transactionHash = payload.hash;
+    transactionHash = payload.transaction.hash().toString('hex');
     canSign = true;
     
     // Extract operations from the Stellar SDK transaction
@@ -304,15 +306,18 @@ export function getTransactionSigningSummary(
     networkName = 'Custom Network';
   }
 
-  // Convert fee from stroops to XLM (1 XLM = 10^7 stroops)
-  const feeInStroops = parseInt(baseFee, 10);
-  const feeInXlm = (feeInStroops / 10000000).toFixed(7);
+  // Fees are integer stroops. Do not round approval amounts through Number,
+  // which silently loses precision above 2^53. Reuse the SDK's exact model.
+  const feeInXlm = fromStroops(baseFee).toString();
 
   // Process operations into summary format
   const summarizedOperations = operations.map(op => {
-    const isNative = !op.asset.issuer || op.asset.code.toUpperCase() === 'XLM';
+    // An issued asset can legitimately use code XLM. Issuer presence, not
+    // the asset code alone, distinguishes it from native lumens.
+    const isNative = !op.asset.issuer;
     const assetCode = isNative ? 'XLM' : op.asset.code;
-    const description = `Send ${op.amount} ${assetCode} to ${op.destination.substring(0, 8)}...`;
+    const shownAsset = isNative ? 'XLM' : `${assetCode} (${op.asset.issuer!.substring(0, 8)}...)`;
+    const description = `Send ${op.amount} ${shownAsset} to ${op.destination.substring(0, 8)}...`;
     
     return {
       type: 'payment' as const,
