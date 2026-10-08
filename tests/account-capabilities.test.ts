@@ -78,6 +78,30 @@ describe('account capability snapshot (#209)', () => {
     expect(getAccountCapabilities(account).canSign).toBe(false);
   });
 
+  it('fails closed when signer getters become unreadable after account creation', () => {
+    let unavailable: 'sign' | 'publicKey' | undefined;
+    const signer = {
+      get publicKey() {
+        if (unavailable === 'publicKey') throw new Error('Signer identity unavailable');
+        return source.publicKey();
+      },
+      get sign() {
+        if (unavailable === 'sign') throw new Error('Signer method unavailable');
+        return async (tx: StellarSDK.Transaction | StellarSDK.FeeBumpTransaction) => tx;
+      },
+    };
+    const account = createAccountWithSigner({ publicKey: source.publicKey() }, signer);
+    expect(getAccountCapabilities(account).canSign).toBe(true);
+
+    unavailable = 'sign';
+    expect(getAccountCapabilities(account)).toMatchObject({
+      canView: true, canSign: false, canSubmit: false,
+    });
+
+    unavailable = 'publicKey';
+    expect(getAccountCapabilities(account).canSign).toBe(false);
+  });
+
   it('rejects attaching an identity-mismatched signer without invoking it', () => {
     const sign = vi.fn(async (tx: StellarSDK.Transaction | StellarSDK.FeeBumpTransaction) => tx);
     expect(() => createAccountWithSigner(
