@@ -170,6 +170,24 @@ describe('diagnoseTestnetAccount', () => {
     expect(lookup).not.toHaveBeenCalled();
   });
 
+  it('rejects surrounding whitespace before lookup instead of returning unavailable', async () => {
+    const lookup = vi.fn(async () => testnetAccountFixtures.unfunded.result);
+    const padded = ` ${testnetAccountFixtures.funded.publicKey} `;
+
+    await expect(
+      diagnoseTestnetAccount(padded, { lookup }),
+    ).rejects.toMatchObject({
+      code: 'INVALID_PUBLIC_KEY',
+      metadata: {
+        validation: {
+          field: 'publicKey',
+          reason: 'surrounding_whitespace',
+        },
+      },
+    });
+    expect(lookup).not.toHaveBeenCalled();
+  });
+
   it('rejects secret-shaped public-key input without echoing it', async () => {
     const lookup = vi.fn(async () => testnetAccountFixtures.unfunded.result);
     const secretLike = `S${'A'.repeat(55)}`;

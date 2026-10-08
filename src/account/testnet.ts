@@ -98,12 +98,24 @@ function readErrorCode(error: unknown): string | undefined {
  * thrown error.
  */
 function validateDiagnosticPublicKey(publicKey: unknown): asserts publicKey is string {
+  const hasSurroundingWhitespace =
+    typeof publicKey === 'string' && publicKey !== publicKey.trim();
   const reason =
     typeof publicKey !== 'string'
       ? 'not_a_string'
       : publicKey.trim().toUpperCase().startsWith('S')
         ? 'secret_key_not_allowed'
-        : 'invalid_format';
+        : hasSurroundingWhitespace
+          ? 'surrounding_whitespace'
+          : 'invalid_format';
+
+  if (hasSurroundingWhitespace) {
+    throw new PocketPayError(
+      'Invalid Stellar public key.',
+      'INVALID_PUBLIC_KEY',
+      { validation: { field: 'publicKey', reason } },
+    );
+  }
 
   try {
     validatePublicKey(publicKey as string);
