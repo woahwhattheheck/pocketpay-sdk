@@ -609,6 +609,48 @@ describe('checkTransactionReadiness — contract', () => {
   });
 });
 
+describe('checkTransactionReadiness — malformed Horizon numeric data (#441)', () => {
+  it('fails closed instead of treating malformed reserve or liability fields as zero', async () => {
+    accounts.set(
+      SOURCE,
+      {
+        ...account(SOURCE, [nativeLine('100.0000000')]),
+        subentry_count: 'not-a-number',
+      } as any,
+    );
+
+    const malformedReserve = await check();
+    expect(malformedReserve.ready).toBe(false);
+    expect(malformedReserve.blockers).toContainEqual(
+      expect.objectContaining({ code: 'SOURCE_LOOKUP_FAILED', retryable: true }),
+    );
+    expect(malformedReserve.checks.balance).toBe('skipped');
+
+    accounts.set(
+      SOURCE,
+      account(
+        SOURCE,
+        [nativeLine('10.0000000'), assetLine('USDC', ISSUER, '50.0000000')],
+        { subentry_count: 1 },
+      ),
+    );
+    accounts.set(
+      DESTINATION,
+      account(DESTINATION, [
+        nativeLine('5.0000000'),
+        assetLine('USDC', ISSUER, '0.0000000', { buying_liabilities: 'not-a-number' }),
+      ]),
+    );
+
+    const malformedLiabilities = await check({ asset: USDC });
+    expect(malformedLiabilities.ready).toBe(false);
+    expect(malformedLiabilities.blockers).toContainEqual(
+      expect.objectContaining({ code: 'DESTINATION_LOOKUP_FAILED', retryable: true }),
+    );
+    expect(malformedLiabilities.checks.asset).toBe('skipped');
+  });
+});
+
 describe('checkTransactionReadiness — shareable input and provider errors (#441)', () => {
   it('does not echo accidentally pasted credentials from amount, asset, or memo', async () => {
     const secret = source.secret();
