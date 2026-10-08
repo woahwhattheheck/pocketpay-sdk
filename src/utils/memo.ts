@@ -265,3 +265,37 @@ export function formatMemoForDisplay(memo?: string | MemoInput): string | undefi
       '\\u' + mark.charCodeAt(0).toString(16).padStart(4, '0')
     );
 }
+
+/**
+ * Normalizes a memo returned by Horizon into the SDK's display representation.
+ *
+ * Horizon serializes hash and return memos as base64, while SDK callers supply
+ * those same 32-byte payloads as 64 hexadecimal characters. Convert valid
+ * Horizon binary memos back to canonical lowercase hex so a transaction reads
+ * the same before submission and after fetching it from Horizon.
+ *
+ * Unknown or malformed upstream memo shapes are preserved rather than making a
+ * transaction-history page fail as a whole.
+ */
+export function formatHorizonMemoForDisplay(
+  memoType: string | undefined,
+  memo: string | undefined
+): string | undefined {
+  if (memoType === undefined || memoType === 'none' || memo === undefined) {
+    return undefined;
+  }
+
+  if (memoType === 'text' || memoType === 'id') {
+    return formatMemoForDisplay({ type: memoType, value: memo });
+  }
+
+  if (memoType === 'hash' || memoType === 'return') {
+    const bytes = Buffer.from(memo, 'base64');
+    if (bytes.length !== 32 || bytes.toString('base64') !== memo) {
+      return memo;
+    }
+    return formatMemoForDisplay({ type: memoType, value: bytes.toString('hex') });
+  }
+
+  return memo;
+}
