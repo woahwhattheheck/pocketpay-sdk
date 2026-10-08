@@ -242,6 +242,18 @@ describe('formatMemoForDisplay', () => {
       .toBe('left\\u0085right');
   });
 
+  it('escapes bidi overrides and isolates to prevent spoofed display direction', () => {
+    expect(formatMemoForDisplay({ type: 'text', value: 'left\u202Eright\u2069' }))
+      .toBe('left\\u202eright\\u2069');
+    expect(formatMemoForDisplay({ type: 'text', value: 'a\u202Ab\u202Dc\u2066d\u2067e\u2068f' }))
+      .toBe('a\\u202ab\\u202dc\\u2066d\\u2067e\\u2068f');
+  });
+
+  it('escapes left-to-right, right-to-left, and Arabic letter direction marks', () => {
+    expect(formatMemoForDisplay({ type: 'text', value: 'a\u200Eb\u200Fc\u061Cd' }))
+      .toBe('a\\u200eb\\u200fc\\u061cd');
+  });
+
   it('rejects invalid values before formatting', () => {
     expect(() => formatMemoForDisplay({ type: 'hash', value: 'not-hex' })).toThrow(
       PocketPayError
