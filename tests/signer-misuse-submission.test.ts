@@ -7,6 +7,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import * as StellarSDK from '@stellar/stellar-sdk';
 import { ErrorCode } from '../src/errors';
 import { submitWithGuard } from '../src/transactions/guarded-submit';
+import { submitSignedTransaction } from '../src/transactions/offline-preparation';
 
 const { mockSubmitTransaction, mockGetHorizonServer } = vi.hoisted(() => ({
   mockSubmitTransaction: vi.fn(),
@@ -50,6 +51,25 @@ describe('signer misuse: guarded Horizon submission', () => {
       validation: { field: 'signatures', reason: 'missing' },
     });
     expect(mockGetHorizonServer).not.toHaveBeenCalled();
+    expect(mockSubmitTransaction).not.toHaveBeenCalled();
+  });
+
+  it('returns the same safe missing-signer code through staged submission', async () => {
+    const { transaction } = payment();
+    // Simulate a caller forging the SignedTransaction wrapper without signing.
+    const forgedSigned = {
+      transaction,
+      networkPassphrase: StellarSDK.Networks.TESTNET,
+      hash: transaction.hash().toString('hex'),
+      xdr: transaction.toXDR(),
+    };
+
+    const result = await submitSignedTransaction(forgedSigned);
+    expect(result).toMatchObject({
+      success: false,
+      errorCode: ErrorCode.TX_SIGNER_MISSING,
+    });
+    expect(result.error).not.toMatch(/S[A-Z2-7]{55}/);
     expect(mockSubmitTransaction).not.toHaveBeenCalled();
   });
 
