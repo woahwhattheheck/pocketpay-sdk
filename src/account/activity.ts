@@ -83,9 +83,23 @@ function stableId(prefix: string, ...parts: Array<string | number | undefined>):
   return prefix + ':' + (key === undefined ? 'unknown' : String(key));
 }
 
+function normalizeActivityStatus(value: unknown): TransactionStatus {
+  return typeof value === 'string' &&
+    Object.values(TransactionStatus).includes(value as TransactionStatus)
+      ? (value as TransactionStatus)
+      : TransactionStatus.UNKNOWN;
+}
+
 function transactionStatus(record: TransactionSummary): TransactionStatus {
   if (record.status !== undefined) {
-    return record.status as TransactionStatus;
+    const status = normalizeActivityStatus(record.status);
+    // Historical success is an observed ledger outcome. Contradictory runtime
+    // status fields must never make a failed transaction look completed.
+    if ((status === TransactionStatus.COMPLETED && record.successful === false) ||
+        (status === TransactionStatus.FAILED && record.successful === true)) {
+      return TransactionStatus.UNKNOWN;
+    }
+    return status;
   }
   if (record.successful === true) return TransactionStatus.COMPLETED;
   if (record.successful === false) return TransactionStatus.FAILED;
@@ -205,19 +219,20 @@ export function mapPaymentReceiptToActivity(
   receipt: PaymentReceipt,
   account: string,
 ): AccountActivityRecord {
+  // PaymentReceipt includes a destination but NOT the originating account.
+  // Destination===account therefore does not prove a self-payment; it could
+  // be an incoming transfer from someone else. Keep the direction neutral.
   const direction: AccountActivityDirection =
-    receipt.destination === account
-      ? TransactionDirection.SELF
-      : receipt.destination
-        ? TransactionDirection.OUTGOING
-        : 'neutral';
+    receipt.destination && receipt.destination !== account
+      ? TransactionDirection.OUTGOING
+      : 'neutral';
 
   const activity: AccountActivityRecord = {
     id: receipt.transactionHash
       ? stableId('receipt', receipt.transactionHash)
       : receiptFallbackId(receipt),
     kind: 'payment',
-    status: receipt.status,
+    status: normalizeActivityStatus(receipt.status),
     direction,
     createdAt: receipt.createdAt,
     source: 'payment_receipt',
@@ -227,7 +242,7 @@ export function mapPaymentReceiptToActivity(
     transactionHash: receipt.transactionHash,
     amount: receipt.amount,
     asset: receipt.asset,
-    counterparty: receipt.destination,
+    counterparty: receipt.destination !== account ? receipt.destination : undefined,
     memo: receipt.memo,
     operation: receipt.operation,
   });
@@ -262,15 +277,16 @@ function receiptFallbackId(receipt: PaymentReceipt): string {
 }
 
 function vaultStatus(result: VaultMappedResult): TransactionStatus {
+  // An incompatible success flag/status pair is not confirmed evidence.
   switch (result.status) {
     case 'success':
-      return TransactionStatus.COMPLETED;
+      return result.success === true ? TransactionStatus.COMPLETED : TransactionStatus.UNKNOWN;
     case 'pending':
-      return TransactionStatus.PENDING;
+      return result.success === true ? TransactionStatus.UNKNOWN : TransactionStatus.PENDING;
     case 'failed':
     case 'error':
     case 'simulation_error':
-      return TransactionStatus.FAILED;
+      return result.success === false ? TransactionStatus.FAILED : TransactionStatus.UNKNOWN;
     default:
       return TransactionStatus.UNKNOWN;
   }
