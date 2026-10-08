@@ -77,10 +77,18 @@ function hasInvalidOptionalString(
 
 function hasInvalidMetadata(descriptor: Record<string, unknown>): boolean {
   const value = descriptor.metadata;
-  return (
-    value !== undefined &&
-    (value === null || typeof value !== 'object' || Array.isArray(value))
-  );
+  if (value === undefined) return false;
+  if (value === null || typeof value !== 'object' || Array.isArray(value)) return true;
+
+  // Runtime callers can bypass the TypeScript Record type. A Date, Map, Set
+  // or class instance would spread to incomplete/empty recipient metadata.
+  // Permit ordinary dictionaries, including null-prototype JSON records.
+  try {
+    const prototype = Object.getPrototypeOf(value);
+    return prototype !== Object.prototype && prototype !== null;
+  } catch {
+    return true;
+  }
 }
 
 function candidateFromInput(
