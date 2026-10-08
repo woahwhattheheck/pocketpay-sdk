@@ -172,6 +172,41 @@ describe('wallet secret redaction boundaries', () => {
     expect(raw.validation?.value).toBe(secret);
   });
 
+  it('does not leak secrets through malformed typed numeric or boolean metadata', async () => {
+    const secret = makeSyntheticSecret();
+    const raw = new PocketPayError('Safe wrapper', 'TX_SUBMISSION_ERROR', {
+      timeout: { stage: 'confirmation', operation: 'confirm', timeoutMs: 1000 },
+    });
+
+    // These public readonly types do not prevent malformed JS callers from
+    // passing objects with secret-bearing properties at runtime.
+    Object.assign(raw, { statusCode: { diagnostic: secret }, retryable: { diagnostic: secret } });
+    Object.assign(raw.timeout!, { timeoutMs: { diagnostic: secret } });
+
+    const result = await toResult(async () => { throw raw; });
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error).not.toBe(raw);
+      expect(result.error.code).toBe('TX_SUBMISSION_ERROR');
+      expect(result.error.statusCode).toBeUndefined();
+      expect(result.error.retryable).toBeUndefined();
+      expect(result.error.timeout).toMatchObject({
+        stage: 'confirmation', operation: 'confirm', timeoutMs: 0,
+      });
+      expectSecretAbsent(result.error, secret);
+      expect(JSON.stringify(result)).not.toContain(secret);
+    }
+
+    // The input object belongs to the caller and must never be rewritten.
+    expect(raw.statusCode).toEqual({ diagnostic: secret });
+    expect(raw.timeout?.timeoutMs).toEqual({ diagnostic: secret });
+
+    Object.assign(raw, { timeout: secret });
+    const malformed = wrapError(raw, 'unused', 'IGNORED');
+    expect(malformed.timeout).toBeUndefined();
+    expectSecretAbsent(malformed, secret);
+  });
+
   it('preserves the identity of already-safe typed errors', async () => {
     const raw = new PocketPayError('Ordinary failure', 'ORDINARY_ERROR');
     const result = await toResult(async () => { throw raw; });
