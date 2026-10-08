@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { importWallet, safeImportWallet } from '../src/wallet';
 import { signTransaction } from '../src/transactions/offline-preparation';
 import { PocketPayError } from '../src/types';
-import { toResult } from '../src/utils';
+import { toResult, toEnhancedResult, wrapError } from '../src/utils';
 
 // Built at runtime so the repository never contains usable signing material.
 // It has the shape of a Stellar secret key but an intentionally invalid checksum.
@@ -125,5 +125,52 @@ describe('wallet secret redaction boundaries', () => {
       expect(result.error.cause?.message).toBe(raw.message);
       expect(result.error.cause?.stack).toBe(raw.stack);
     }
+  });
+
+  it('redacts pretyped PocketPayErrors at safe-result and wrapping boundaries', async () => {
+    const secret = makeSyntheticSecret();
+    const cause = Object.assign(new Error(`Upstream failure ${secret}`), {
+      unsafeDiagnostic: secret,
+    });
+    const raw = Object.assign(
+      new PocketPayError(`Rejected ${secret}`, 'TX_SUBMISSION_ERROR', {
+        cause,
+        validation: { field: 'secretKey', reason: 'invalid_format', value: secret },
+        category: 'wallet',
+        safeMessage: `Transaction failed ${secret}`,
+      }),
+      { extraPayload: { secret } },
+    );
+
+    const failed = await toResult(async () => { throw raw; });
+    expect(failed.ok).toBe(false);
+    if (!failed.ok) {
+      expect(failed.error).not.toBe(raw);
+      expect(failed.error.code).toBe('TX_SUBMISSION_ERROR');
+      expect(failed.error.validation?.value).toBe('S[REDACTED]');
+      expect(failed.error.cause?.message).toContain('S[REDACTED]');
+      expectSecretAbsent(failed.error, secret);
+      expect(JSON.stringify(failed)).not.toContain(secret);
+      expect(Object.hasOwn(failed.error, 'extraPayload')).toBe(false);
+      expect(Object.hasOwn(failed.error.cause!, 'unsafeDiagnostic')).toBe(false);
+    }
+
+    const enhanced = await toEnhancedResult(async () => { throw raw; });
+    expect(enhanced.ok).toBe(false);
+    if (!enhanced.ok) {
+      expectSecretAbsent(enhanced.error, secret);
+      expect(JSON.stringify(enhanced)).not.toContain(secret);
+    }
+    expectSecretAbsent(wrapError(raw, 'Context', 'IGNORED'), secret);
+    expect(raw.message).toContain(secret);
+    expect(raw.validation?.value).toBe(secret);
+  });
+
+  it('preserves the identity of already-safe typed errors', async () => {
+    const raw = new PocketPayError('Ordinary failure', 'ORDINARY_ERROR');
+    const result = await toResult(async () => { throw raw; });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.error).toBe(raw);
+    expect(wrapError(raw, 'Context', 'IGNORED')).toBe(raw);
   });
 });
