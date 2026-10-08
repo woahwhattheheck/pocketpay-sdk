@@ -90,7 +90,11 @@ function hasInvalidMetadata(descriptor: Record<string, unknown>): boolean {
   // Permit ordinary dictionaries, including null-prototype JSON records.
   try {
     const prototype = Object.getPrototypeOf(value);
-    return prototype !== Object.prototype && prototype !== null;
+    if (prototype !== Object.prototype && prototype !== null) return true;
+    // Never execute property accessors while copying untrusted metadata.
+    return Object.values(Object.getOwnPropertyDescriptors(value)).some(
+      descriptor => !Object.prototype.hasOwnProperty.call(descriptor, 'value'),
+    );
   } catch {
     return true;
   }
@@ -127,6 +131,13 @@ function candidateFromInput(
   const prototype = Object.getPrototypeOf(descriptor);
   if (prototype !== null && prototype !== Object.prototype) {
     return invalidRecipientShape('Recipient descriptor must be a plain object');
+  }
+  // An accessor-bearing object can mutate a recipient between validation
+  // and use. Accept JSON data properties only, never execute getters.
+  if (Object.values(Object.getOwnPropertyDescriptors(descriptor)).some(
+    property => !Object.prototype.hasOwnProperty.call(property, 'value'),
+  )) {
+    return invalidRecipientShape('Recipient descriptor must use data properties');
   }
   const kind = own(descriptor, 'kind');
 
