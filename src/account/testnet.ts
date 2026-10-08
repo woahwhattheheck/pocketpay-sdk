@@ -120,18 +120,39 @@ export async function diagnoseTestnetAccount(
           horizonUrl: HORIZON_URLS.testnet,
         });
 
+    // A lookup adapter can return a cached entry for a *different* account.
+    // Never label the requested key funded or unfunded from mismatched identity.
+    if (!result || result.publicKey !== publicKey) {
+      throw new Error('Testnet account lookup identity mismatch');
+    }
+
     if (result.status === 'funded') {
+      const balance = result.balance;
+      if (
+        !balance ||
+        balance.publicKey !== publicKey ||
+        typeof balance.nativeBalance !== 'string' ||
+        !Array.isArray(balance.balances)
+      ) {
+        throw new Error('Testnet account lookup returned malformed funded balance');
+      }
       return {
         ...base,
         status: 'funded',
-        balance: result.balance,
+        balance,
       };
     }
 
-    return {
-      ...base,
-      status: 'unfunded',
-    };
+    if (result.status === 'unfunded') {
+      return {
+        ...base,
+        status: 'unfunded',
+      };
+    }
+
+    // A runtime/third-party lookup may return an unexpected status, including
+    // an "unavailable" state. Unknown is NEVER equivalent to a Horizon 404.
+    throw new Error('Testnet account lookup returned an unknown status');
   } catch (error) {
     const errorCode = readErrorCode(error);
     return {
