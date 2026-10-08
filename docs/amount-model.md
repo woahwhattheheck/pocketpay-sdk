@@ -122,6 +122,13 @@ trustline limit reports `922337203685.4775807` rather than a float-rounded value
 and a payment that exactly fills the remaining capacity is accepted. Both helpers
 run `validateAmount` on the amount before the Horizon lookup.
 
+Results are formatted with the same model. The vault `get_balance` mapping
+(`mapVaultInvocationResult` in `src/soroban/mapper.ts`) builds `balance` with
+`formatStroops` and `rawStroops` with the exact parser, and transaction history
+(`amountDisplay` in `src/transactions/mapper.ts`) prints Horizon amounts through
+`parseAmount`. Balances and amounts above 2^53 stroops (about 900 million XLM)
+keep every digit instead of being rounded through `Number`.
+
 ## See also
 
 - [Error Standard](./error-standard.md) — the published error code registry.

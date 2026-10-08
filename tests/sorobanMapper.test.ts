@@ -212,6 +212,20 @@ describe('Soroban Invocation Result Mapper', () => {
       });
     });
 
+    it('maps get_balance above 2^53 stroops exactly (#307)', () => {
+      // Number()/parseFloat gave 900719925.4740992 and 9007199254740992.
+      expect(mapVaultInvocationResult('get_balance', 9007199254740993n)).toMatchObject({
+        balance: '900719925.4740993',
+        rawStroops: '9007199254740993',
+      });
+      expect(
+        mapVaultInvocationResult('get_balance', { success: true, balance: '900719925.4740993' })
+      ).toMatchObject({ balance: '900719925.4740993', rawStroops: '9007199254740993' });
+      expect(
+        mapVaultInvocationResult('get_balance', { success: true, balance: '9223372036854775807' })
+      ).toMatchObject({ balance: '922337203685.4775807', rawStroops: '9223372036854775807' });
+    });
+
     it('maps successful deposit operation', () => {
       const raw = { status: 'SUCCESS', hash: 'deposithash' };
       const mapped = mapVaultInvocationResult('deposit', raw, { amount: '100', contractId: 'C123' });

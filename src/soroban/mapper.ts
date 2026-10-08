@@ -11,6 +11,7 @@ import {
   SimulationWarning,
 } from '../types';
 import { ErrorCode, ERROR_CODES, type ErrorCodeValue } from '../errors/codes';
+import { formatStroops, safeParseAmount } from '../utils/amount';
 
 /** Optional remapping for contract-specific simulation error strings. */
 export interface MapSimulationResultOptions {
@@ -261,21 +262,28 @@ export function mapVaultInvocationResult(
     let balanceXLM = '0';
     let rawStroops: string | undefined;
 
+    // Exact conversions through the shared amount model: Number()/parseFloat
+    // lose the low digits of any balance above 2^53 stroops (~900M XLM).
     if (rawValue !== undefined && rawValue !== null) {
       if (typeof rawValue === 'string') {
         // If already formatted as XLM string (e.g. "15.0000000")
         if (rawValue.includes('.')) {
           balanceXLM = rawValue;
-          rawStroops = String(Math.round(parseFloat(rawValue) * 10_000_000));
+          const parsed = safeParseAmount(rawValue);
+          rawStroops = parsed.valid ? parsed.amount.toStroopString() : undefined;
         } else {
           // Stroop value represented as string
           rawStroops = rawValue;
-          const num = BigInt(rawValue);
-          balanceXLM = (Number(num) / 10_000_000).toFixed(7);
+          balanceXLM = formatStroops(BigInt(rawValue));
         }
-      } else if (typeof rawValue === 'number' || typeof rawValue === 'bigint') {
+      } else if (typeof rawValue === 'bigint') {
+        rawStroops = rawValue.toString();
+        balanceXLM = formatStroops(rawValue);
+      } else if (typeof rawValue === 'number') {
         rawStroops = String(rawValue);
-        balanceXLM = (Number(rawValue) / 10_000_000).toFixed(7);
+        balanceXLM = Number.isSafeInteger(rawValue)
+          ? formatStroops(BigInt(rawValue))
+          : (rawValue / 10_000_000).toFixed(7);
       }
     }
 
