@@ -19,6 +19,14 @@ const snapshotFile = path.join(root, 'docs/public-api-surface.snapshot.json');
 
 function extractExports(code: string): SurfaceEntry[] {
   const sf = ts.createSourceFile('src/index.ts', code, ts.ScriptTarget.Latest, true);
+  // A parse-error recovery tree can retain every old export node and make an
+  // invalid package entrypoint look API-compatible. Never bless that baseline.
+  const syntaxErrors = (sf as ts.SourceFile & {
+    parseDiagnostics?: readonly ts.Diagnostic[]
+  }).parseDiagnostics;
+  if (syntaxErrors?.some((diagnostic) => diagnostic.category === ts.DiagnosticCategory.Error)) {
+    throw new Error('Invalid TypeScript syntax in src/index.ts; cannot approve public API snapshot');
+  }
   const found: SurfaceEntry[] = [];
   const add = (name: string, kind: SurfaceEntry['kind']): void => {
     if (!name) throw new Error('Unnamed public export');
@@ -104,6 +112,12 @@ function format(value: unknown): string {
 }
 
 function selfTest(): void {
+  const invalidEntry = "export { A } from './x'; const unfinished = ;";
+  let invalidSyntaxRejected = false;
+  try { extractExports(invalidEntry); } catch { invalidSyntaxRejected = true; }
+  if (!invalidSyntaxRejected) {
+    throw new Error('Source parse failure was ignored because exports stayed unchanged');
+  }
   const sample = "export { A, type B as Alias } from './x';\nexport type { C } from './y';";
   const result = extractExports(sample);
   if (format(result) !== format([
