@@ -722,7 +722,7 @@ export function validatePocketPayConfig(
       severity: 'error',
       field: 'timeout',
       code: 'INVALID_TIMEOUT',
-      message: `Invalid timeout: "${rawTimeout}". Timeout must be a number (milliseconds).`,
+      message: 'Invalid timeout. Timeout must be a number (milliseconds).',
       value: sanitizeValue(rawTimeout),
     });
   } else if (rawTimeout <= 0) {
