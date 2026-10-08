@@ -890,7 +890,7 @@ export async function checkTransactionReadiness(
             field: 'asset',
             message: `The source account does not hold a trustline for ${asset.code}.`,
           });
-        } else if (line.is_authorized === false) {
+        } else if (line.is_authorized !== true) {
           c.block({
             check: 'asset',
             code: 'SOURCE_TRUSTLINE_NOT_AUTHORIZED',
@@ -922,7 +922,7 @@ export async function checkTransactionReadiness(
             message: `The destination account does not hold a trustline for ${asset.code}.`,
             cause: 'MISSING_TRUSTLINE',
           });
-        } else if (line.is_authorized === false) {
+        } else if (line.is_authorized !== true) {
           c.block({
             check: 'asset',
             code: 'DESTINATION_TRUSTLINE_NOT_AUTHORIZED',
