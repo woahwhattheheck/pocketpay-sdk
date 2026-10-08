@@ -27,6 +27,7 @@ import { ErrorCode } from '../errors/codes';
 import { CapabilityMismatchError } from '../errors/unsupported';
 import { validateSecretKey, validatePublicKey, validateAmount, toStroops, wrapError } from '../utils';
 import { withTimeout } from '../network';
+import { pollSorobanTransactionStatus } from './status-polling';
 import {
   mapSorobanInvocationResult,
   mapVaultInvocationResult,
@@ -204,21 +205,23 @@ export async function depositToVault(
       return mapVaultInvocationResult('deposit', sendResult, { amount, contractId });
     }
 
-    // Poll for result
-    let getResult = await withTimeout(
-      'Soroban transaction status request',
+    // A timeout or failed status lookup cannot prove whether the submitted
+    // transaction succeeded. Never invite a second submission on this path.
+    const getResult = await pollSorobanTransactionStatus(
+      () => sorobanServer.getTransaction(sendResult.hash),
       cfg.timeout,
-      sorobanServer.getTransaction(sendResult.hash),
     );
-    while (getResult.status === 'NOT_FOUND') {
-      await new Promise((r) => setTimeout(r, 1000));
-      getResult = await withTimeout(
-        'Soroban transaction status request',
-        cfg.timeout,
-        sorobanServer.getTransaction(sendResult.hash),
-      );
+    if (getResult === null) {
+      return {
+        success: false,
+        status: 'pending',
+        operation: 'deposit',
+        hash: sendResult.hash,
+        amount,
+        error: 'Transaction confirmation is unknown; query this hash before resubmitting.',
+        errorCode: 'TX_STATUS_UNKNOWN',
+      };
     }
-
     return mapVaultInvocationResult('deposit', getResult, { amount, contractId, hash: sendResult.hash });
   } catch (error) {
     if (error instanceof PocketPayError) throw error;
@@ -297,20 +300,23 @@ export async function withdrawFromVault(
       return mapVaultInvocationResult('withdraw', sendResult, { amount, contractId });
     }
 
-    let getResult = await withTimeout(
-      'Soroban transaction status request',
+    // A timeout or failed status lookup cannot prove whether the submitted
+    // transaction succeeded. Never invite a second submission on this path.
+    const getResult = await pollSorobanTransactionStatus(
+      () => sorobanServer.getTransaction(sendResult.hash),
       cfg.timeout,
-      sorobanServer.getTransaction(sendResult.hash),
     );
-    while (getResult.status === 'NOT_FOUND') {
-      await new Promise((r) => setTimeout(r, 1000));
-      getResult = await withTimeout(
-        'Soroban transaction status request',
-        cfg.timeout,
-        sorobanServer.getTransaction(sendResult.hash),
-      );
+    if (getResult === null) {
+      return {
+        success: false,
+        status: 'pending',
+        operation: 'withdraw',
+        hash: sendResult.hash,
+        amount,
+        error: 'Transaction confirmation is unknown; query this hash before resubmitting.',
+        errorCode: 'TX_STATUS_UNKNOWN',
+      };
     }
-
     return mapVaultInvocationResult('withdraw', getResult, { amount, contractId, hash: sendResult.hash });
   } catch (error) {
     if (error instanceof PocketPayError) throw error;
