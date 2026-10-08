@@ -111,8 +111,7 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
       if (value !== undefined) {
         throw memoError(
           'unexpected_payload',
-          'A none memo must not include a value.',
-          String(value)
+          'A none memo must not include a value.'
         );
       }
       return true;
@@ -262,5 +261,8 @@ export function formatMemoForDisplay(memo?: string | MemoInput): string | undefi
   const value = String(normalized.value ?? '');
   if (normalized.type !== 'text') return value;
 
-  return JSON.stringify(value).slice(1, -1).replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
+  return JSON.stringify(value).slice(1, -1)
+    .replace(/\u0085/g, '\\u0085')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
 }
