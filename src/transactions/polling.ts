@@ -260,7 +260,9 @@ export async function pollTransaction(
             error: classified.message,
           };
         }
-        lastState = 'unknown';
+        // A retryable transport failure is not a new ledger observation.
+        // Preserve any earlier pending status instead of erasing it to unknown.
+        // If no ledger state has been observed yet, lastState is already unknown.
       }
     }
 
