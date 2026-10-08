@@ -280,6 +280,42 @@ describe('buildAccountDiagnosticsReport — failing lookups', () => {
     expect(JSON.stringify(report)).not.toContain(providerToken);
   });
 
+  it('keeps support reports safe when provider error accessors throw', async () => {
+    const secret = StellarSDK.Keypair.random().secret();
+    const hostile: Record<string, unknown> = {};
+    Object.defineProperty(hostile, 'code', {
+      get() { throw new Error(`provider code exposed ${secret}`); },
+    });
+    Object.defineProperty(hostile, 'statusCode', {
+      get() { throw new Error(`provider status exposed ${secret}`); },
+    });
+    const lookup = lookupRejecting(hostile);
+    const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, { config: TESTNET, lookup });
+
+    expect(lookup).toHaveBeenCalledTimes(1);
+    expect(report.account).toMatchObject({
+      status: 'error',
+      errorCode: 'ACCOUNT_DIAGNOSTICS_ERROR',
+      errorMessage: 'Account state could not be loaded.',
+    });
+    expect(report.account).not.toHaveProperty('errorHttpStatus');
+    expect(report.paymentReadiness.status).toBe('unknown');
+    expect(JSON.stringify(report)).not.toContain(secret);
+  });
+
+  it('still recognizes HTTP 404 when a provider error-code getter throws', async () => {
+    const hostile = { statusCode: 404 };
+    Object.defineProperty(hostile, 'code', {
+      get() { throw new Error('untrusted code accessor'); },
+    });
+    const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, {
+      config: TESTNET,
+      lookup: lookupRejecting(hostile),
+    });
+    expect(report.account.status).toBe('unfunded');
+    expect(report.paymentReadiness.reasons).toContain('ACCOUNT_UNFUNDED');
+  });
+
   it('handles non-Error rejections', async () => {
     const lookup = lookupRejecting('socket hang up');
     const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, { config: TESTNET, lookup });
