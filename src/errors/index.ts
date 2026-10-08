@@ -62,6 +62,29 @@ export type { CapabilityStatus, CapabilitySpec } from './capabilities';
  */
 export function classifySubmitError(error: unknown, txHash?: string): PocketPayError {
   if (error instanceof PocketPayError) {
+    // The generic network layer calls a 5xx response NET_UNREACHABLE and
+    // marks it retryable for read-only requests. In a transaction submission
+    // the server may already have received the signed envelope; never let
+    // that read-only retry signal bypass hash polling.
+    if (
+      error.code === ErrorCode.NET_UNREACHABLE &&
+      typeof error.statusCode === 'number' &&
+      (error.statusCode === 408 || (error.statusCode >= 500 && error.statusCode < 600))
+    ) {
+      const hash = txHash ?? error.transactionHash;
+      return new PocketPayError(
+        `Transaction status unknown after submission attempt for hash ${hash ?? 'unknown'}`,
+        ErrorCode.TX_STATUS_UNKNOWN,
+        {
+          statusCode: error.statusCode,
+          cause: error,
+          category: ErrorCategory.Transaction,
+          safeMessage: ERROR_CODES[ErrorCode.TX_STATUS_UNKNOWN].safeMessage,
+        },
+        hash,
+        false,
+      );
+    }
     if (txHash && !error.transactionHash) {
       (error as any).transactionHash = txHash;
     }
@@ -114,13 +137,31 @@ export function classifySubmitError(error: unknown, txHash?: string): PocketPayE
   // After a submission attempt, an HTTP timeout or server/gateway 5xx
   // does not prove the envelope was rejected. It may already be accepted.
   // Poll its known hash before any resubmission, even for a 503.
+  // Node fetch / undici may put a socket failure on error.cause.code
+  // while the outer TypeError says only "fetch failed". A cancelled
+  // in-flight fetch is similarly ambiguous. Classify both as unknown.
+  const transportCodes = [err?.code, err?.cause?.code];
+  const isTransportInterruption = transportCodes.some((code) =>
+    [
+      'ETIMEDOUT',
+      'ECONNRESET',
+      'ENOTFOUND',
+      'EPIPE',
+      'ABORT_ERR',
+      'UND_ERR_SOCKET',
+      'UND_ERR_HEADERS_TIMEOUT',
+      'UND_ERR_BODY_TIMEOUT',
+    ].includes(code)
+  );
+  const isAborted = err?.name === 'AbortError' || err?.cause?.name === 'AbortError';
   const isSubmissionOutcomeUnknown =
     (typeof status === 'number' &&
       (status === 408 || (status >= 500 && status < 600))) ||
-    err?.code === 'ETIMEDOUT' ||
-    err?.code === 'ECONNRESET' ||
-    err?.code === 'ENOTFOUND' ||
-    (typeof err?.message === 'string' && err.message.toLowerCase().includes('timeout'));
+    isTransportInterruption ||
+    isAborted ||
+    (typeof err?.message === 'string' &&
+      (err.message.toLowerCase().includes('timeout') ||
+       err.message.toLowerCase().includes('timed out')));
 
   if (isSubmissionOutcomeUnknown) {
     return new PocketPayError(
