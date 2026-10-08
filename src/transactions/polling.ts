@@ -29,11 +29,11 @@ function positiveInteger(value: number | undefined, fallback: number): number {
     : fallback;
 }
 
-/** Untrusted Horizon adapter errors may implement getters or Proxy traps. */
-function safeErrorField(error: unknown, field: string): unknown {
-  if (error === null || (typeof error !== 'object' && typeof error !== 'function')) return undefined;
+/** Untrusted Horizon adapter values may implement getters or Proxy traps. */
+function safeProviderField(value: unknown, field: string): unknown {
+  if (value === null || (typeof value !== 'object' && typeof value !== 'function')) return undefined;
   try {
-    return (error as Record<string, unknown>)[field];
+    return (value as Record<string, unknown>)[field];
   } catch {
     return undefined;
   }
@@ -196,13 +196,38 @@ export async function pollTransaction(
       // Horizon adapters are untrusted even when the TS interface is correct.
       // Snapshot decision fields exactly once: stateful getters/Proxy traps
       // must not change identity or success after validation.
-      const txHash = safeErrorField(tx, 'hash');
-      const txSuccessful = safeErrorField(tx, 'successful');
+      const txHash = safeProviderField(tx, 'hash');
+      const txSuccessful = safeProviderField(tx, 'successful');
+      const txLedger = safeProviderField(tx, 'ledger_attr');
+      const txCreatedAt = safeProviderField(tx, 'created_at');
+      const txSourceAccount = safeProviderField(tx, 'source_account');
+      const txFeeCharged = safeProviderField(tx, 'fee_charged');
+      const txOperationCount = safeProviderField(tx, 'operation_count');
+      const txMemo = safeProviderField(tx, 'memo');
+      const txMemoType = safeProviderField(tx, 'memo_type');
+
+      const metadataValid =
+        typeof txCreatedAt === 'string' &&
+        (txLedger === undefined || (typeof txLedger === 'number' && Number.isFinite(txLedger))) &&
+        (txSourceAccount === undefined || typeof txSourceAccount === 'string') &&
+        (
+          txFeeCharged === undefined ||
+          typeof txFeeCharged === 'string' ||
+          (typeof txFeeCharged === 'number' && Number.isFinite(txFeeCharged))
+        ) &&
+        (
+          txOperationCount === undefined ||
+          (typeof txOperationCount === 'number' && Number.isFinite(txOperationCount))
+        ) &&
+        (txMemo === undefined || txMemo === null || typeof txMemo === 'string') &&
+        (txMemoType === undefined || txMemoType === null || typeof txMemoType === 'string');
+
       if (
         !tx ||
         typeof txHash !== 'string' ||
         txHash.toLowerCase() !== hash.toLowerCase() ||
-        typeof txSuccessful !== 'boolean'
+        typeof txSuccessful !== 'boolean' ||
+        !metadataValid
       ) {
         lastState = 'unknown';
       } else {
@@ -210,15 +235,15 @@ export async function pollTransaction(
           hash: txHash,
           // `tx.ledger` is Horizon's link-follow helper, not the ledger number;
           // the numeric sequence is exposed as `ledger_attr`.
-          ledger: tx.ledger_attr,
-          createdAt: tx.created_at,
-          sourceAccount: tx.source_account,
+          ledger: txLedger,
+          createdAt: txCreatedAt,
+          sourceAccount: txSourceAccount,
           // Horizon types `fee_charged` as `string | number`; preserve stroops.
-          fee: String(tx.fee_charged),
-          operationCount: tx.operation_count,
+          fee: txFeeCharged === undefined ? undefined : String(txFeeCharged),
+          operationCount: txOperationCount,
           successful: txSuccessful,
-          memo: tx.memo || undefined,
-          memoType: tx.memo_type,
+          memo: typeof txMemo === 'string' ? txMemo : undefined,
+          memoType: typeof txMemoType === 'string' ? txMemoType : undefined,
         };
 
         return {
@@ -230,12 +255,12 @@ export async function pollTransaction(
         };
       }
     } catch (error: unknown) {
-      const name = safeErrorField(error, 'name');
+      const name = safeProviderField(error, 'name');
       if (name === 'AbortError') throw error;
       if (name === 'PollingTimeoutError') break;
 
-      const response = safeErrorField(error, 'response');
-      const status = safeErrorField(response, 'status') ?? safeErrorField(error, 'status');
+      const response = safeProviderField(error, 'response');
+      const status = safeProviderField(response, 'status') ?? safeProviderField(error, 'status');
       if (status === 404) {
         lastState = 'pending';
       } else {
