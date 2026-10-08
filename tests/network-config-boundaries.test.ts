@@ -85,10 +85,30 @@ describe('network configuration preset boundaries', () => {
     expect(result.config).toBeUndefined();
   });
 
+  it('requires an explicit Mainnet RPC provider', () => {
+    delete process.env.STELLAR_SOROBAN_RPC_URL;
+
+    expectConfigError(
+      () => resolveConfig({ network: 'mainnet' }),
+      'INVALID_SOROBAN_RPC_URL'
+    );
+
+    expect(validatePocketPayConfig({ network: 'mainnet' })).toMatchObject({
+      valid: false,
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          field: 'sorobanRpcUrl',
+          code: 'INVALID_SOROBAN_RPC_URL',
+        }),
+      ]),
+    });
+  });
+
   it('preserves a valid explicit passphrase and its override source', () => {
     const config = resolveConfig({
       network: 'mainnet',
       networkPassphrase: getNetworkPassphrase('mainnet'),
+      sorobanRpcUrl: 'https://rpc.mainnet.example.com',
     });
 
     expect(config.networkPassphrase).toBe(getNetworkPassphrase('mainnet'));
