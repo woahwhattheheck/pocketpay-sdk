@@ -427,20 +427,23 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
       : DEFAULT_TIMEOUT_MS);
   validateTimeout(timeout);
 
+  const envContractId =
+    process.env.VAULT_CONTRACT_ID ?? process.env.STELLAR_CONTRACT_ID;
   let contractIdSource: ConfigSource | undefined = undefined;
   if (overrides?.contractId !== undefined) {
     contractIdSource = 'override';
-  } else if (process.env.STELLAR_CONTRACT_ID !== undefined || process.env.VAULT_CONTRACT_ID !== undefined) {
+  } else if (envContractId !== undefined) {
     contractIdSource = 'env';
   }
 
   // Contract ID: preserve an explicitly-provided value (including '').
-  // An empty string is a valid "no contract configured" sentinel and is
-  // passed through unvalidated; a non-empty value is validated.
+  // Otherwise follow the documented vault-specific env var before the
+  // generic Stellar fallback. An empty string remains the intentional
+  // "no contract configured" sentinel.
   const contractId =
     overrides?.contractId !== undefined
       ? overrides.contractId
-      : process.env.STELLAR_CONTRACT_ID;
+      : envContractId;
   if (contractId !== undefined && contractId !== '') {
     validateContractId(contractId);
   }
@@ -767,7 +770,7 @@ export function validatePocketPayConfig(
   const rawContractId: unknown =
     overrides?.contractId !== undefined
       ? overrides.contractId
-      : process.env.STELLAR_CONTRACT_ID;
+      : process.env.VAULT_CONTRACT_ID ?? process.env.STELLAR_CONTRACT_ID;
 
   if (
     rawContractId !== undefined &&
