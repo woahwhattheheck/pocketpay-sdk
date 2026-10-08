@@ -226,6 +226,18 @@ describe('Soroban Invocation Result Mapper', () => {
       ).toMatchObject({ balance: '922337203685.4775807', rawStroops: '9223372036854775807' });
     });
 
+    it('fails closed for an unsafe numeric get_balance value (#307)', () => {
+      const mapped = mapVaultInvocationResult('get_balance', Number.MAX_SAFE_INTEGER + 1);
+      expect(mapped).toMatchObject({
+        success: false,
+        status: 'error',
+        operation: 'get_balance',
+        errorCode: 'SOROBAN_INVALID_RESPONSE',
+      });
+      expect(mapped.balance).toBeUndefined();
+      expect(mapped.rawStroops).toBeUndefined();
+    });
+
     it('maps successful deposit operation', () => {
       const raw = { status: 'SUCCESS', hash: 'deposithash' };
       const mapped = mapVaultInvocationResult('deposit', raw, { amount: '100', contractId: 'C123' });
