@@ -114,6 +114,9 @@ describe('redaction', () => {
     const valid = new PocketPayError('failed', ErrorCode.SDK_INTERNAL,
       undefined, undefined, validHash);
     expect(redactError(valid).transactionHash).toBe(validHash);
+
+    const unprintable = { toString: () => { throw new Error('toString failed'); } };
+    expect(redactError(unprintable).message).toBe('Unable to format thrown error value.');
   });
 });
 
