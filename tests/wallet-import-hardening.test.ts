@@ -89,6 +89,36 @@ describe('wallet import hardening (#334)', () => {
     expect(unknown.cause).toBeUndefined();
   });
 
+  it('never throws when malformed typed error properties contain throwing getters', () => {
+    const secretMarker = 'SECRET_FROM_UNTRUSTED_SDK_METADATA';
+    const maliciousReason = new PocketPayError('bad input', 'INVALID_SECRET_KEY');
+    Object.defineProperty(maliciousReason, 'validation', {
+      value: { field: 'secretKey', get reason() { throw new Error(secretMarker); } },
+    });
+
+    const malformedCode = new PocketPayError('bad input', 'INVALID_SECRET_KEY');
+    Object.defineProperty(malformedCode, 'code', {
+      get() { throw new Error(secretMarker); },
+    });
+
+    const maliciousProxy = new Proxy(new PocketPayError('bad input', 'INVALID_SECRET_KEY'), {
+      get(target, property) {
+        if (property === 'validation') throw new Error(secretMarker);
+        return Reflect.get(target, property);
+      },
+    });
+
+    for (const error of [maliciousReason, malformedCode, maliciousProxy]) {
+      const sanitized = sanitizeWalletImportError(error);
+      expect(sanitized).toBeInstanceOf(PocketPayError);
+      expect(sanitized.code).toBe('INVALID_SECRET_KEY');
+      expect(sanitized.validation?.reason).toBe('import_failed');
+      expect(sanitized.validation?.value).toBeUndefined();
+      expect(sanitized.cause).toBeUndefined();
+      expect(JSON.stringify(sanitized)).not.toContain(secretMarker);
+    }
+  });
+
   it('safe and enhanced APIs consistently return typed failures instead of throwing', () => {
     const publicOnly = createWallet().publicKey;
     const safe = safeImportWallet(publicOnly);
