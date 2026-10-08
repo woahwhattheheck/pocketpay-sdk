@@ -146,6 +146,29 @@ describe('diagnoseTestnetAccount', () => {
 
     expect(lookup).not.toHaveBeenCalled();
   });
+
+  it('rejects secret-shaped public-key input without echoing it', async () => {
+    const lookup = vi.fn(async () => testnetAccountFixtures.unfunded.result);
+    const secretLike = `S${'A'.repeat(55)}`;
+
+    let thrown: unknown;
+    try {
+      await diagnoseTestnetAccount(secretLike, { lookup });
+    } catch (error) {
+      thrown = error;
+    }
+
+    expect(thrown).toMatchObject({
+      code: 'INVALID_PUBLIC_KEY',
+      validation: {
+        field: 'publicKey',
+        reason: 'secret_key_not_allowed',
+      },
+    });
+    expect((thrown as Error).message).not.toContain(secretLike);
+    expect(JSON.stringify(thrown)).not.toContain(secretLike);
+    expect(lookup).not.toHaveBeenCalled();
+  });
   it('pins the default lookup to Testnet Horizon despite caller endpoint overrides', async () => {
     let requestedUrl: string | undefined;
     setHorizonServerFactory((url) => {
