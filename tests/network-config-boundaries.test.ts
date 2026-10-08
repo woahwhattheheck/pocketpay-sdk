@@ -94,4 +94,44 @@ describe('network configuration preset boundaries', () => {
     expect(config.networkPassphrase).toBe(getNetworkPassphrase('mainnet'));
     expect(config.sources.networkPassphrase).toBe('override');
   });
+
+  it('rejects explicit null timeout in both validators', () => {
+    expectConfigError(
+      () => resolveConfig({ timeout: null as unknown as number }),
+      'INVALID_TIMEOUT'
+    );
+
+    expect(validatePocketPayConfig({ timeout: null })).toMatchObject({
+      valid: false,
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          field: 'timeout',
+          code: 'INVALID_TIMEOUT',
+        }),
+      ]),
+    });
+  });
+
+  it('rejects explicit null contract IDs without a runtime TypeError', () => {
+    expectConfigError(
+      () => resolveConfig({ contractId: null as unknown as string }),
+      'INVALID_CONTRACT_ID'
+    );
+
+    expect(validatePocketPayConfig({ contractId: null })).toMatchObject({
+      valid: false,
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          field: 'contractId',
+          code: 'INVALID_CONTRACT_ID',
+        }),
+      ]),
+    });
+  });
+
+  it('preserves the intentional empty contract ID sentinel', () => {
+    expect(resolveConfig({ contractId: '' }).contractId).toBe('');
+    expect(validatePocketPayConfig({ contractId: '' }).valid).toBe(true);
+  });
+
 });
