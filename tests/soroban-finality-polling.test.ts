@@ -84,10 +84,34 @@ describe('Soroban unknown submission before RPC returns a hash', () => {
       .rejects.toBe(rejected);
     expect(fail).toHaveBeenCalledOnce();
 
-    const serverResponse = { status: 'PENDING', hash: 'server-returned-hash' };
+    const serverResponse = { status: 'PENDING', hash: signedHash };
     const success = vi.fn().mockResolvedValue(serverResponse);
     await expect(submitSorobanWithKnownHash(signedHash, success, 2500))
       .resolves.toEqual({ kind: 'response', response: serverResponse });
     expect(success).toHaveBeenCalledOnce();
+  });
+
+  it('keeps the local signed identity when an RPC response hash is missing or mismatched', async () => {
+    const mismatched = vi.fn().mockResolvedValue({
+      status: 'PENDING',
+      hash: 'b'.repeat(64),
+    });
+    await expect(submitSorobanWithKnownHash(signedHash, mismatched, 2500))
+      .resolves.toEqual({ kind: 'unknown', hash: signedHash });
+
+    const missing = vi.fn().mockResolvedValue({ status: 'PENDING' });
+    await expect(submitSorobanWithKnownHash(signedHash, missing, 2500))
+      .resolves.toEqual({ kind: 'unknown', hash: signedHash });
+
+    const throwingHash = Object.defineProperty({ status: 'PENDING' }, 'hash', {
+      get() { throw new Error('malformed RPC hash getter'); },
+    });
+    const malformed = vi.fn().mockResolvedValue(throwingHash);
+    await expect(submitSorobanWithKnownHash(signedHash, malformed, 2500))
+      .resolves.toEqual({ kind: 'unknown', hash: signedHash });
+
+    expect(mismatched).toHaveBeenCalledOnce();
+    expect(missing).toHaveBeenCalledOnce();
+    expect(malformed).toHaveBeenCalledOnce();
   });
 });

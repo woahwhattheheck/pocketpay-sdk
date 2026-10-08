@@ -68,10 +68,27 @@ export async function submitSorobanWithKnownHash<T>(
   timeoutMs: number,
 ): Promise<{ kind: 'response'; response: T } | { kind: 'unknown'; hash: string }> {
   try {
-    return {
-      kind: 'response',
-      response: await withTimeout('Soroban transaction submission', timeoutMs, send()),
-    };
+    const response = await withTimeout(
+      'Soroban transaction submission',
+      timeoutMs,
+      send(),
+    );
+
+    // The signed envelope already fixes the transaction identity. Runtime RPC
+    // adapters must not be allowed to redirect confirmation to a different
+    // transaction hash (or omit the identity entirely) after submission.
+    try {
+      const record = response as unknown as { status?: unknown; hash?: unknown } | null;
+      if (record?.status !== 'ERROR') {
+        if (typeof record?.hash !== 'string' || record.hash !== signedHash) {
+          return { kind: 'unknown', hash: signedHash };
+        }
+      }
+    } catch {
+      return { kind: 'unknown', hash: signedHash };
+    }
+
+    return { kind: 'response', response };
   } catch (error) {
     let classified;
     try {
