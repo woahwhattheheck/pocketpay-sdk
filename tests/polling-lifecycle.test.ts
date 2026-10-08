@@ -31,6 +31,39 @@ describe('pollTransaction request and cancellation lifecycle', () => {
     vi.restoreAllMocks();
   });
 
+  it('never accepts a mismatched or malformed Horizon status as confirmation', async () => {
+    const wrongHash = 'abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890';
+    for (const response of [
+      { ...CONFIRMED, hash: wrongHash },
+      { ...CONFIRMED, successful: 'false' },
+      null,
+    ]) {
+      vi.restoreAllMocks();
+      const call = vi.fn().mockResolvedValue(response);
+      installLookup(call);
+      // A syntactically successful response for another transaction must
+      // not be interpreted as this transaction's success or failure.
+      expect(await pollTransaction(HASH, { timeout: 40, maxAttempts: 1 }))
+        .toMatchObject({ status: 'timeout', state: 'unknown', attempts: 1 });
+      expect(call).toHaveBeenCalledOnce();
+    }
+  });
+
+  it('retries a mismatched transaction response and accepts the matching one', async () => {
+    const call = vi.fn()
+      .mockResolvedValueOnce({ ...CONFIRMED, hash: 'f'.repeat(64) })
+      .mockResolvedValueOnce(CONFIRMED);
+    installLookup(call);
+    const completed = pollTransaction(HASH, {
+      interval: 2, maxAttempts: 2, timeout: 40,
+    });
+    await vi.advanceTimersByTimeAsync(3);
+    expect(await completed)
+      .toMatchObject({ status: 'success', state: 'confirmed', attempts: 2 });
+    expect(call).toHaveBeenCalledTimes(2);
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('returns timeout at the deadline even when the lookup never settles', async () => {
     const controller = new AbortController();
     const call = vi.fn(() => new Promise<typeof CONFIRMED>(() => {}));
