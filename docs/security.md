@@ -129,6 +129,13 @@ Import failures use `PocketPayError` with
 `validation.reason` metadata, **without `validation.value` or a raw
 underlying `cause`**. Safe wrappers continue returning results instead
 of throwing; enhanced failures offer input-specific recovery guidance.
+Malformed third-party SDK error objects cannot change this contract: import
+sanitization treats `PocketPayError.code` and `validation.reason` as
+untrusted metadata, guards against accessors or proxy traps that throw,
+and falls back to a fixed `import_failed` reason with no original
+message, cause or secret-bearing fields. The existing focused test
+covers malicious reason/code getters and proxy traps; it is authored
+but not executed in this source publication.
 Do not log caught raw key material from unrelated application code.
 
 The SDK does not persist, overwrite or roll back application-managed
