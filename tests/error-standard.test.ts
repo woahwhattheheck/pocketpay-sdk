@@ -97,6 +97,24 @@ describe('redaction', () => {
     expect(safe.message).not.toContain(fakeKey);
     expect(safe.category).toBe(ErrorCategory.SDK);
   });
+
+  it('redacts raw thrown strings and custom metadata but preserves real transaction hashes', () => {
+    const fakeKey = makeFakeKey();
+    expect(redactError(`failure: ${fakeKey}`).message).not.toContain(fakeKey);
+
+    const unexpected = new Error('failed');
+    unexpected.name = `SDKError_${fakeKey}`;
+    expect(redactError(unexpected).name).not.toContain(fakeKey);
+
+    const untrustedHash = new PocketPayError('failed', ErrorCode.SDK_INTERNAL,
+      undefined, undefined, fakeKey);
+    expect(redactError(untrustedHash).transactionHash).not.toContain(fakeKey);
+
+    const validHash = 'a'.repeat(64);
+    const valid = new PocketPayError('failed', ErrorCode.SDK_INTERNAL,
+      undefined, undefined, validHash);
+    expect(redactError(valid).transactionHash).toBe(validHash);
+  });
 });
 
 describe('classifySubmitError taxonomy wiring', () => {
