@@ -608,3 +608,47 @@ describe('checkTransactionReadiness — contract', () => {
     }
   });
 });
+
+describe('checkTransactionReadiness — shareable input and provider errors (#441)', () => {
+  it('does not echo accidentally pasted credentials from amount, asset, or memo', async () => {
+    const secret = source.secret();
+    const candidates: Partial<TransactionReadinessParams>[] = [
+      { amount: secret },
+      { asset: { code: secret, issuer: ISSUER } },
+      { memo: { type: 'hash', value: secret } as never },
+    ];
+    for (const candidate of candidates) {
+      const result = await check(candidate);
+      expect(result.ready).toBe(false);
+      expect(JSON.stringify(result)).not.toContain(secret);
+      expect(result.blockers.some(({ check }) => ['amount', 'asset', 'memo'].includes(check))).toBe(true);
+    }
+  });
+
+  it('keeps typed SDK causes but drops invented provider codes and throwing getters', async () => {
+    const injected = Object.assign(new Error('provider contains a private credential'), {
+      code: 'PRIVATE_PROVIDER_TOKEN',
+    });
+    accounts.set(SOURCE, injected);
+    const untrusted = await check();
+    const failed = untrusted.blockers.find((b) => b.code === 'SOURCE_LOOKUP_FAILED');
+    expect(failed?.retryable).toBe(true);
+    expect(failed?.cause).toBeUndefined();
+    expect(JSON.stringify(untrusted)).not.toContain('PRIVATE_PROVIDER_TOKEN');
+
+    const hostile = new Error('raw provider error');
+    Object.defineProperty(hostile, 'response', {
+      get() { throw new Error('sensitive Horizon response header'); },
+    });
+    Object.defineProperty(hostile, 'code', {
+      get() { throw new Error('sensitive private code'); },
+    });
+    accounts.set(SOURCE, hostile);
+    const safe = await check();
+    expect(safe.ready).toBe(false);
+    expect(safe.blockers).toEqual([
+      expect.objectContaining({ code: 'SOURCE_LOOKUP_FAILED', retryable: true }),
+    ]);
+    expect(JSON.stringify(safe)).not.toContain('sensitive');
+  });
+});
