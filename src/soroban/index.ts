@@ -27,7 +27,7 @@ import { ErrorCode } from '../errors/codes';
 import { CapabilityMismatchError } from '../errors/unsupported';
 import { validateSecretKey, validatePublicKey, validateAmount, toStroops, wrapError } from '../utils';
 import { withTimeout } from '../network';
-import { pollSorobanTransactionStatus } from './status-polling';
+import { pollSorobanTransactionStatus, submitSorobanWithKnownHash } from './status-polling';
 import {
   mapSorobanInvocationResult,
   mapVaultInvocationResult,
@@ -195,12 +195,23 @@ export async function depositToVault(
     const prepared = StellarSDK.rpc.assembleTransaction(tx, simulated).build();
     prepared.sign(keypair);
 
-    const sendResult = await withTimeout(
-      'Soroban transaction submission',
+    const submitted = await submitSorobanWithKnownHash(
+      prepared.hash().toString('hex'),
+      () => sorobanServer.sendTransaction(prepared),
       cfg.timeout,
-      sorobanServer.sendTransaction(prepared),
     );
-
+    if (submitted.kind === 'unknown') {
+      return {
+        success: false,
+        status: 'pending',
+        operation: 'deposit',
+        hash: submitted.hash,
+        amount,
+        error: 'Transaction submission status is unknown; query this hash before retrying.',
+        errorCode: 'TX_STATUS_UNKNOWN',
+      };
+    }
+    const sendResult = submitted.response;
     if (sendResult.status === 'ERROR') {
       return mapVaultInvocationResult('deposit', sendResult, { amount, contractId });
     }
@@ -290,12 +301,23 @@ export async function withdrawFromVault(
     const prepared = StellarSDK.rpc.assembleTransaction(tx, simulated).build();
     prepared.sign(keypair);
 
-    const sendResult = await withTimeout(
-      'Soroban transaction submission',
+    const submitted = await submitSorobanWithKnownHash(
+      prepared.hash().toString('hex'),
+      () => sorobanServer.sendTransaction(prepared),
       cfg.timeout,
-      sorobanServer.sendTransaction(prepared),
     );
-
+    if (submitted.kind === 'unknown') {
+      return {
+        success: false,
+        status: 'pending',
+        operation: 'withdraw',
+        hash: submitted.hash,
+        amount,
+        error: 'Transaction submission status is unknown; query this hash before retrying.',
+        errorCode: 'TX_STATUS_UNKNOWN',
+      };
+    }
+    const sendResult = submitted.response;
     if (sendResult.status === 'ERROR') {
       return mapVaultInvocationResult('withdraw', sendResult, { amount, contractId });
     }
