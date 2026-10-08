@@ -8,6 +8,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getTransactions, getPayments, createWallet, PocketPayError } from '../src';
+import { mapTransactionToSummary } from '../src/transactions';
 
 // ─── Mock @stellar/stellar-sdk ───────────────────────────────────────────────
 // Stub Horizon.Server so the transaction/payment builder chain is controllable
@@ -147,6 +148,40 @@ describe('Transactions Module - getTransactions', () => {
     mockTxCall.mockResolvedValue(makeHorizonTxPage());
     const result = await getTransactions(account);
     expect(result.records[1].memo).toBeUndefined();
+  });
+
+  it('safe-formats Horizon text memos and preserves their type across history mappers', async () => {
+    const page = makeHorizonTxPage();
+    page.records[0].memo = 'line1\nline2\u202e';
+    mockTxCall.mockResolvedValue(page);
+
+    const history = await getTransactions(account);
+    expect(history.records[0]).toMatchObject({
+      memo: 'line1\\nline2\\u202e',
+      memoType: 'text',
+    });
+
+    const summary = mapTransactionToSummary(
+      {
+        id: 'tx-id',
+        paging_token: '123',
+        tx_hash: 'txhash',
+        created_at: '2024-01-15T10:30:00Z',
+        source_account: account,
+        fee_account: account,
+        fee_charged: '100',
+        memo_type: 'text',
+        memo: 'line1\nline2\u202e',
+        successful: true,
+        operations: [],
+      },
+      { userAccount: account },
+    );
+
+    expect(summary).toMatchObject({
+      memo: 'line1\\nline2\\u202e',
+      memoType: 'text',
+    });
   });
 
   it('sets nextCursor to the last record paging token', async () => {
