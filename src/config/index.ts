@@ -473,8 +473,8 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
 
   emitDiagnosticsEvent('config', 'config.resolved', {
     network: resolved.network,
-    horizonUrl: resolved.horizonUrl,
-    sorobanRpcUrl: resolved.sorobanRpcUrl,
+    horizonUrl: new URL(resolved.horizonUrl).origin,
+    sorobanRpcUrl: new URL(resolved.sorobanRpcUrl).origin,
     timeoutMs: resolved.timeout,
     contractIdConfigured:
       typeof resolved.contractId === 'string' && resolved.contractId.length > 0,
