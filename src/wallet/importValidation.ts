@@ -3,6 +3,7 @@
  * This code intentionally never returns, logs or retains an input value in
  * errors, diagnostics or validation metadata.
  */
+import * as StellarSDK from '@stellar/stellar-sdk';
 import { PocketPayError } from '../types';
 import { validateSecretKey } from '../utils';
 
@@ -74,11 +75,29 @@ export function validateWalletImportInput(input: unknown): boolean {
   const key = input.trim();
   if (!key) throw failure('missing');
 
-  // Stellar G (public) addresses can view account data but cannot sign.
-  if (key.startsWith('G')) throw failure('public_key_only');
-  // M muxed accounts and C Soroban contracts are not importable seed material.
-  if (key.startsWith('M') || key.startsWith('C')) {
-    throw failure('unsupported_account_material');
+  // Only classify syntactically valid Stellar address material semantically.
+  // Prefix lookalikes with bad length/checksum are malformed input, not genuine
+  // public/muxed/contract addresses.
+  if (key.startsWith('G')) {
+    throw failure(
+      StellarSDK.StrKey.isValidEd25519PublicKey(key)
+        ? 'public_key_only'
+        : 'invalid_format',
+    );
+  }
+  if (key.startsWith('M')) {
+    throw failure(
+      StellarSDK.StrKey.isValidMed25519PublicKey(key)
+        ? 'unsupported_account_material'
+        : 'invalid_format',
+    );
+  }
+  if (key.startsWith('C')) {
+    throw failure(
+      StellarSDK.StrKey.isValidContract(key)
+        ? 'unsupported_account_material'
+        : 'invalid_format',
+    );
   }
   if (!key.startsWith('S')) throw failure('unsupported_format');
 
