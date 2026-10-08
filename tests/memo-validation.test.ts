@@ -150,6 +150,9 @@ describe('validateMemoInput — rejected input', () => {
     expect(capture(() => validateMemoInput({ type: 'id', value: 'abc' })).validation?.reason).toBe(
       'not_unsigned_integer'
     );
+    expect(capture(() => validateMemoInput({ type: 'id', value: ' 123 ' })).validation?.reason).toBe(
+      'not_unsigned_integer'
+    );
   });
 
   it('rejects unsafe numeric ids before JavaScript rounding can change the memo', () => {
