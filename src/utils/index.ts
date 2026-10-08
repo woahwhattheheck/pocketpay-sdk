@@ -496,15 +496,28 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
       (key) => typeof key !== 'string' || !['field', 'reason', 'value'].includes(key),
     );
   const extraTimeoutMetadata = error.timeout !== undefined &&
+    typeof error.timeout === 'object' && error.timeout !== null &&
     Reflect.ownKeys(error.timeout).some(
       (key) => typeof key !== 'string' || !['stage', 'operation', 'timeoutMs'].includes(key),
     );
+  // TypeScript annotations cannot constrain untrusted runtime objects.
+  // Values in nominally numeric/boolean fields can themselves carry secrets.
+  const invalidKnownMetadata =
+    (error.statusCode !== undefined &&
+      (typeof error.statusCode !== 'number' || !Number.isFinite(error.statusCode))) ||
+    (error.retryable !== undefined && typeof error.retryable !== 'boolean') ||
+    (error.timeout !== undefined &&
+      (typeof error.timeout !== 'object' || error.timeout === null ||
+        typeof error.timeout.operation !== 'string' ||
+        typeof error.timeout.timeoutMs !== 'number' ||
+        !Number.isFinite(error.timeout.timeoutMs)));
   const invalidValidationValue = error.validation?.value !== undefined &&
     typeof error.validation.value !== 'string' &&
     typeof error.validation.value !== 'number';
 
   if (!hasSecret && !extraErrorMetadata && !extraCauseMetadata &&
-      !extraValidationMetadata && !extraTimeoutMetadata && !invalidValidationValue) {
+      !extraValidationMetadata && !extraTimeoutMetadata && !invalidValidationValue &&
+      !invalidKnownMetadata) {
     return error;
   }
 
@@ -521,21 +534,24 @@ function sanitizePocketPayError(error: PocketPayError): PocketPayError {
     redactSensitive(error.message),
     redactSensitive(error.code),
     {
-      statusCode: error.statusCode,
+      statusCode: typeof error.statusCode === 'number' &&
+        Number.isFinite(error.statusCode) ? error.statusCode : undefined,
       cause: error.cause ? sanitizeErrorCause(error.cause) : undefined,
       validation,
       category: error.category ? redactSensitive(error.category) : undefined,
       safeMessage: error.safeMessage ? redactSensitive(error.safeMessage) : undefined,
-      timeout: error.timeout && {
+      timeout: error.timeout && typeof error.timeout === 'object' ? {
         stage: ['preparation', 'submission', 'confirmation', 'unknown'].includes(
           error.timeout.stage,
         ) ? error.timeout.stage : 'unknown',
-        operation: redactSensitive(error.timeout.operation),
-        timeoutMs: error.timeout.timeoutMs,
-      },
+        operation: typeof error.timeout.operation === 'string'
+          ? redactSensitive(error.timeout.operation) : 'unknown',
+        timeoutMs: typeof error.timeout.timeoutMs === 'number' &&
+          Number.isFinite(error.timeout.timeoutMs) ? error.timeout.timeoutMs : 0,
+      } : undefined,
     },
     error.transactionHash ? redactSensitive(error.transactionHash) : undefined,
-    error.retryable,
+    typeof error.retryable === 'boolean' ? error.retryable : undefined,
   );
   safe.name = redactSensitive(error.name);
   if (error.stack) safe.stack = redactSensitive(error.stack);
