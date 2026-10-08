@@ -230,6 +230,12 @@ The checkbox form lives at [`.github/checklists/contribution-quality-gate.md`](.
 
 Contributors should read that guide before opening a PR. Maintainers should not approve until the checklist passes. A merged PR is still **not** automatic payment approval.
 
+## Payment-Period Conduct
+
+Before asking about campaign status, review your own acceptance-criteria coverage, evidence, CI status, and known limitations. Keep follow-ups specific and avoid repeating the same request across multiple issues, pull requests, or community threads.
+
+See [Payment-Period Conduct](./docs/payment-period-conduct.md) for the contributor checklist and communication guidance.
+
 ---
 
 ## Reporting Issues
