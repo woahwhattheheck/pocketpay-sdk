@@ -40,7 +40,10 @@ export interface AccountActivityRecord {
   source: AccountActivitySource;
   transactionHash?: string;
   pagingToken?: string;
+  /** Asset-unit decimal for display; omitted when the source has only raw units. */
   amount?: string;
+  /** Raw smallest-unit transaction quantity; do not present as asset units. */
+  rawAmount?: string;
   asset?: string;
   assetIssuer?: string;
   counterparty?: string;
@@ -183,7 +186,10 @@ export function mapTransactionSummaryToActivity(
   return assignOptional(activity, {
     transactionHash: record.hash ?? record.txHash,
     pagingToken: record.pagingToken,
-    amount: record.amount,
+    // TransactionSummary.amount is smallest-unit, while amountDisplay is the
+    // already-scaled amount. Keep both without ever relabeling raw units.
+    amount: record.amountDisplay,
+    rawAmount: record.amount,
     asset: record.asset,
     counterparty: record.counterparty,
     memo: record.memo,
