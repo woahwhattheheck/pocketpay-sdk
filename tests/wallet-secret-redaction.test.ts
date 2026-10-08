@@ -207,6 +207,29 @@ describe('wallet secret redaction boundaries', () => {
     expectSecretAbsent(malformed, secret);
   });
 
+  it('returns a safe result when a thrown non-Error refuses string conversion', async () => {
+    const secret = makeSyntheticSecret();
+    const thrownValue = {
+      toString() { throw new Error(`Conversion failed for ${secret}`); },
+    };
+
+    const result = await toResult(
+      async () => { throw thrownValue; },
+      'Failed to submit transaction',
+      'TX_SUBMISSION_ERROR',
+    );
+    expect(result.ok).toBe(false);
+    if (!result.ok) {
+      expect(result.error.code).toBe('TX_SUBMISSION_ERROR');
+      expect(result.error.message).toContain('Non-renderable thrown value');
+      expectSecretAbsent(result.error, secret);
+    }
+
+    const enhanced = await toEnhancedResult(async () => { throw thrownValue; });
+    expect(enhanced.ok).toBe(false);
+    if (!enhanced.ok) expectSecretAbsent(enhanced.error, secret);
+  });
+
   it('preserves the identity of already-safe typed errors', async () => {
     const raw = new PocketPayError('Ordinary failure', 'ORDINARY_ERROR');
     const result = await toResult(async () => { throw raw; });
