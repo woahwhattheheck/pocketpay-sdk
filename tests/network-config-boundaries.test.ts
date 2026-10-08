@@ -155,6 +155,19 @@ describe('network configuration preset boundaries', () => {
     expect(rejected.valid).toBe(false);
     expect(JSON.stringify(rejected.issues)).not.toContain(token);
 
+    const invalidTimeout = validatePocketPayConfig({
+      timeout: token as unknown as number,
+    });
+    expect(invalidTimeout.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          field: 'timeout',
+          code: 'INVALID_TIMEOUT',
+        }),
+      ])
+    );
+    expect(JSON.stringify(invalidTimeout.issues)).not.toContain(token);
+
     const warnings = validatePocketPayConfig({
       horizonUrl: `http://horizon.example.test/?api_key=${token}`,
     });
