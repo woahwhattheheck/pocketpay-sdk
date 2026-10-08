@@ -29,11 +29,14 @@ export interface AccountCapabilitySnapshot {
 
 /** Runtime guard, also safe when given malformed JavaScript inputs. */
 export function hasSubmissionTransport(value: unknown): value is AccountSubmissionTransport {
-  return (
-    typeof value === 'object' &&
-    value !== null &&
-    typeof (value as Partial<AccountSubmissionTransport>).submitSignedTransaction === 'function'
-  );
+  if (typeof value !== 'object' || value === null) return false;
+  try {
+    return typeof (value as Partial<AccountSubmissionTransport>).submitSignedTransaction === 'function';
+  } catch {
+    // A malformed caller transport may expose a throwing getter. Do not
+    // certify submission capability or interrupt the read-only snapshot.
+    return false;
+  }
 }
 
 /**
@@ -51,9 +54,19 @@ export function getAccountCapabilities(
     signer !== undefined &&
     typeof signer.sign === 'function' &&
     signer.publicKey === account.publicKey;
-  const signerAvailable =
-    signer !== undefined &&
-    (!('isAvailable' in signer) || signer.isAvailable === true);
+  let signerAvailable = false;
+  if (signer !== undefined) {
+    try {
+      // A missing or undefined optional probe is not an explicit denial.
+      signerAvailable =
+        !('isAvailable' in signer) ||
+        signer.isAvailable === undefined ||
+        signer.isAvailable === true;
+    } catch {
+      // Unreadable hardware/remote availability must fail closed.
+      signerAvailable = false;
+    }
+  }
   const configuredSubmit = hasSubmissionTransport(transport);
 
   return Object.freeze({
