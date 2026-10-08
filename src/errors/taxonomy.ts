@@ -15,7 +15,7 @@ import {
   ErrorCode,
   ERROR_CODES,
   type ErrorCodeValue,
-  isKnownErrorCode,
+  resolveErrorCode,
 } from './codes';
 import { PocketPayError } from '../types';
 
@@ -41,16 +41,21 @@ export function redactSensitive(input: string): string {
   return out;
 }
 
-/** Returns the category for a known code, or SDK for unknown codes. */
+/** Returns the category for a canonical or supported legacy code. */
 export function getErrorCategory(code: string): ErrorCategory {
-  if (isKnownErrorCode(code)) {
-    return ERROR_CODES[code].category;
-  }
-  return ErrorCategory.SDK;
+  const canonicalCode = resolveErrorCode(code);
+  return canonicalCode
+    ? ERROR_CODES[canonicalCode].category
+    : ErrorCategory.SDK;
 }
 
 export interface ErrorDescription {
+  /** Code supplied by the throwing path (kept for backwards compatibility). */
   code: string;
+  /** Stable canonical code consumers should branch on for new integrations. */
+  canonicalCode: ErrorCodeValue;
+  /** True when `code` was a supported legacy/dynamic alias. */
+  legacyAlias: boolean;
   category: ErrorCategory;
   retryable: boolean;
   httpStatus?: number;
@@ -67,10 +72,13 @@ export interface ErrorDescription {
  * rely on a non-null description.
  */
 export function describeError(code: string): ErrorDescription {
-  if (isKnownErrorCode(code)) {
-    const spec = ERROR_CODES[code as ErrorCodeValue];
+  const canonicalCode = resolveErrorCode(code);
+  if (canonicalCode) {
+    const spec = ERROR_CODES[canonicalCode];
     return {
       code,
+      canonicalCode,
+      legacyAlias: canonicalCode !== code,
       category: spec.category,
       retryable: spec.retryable,
       httpStatus: spec.httpStatus,
@@ -79,12 +87,18 @@ export function describeError(code: string): ErrorDescription {
       known: true,
     };
   }
+
+  const fallback = ERROR_CODES[ErrorCode.SDK_INTERNAL];
   return {
     code,
-    category: ErrorCategory.SDK,
-    retryable: false,
-    safeMessage: 'An unexpected error occurred.',
-    developerHint: 'Code is not part of the published standard; redact and report.',
+    canonicalCode: ErrorCode.SDK_INTERNAL,
+    legacyAlias: false,
+    category: fallback.category,
+    retryable: fallback.retryable,
+    httpStatus: fallback.httpStatus,
+    safeMessage: fallback.safeMessage,
+    developerHint:
+      'Code is not part of the published standard; redact and report it as SDK_INTERNAL.',
     known: false,
   };
 }
@@ -97,6 +111,7 @@ export function describeError(code: string): ErrorDescription {
 export function redactError(error: unknown): {
   name: string;
   code: string;
+  canonicalCode: ErrorCodeValue;
   category: ErrorCategory;
   retryable: boolean;
   safeMessage: string;
@@ -109,6 +124,7 @@ export function redactError(error: unknown): {
     return {
       name: error.name,
       code: error.code,
+      canonicalCode: desc.canonicalCode,
       category: desc.category,
       retryable: desc.retryable,
       safeMessage: desc.safeMessage,
@@ -123,6 +139,7 @@ export function redactError(error: unknown): {
   return {
     name: error instanceof Error ? error.name : 'Error',
     code: ErrorCode.SDK_INTERNAL,
+    canonicalCode: ErrorCode.SDK_INTERNAL,
     category: ErrorCategory.SDK,
     retryable: false,
     safeMessage: 'An unexpected error occurred.',
@@ -132,8 +149,6 @@ export function redactError(error: unknown): {
 
 /** Convenience: is the given code retryable per the standard? */
 export function isRetryableCode(code: string): boolean {
-  if (isKnownErrorCode(code)) {
-    return ERROR_CODES[code as ErrorCodeValue].retryable;
-  }
-  return false;
+  const canonicalCode = resolveErrorCode(code);
+  return canonicalCode ? ERROR_CODES[canonicalCode].retryable : false;
 }
