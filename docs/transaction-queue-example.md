@@ -4,7 +4,7 @@ This shows how an app may serialize **one source account in one process** using 
 
 ```ts
 import {
-  SequenceProvider, sendXLM, isUnknownStatusError,
+  SequenceProvider, sendXLM, getPublicKey, isUnknownStatusError,
   requiresRebuild, PocketPayError,
   type SendXLMParams,
 } from 'stellar-pocketpay-sdk';
@@ -19,6 +19,9 @@ async function processSourceFIFO(
   onRebuild: (error: PocketPayError) => Promise<void>,
 ): Promise<void> {
   for (const payment of jobs) {
+    if (getPublicKey(payment.sourceSecret) !== sourcePublicKey) {
+      throw new Error('Queue source mismatch');
+    }
     try {
       const receipt = await sequences.withSequence(sourcePublicKey, () =>
         sendXLM(payment, { network: 'testnet' }));
