@@ -17,9 +17,14 @@ reference for the signer capability architecture built on top of the
 | Signing capability | `Signer` / `ExternalSignerAdapter` | Depends on implementation | Yes, by contract |
 | Account handle | `ReadOnlyAccount` \| `SigningAccount` (the `AccountAbstraction` union) | Never directly — delegates to `Signer` | Only `SigningAccount` |
 
-Submission (`submitSignedTransaction`, `server.submitTransaction`) is
+Submission (`submitSignedTransaction`, `submitWithGuard`) is
 agnostic to how a transaction was signed — it only requires a signed
-envelope, never a secret.
+envelope, never a secret. Before any Horizon server is acquired,
+`submitWithGuard` rejects an envelope with no signatures using the typed,
+safe `TX_SIGNER_MISSING` error. This catches misuse of a read-only account
+or a skipped sign step before a network request; it does **not** validate
+that a non-empty signature is cryptographically correct or satisfies on-chain
+multisignature thresholds. Horizon retains those checks.
 
 ## Which type carries secrets
 
