@@ -49,7 +49,7 @@ function flow(
   const source = FIXTURE_FLOW_SOURCE;
   const destination = options.destination ?? FIXTURE_FLOW_DESTINATION;
   const amount = options.amount ?? '5.0000000';
-  const asset = options.asset ?? { type: 'native', code: 'XLM' };
+  const asset: CreatePaymentIntentParams['asset'] = options.asset ?? { type: 'native', code: 'XLM' };
   const paymentStatus = options.paymentStatus ?? 'completed';
   const issuer = asset.type === 'issued' ? asset.issuer : undefined;
   const hash = 'a1b2c3d4e5f678901234567890abcdef1234567890abcdef1234567890abcdef';
