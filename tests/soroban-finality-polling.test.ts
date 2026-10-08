@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { pollSorobanTransactionStatus } from '../src/soroban/status-polling';
+import { pollSorobanTransactionStatus, submitSorobanWithKnownHash } from '../src/soroban/status-polling';
 
 describe('Soroban submitted-transaction finality', () => {
   it('returns confirmed success and failure without polling again', async () => {
@@ -59,5 +59,35 @@ describe('Soroban submitted-transaction finality', () => {
     await expect(pollSorobanTransactionStatus(getTransaction, 2500))
       .resolves.toBeNull();
     expect(getTransaction).toHaveBeenCalledOnce();
+  });
+});
+
+describe('Soroban unknown submission before RPC returns a hash', () => {
+  const signedHash = 'a'.repeat(64);
+
+  it('returns the locally signed hash on an ambiguous transport timeout, without resubmission', async () => {
+    const send = vi.fn().mockRejectedValue(new Error('Soroban submission timeout'));
+    await expect(submitSorobanWithKnownHash(signedHash, send, 2500))
+      .resolves.toEqual({ kind: 'unknown', hash: signedHash });
+    expect(send).toHaveBeenCalledOnce();
+  });
+
+  it('propagates definitive rejection, while retaining ordinary successful responses', async () => {
+    const rejected = {
+      response: {
+        status: 400,
+        data: { extras: { result_codes: { transaction: 'tx_bad_seq' } } },
+      },
+    };
+    const fail = vi.fn().mockRejectedValue(rejected);
+    await expect(submitSorobanWithKnownHash(signedHash, fail, 2500))
+      .rejects.toBe(rejected);
+    expect(fail).toHaveBeenCalledOnce();
+
+    const serverResponse = { status: 'PENDING', hash: 'server-returned-hash' };
+    const success = vi.fn().mockResolvedValue(serverResponse);
+    await expect(submitSorobanWithKnownHash(signedHash, success, 2500))
+      .resolves.toEqual({ kind: 'response', response: serverResponse });
+    expect(success).toHaveBeenCalledOnce();
   });
 });
