@@ -191,8 +191,10 @@ category that applications can branch on without parsing provider messages.
 
 Use `paymentCategory` for the recovery branch, `code` for the specific SDK
 condition, and `safeMessage` for user-facing copy. Payment classification
-redacts secret-shaped material from normalized messages and causes; applications
-should still avoid logging raw provider errors or payment arguments.
+redacts secret-shaped material from normalized messages and causes. Validation
+metadata is copied through an allowlist of the documented `field`, `reason`, and
+safe primitive `value` fields; unreadable or undeclared runtime metadata is dropped.
+Applications should still avoid logging raw provider errors or payment arguments.
 
 ```typescript
 import {
