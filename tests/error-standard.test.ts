@@ -124,6 +124,43 @@ describe('classifySubmitError taxonomy wiring', () => {
     }
   });
 
+  it('requires hash polling after wrapped 5xx or interrupted fetch, without changing 429', () => {
+    const wrapped = new PocketPayError(
+      'Service unavailable',
+      ErrorCode.NET_UNREACHABLE,
+      { statusCode: 503 },
+      'wrapped-hash',
+      true,
+    );
+    const unknown = classifySubmitError(wrapped);
+    expect(unknown.code).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+    expect(unknown.transactionHash).toBe('wrapped-hash');
+    expect(unknown.retryable).toBe(false);
+    expect(classifySubmissionOutcome(unknown).kind).toBe('unknown_status');
+
+    const interrupted = [
+      { name: 'AbortError', message: 'The request was aborted' },
+      { message: 'fetch failed', cause: { code: 'UND_ERR_SOCKET' } },
+      { code: 'EPIPE' },
+      { message: 'Horizon submission timed out' },
+    ];
+    for (const raw of interrupted) {
+      const classified = classifySubmitError(raw, 'submitted-hash');
+      expect(classified.code).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+      expect(classified.transactionHash).toBe('submitted-hash');
+      expect(classified.retryable).toBe(false);
+    }
+
+    const limited = new PocketPayError(
+      'Rate limited',
+      ErrorCode.NET_RATE_LIMITED,
+      { statusCode: 429 },
+      'limited-hash',
+      true,
+    );
+    expect(classifySubmitError(limited)).toBe(limited);
+  });
+
   it('redacts secrets leaking from raw submission errors', () => {
     const fakeKey = makeFakeKey();
     const err = classifySubmitError(new Error(`boom ${fakeKey}`));
