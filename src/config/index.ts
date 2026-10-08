@@ -883,9 +883,12 @@ export function getSorobanRpcUrl(config?: Partial<SDKConfig>): string {
  * @throws PocketPayError if network is unsupported
  */
 export function getNetworkPassphrase(network?: StellarNetwork): string {
-  const resolvedNetwork = network ?? resolveConfig().network;
-  validateNetwork(resolvedNetwork);
-  return NETWORK_PASSPHRASES[resolvedNetwork];
+  const rawNetwork: unknown =
+    network !== undefined
+      ? network
+      : process.env.STELLAR_NETWORK ?? 'testnet';
+  validateNetwork(rawNetwork);
+  return NETWORK_PASSPHRASES[rawNetwork];
 }
 /**
  * Returns the Friendbot URL for testnet funding.
