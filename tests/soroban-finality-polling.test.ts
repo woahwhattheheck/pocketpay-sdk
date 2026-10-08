@@ -114,4 +114,12 @@ describe('Soroban unknown submission before RPC returns a hash', () => {
     expect(missing).toHaveBeenCalledOnce();
     expect(malformed).toHaveBeenCalledOnce();
   });
+
+  it('falls back to the SDK network timeout when the client timeout is unset', async () => {
+    const serverResponse = { status: 'PENDING', hash: signedHash };
+    const send = vi.fn().mockResolvedValue(serverResponse);
+    await expect(submitSorobanWithKnownHash(signedHash, send, undefined))
+      .resolves.toEqual({ kind: 'response', response: serverResponse });
+    expect(send).toHaveBeenCalledOnce();
+  });
 });
