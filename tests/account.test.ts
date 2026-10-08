@@ -330,6 +330,20 @@ describe('createAccountWithSigner()', () => {
     expect(wrongSigner.sign).not.toHaveBeenCalled();
   });
 
+  it('snapshots the supplied identity so caller mutation cannot drift the account', () => {
+    const identity = { publicKey: TEST_PUBLIC };
+    const signer = createLocalSigner(TEST_SECRET);
+    const account = createAccountWithSigner(identity, signer);
+
+    identity.publicKey = OTHER_PUBLIC;
+
+    expect(account.publicKey).toBe(TEST_PUBLIC);
+    expect(account.identity.publicKey).toBe(TEST_PUBLIC);
+    expect(Object.isFrozen(account.identity)).toBe(true);
+    expect(Reflect.set(account.identity as object, 'publicKey', OTHER_PUBLIC)).toBe(false);
+    expect(account.publicKey).toBe(TEST_PUBLIC);
+  });
+
   it('rechecks external signer identity before each sign call', async () => {
     const externalSigner = {
       publicKey: TEST_PUBLIC,

@@ -56,7 +56,11 @@ class AccountAbstractionImpl {
   readonly signer: Signer | undefined;
 
   constructor(identity: AccountIdentity, signer?: Signer) {
-    this.identity = identity;
+    // Snapshot the validated identity so a caller retaining the input object
+    // cannot mutate the account's advertised public key after attachment.
+    // Freeze the internal snapshot as a runtime counterpart to AccountIdentity's
+    // readonly TypeScript contract.
+    this.identity = Object.freeze({ publicKey: identity.publicKey });
     this.signer = signer;
   }
 
