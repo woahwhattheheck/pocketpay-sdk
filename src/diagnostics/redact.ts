@@ -23,6 +23,12 @@ const STELLAR_SECRET_RE = /\bS[A-Z2-7]{55}\b/g;
 /** Long opaque tokens that often appear in headers / env dumps. */
 const OPAQUE_TOKEN_RE = /\b(?:sk|pk|api)[_-][A-Za-z0-9_-]{16,}\b/gi;
 
+/** Endpoint metadata keys are not generally secret, but their paths and query can be. */
+function isEndpointKey(key: string): boolean {
+  const normalized = key.toLowerCase().replace(/[-_\s]/g, '');
+  return normalized === 'horizonurl' || normalized === 'sorobanrpcurl';
+}
+
 function isSensitiveKey(key: string): boolean {
   const lower = key.toLowerCase();
   if (SENSITIVE_KEY_SET.has(lower)) return true;
@@ -123,7 +129,7 @@ function redactInternal(value: unknown, seen: WeakSet<object>): unknown {
   for (const [key, child] of Object.entries(value as Record<string, unknown>)) {
     if (isSensitiveKey(key)) {
       out[key] = REDACTED;
-    } else if ((key === 'horizonUrl' || key === 'sorobanRpcUrl') && typeof child === 'string') {
+    } else if (isEndpointKey(key) && typeof child === 'string') {
       // Redact arbitrary credentials even when they are not recognizable tokens.
       out[key] = redactEndpointUrl(child);
     } else {
