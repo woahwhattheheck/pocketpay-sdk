@@ -140,7 +140,7 @@ export function validateMemoInput(memo?: string | MemoInput): boolean {
           'An id memo number must be a safe JavaScript integer; pass larger IDs as a decimal string or bigint.'
         );
       }
-      const raw = String(value).trim();
+      const raw = String(value);
       if (!/^\d+$/.test(raw)) {
         throw memoError(
           'not_unsigned_integer',
@@ -204,7 +204,7 @@ export function buildMemo(memo?: string | MemoInput): StellarSDK.Memo | undefine
     case 'text':
       return StellarSDK.Memo.text(String(normalized.value));
     case 'id':
-      return StellarSDK.Memo.id(String(normalized.value).trim());
+      return StellarSDK.Memo.id(String(normalized.value));
     case 'hash':
       return StellarSDK.Memo.hash(String(normalized.value));
     case 'return':
