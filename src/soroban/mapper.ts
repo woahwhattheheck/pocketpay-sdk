@@ -280,10 +280,17 @@ export function mapVaultInvocationResult(
         rawStroops = rawValue.toString();
         balanceXLM = formatStroops(rawValue);
       } else if (typeof rawValue === 'number') {
+        if (!Number.isSafeInteger(rawValue)) {
+          return {
+            success: false,
+            status: 'error',
+            operation,
+            error: 'Vault balance cannot be represented exactly as a JavaScript number.',
+            errorCode: ErrorCode.SOROBAN_INVALID_RESPONSE,
+          };
+        }
         rawStroops = String(rawValue);
-        balanceXLM = Number.isSafeInteger(rawValue)
-          ? formatStroops(BigInt(rawValue))
-          : (rawValue / 10_000_000).toFixed(7);
+        balanceXLM = formatStroops(BigInt(rawValue));
       }
     }
 
