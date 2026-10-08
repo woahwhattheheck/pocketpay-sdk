@@ -628,7 +628,15 @@ export async function checkTransactionReadiness(
     passphrase = getNetworkPassphrase(cfg.network);
     for (const issue of configResult.warnings) {
       if (issue.code === 'NETWORK_MISMATCH') {
-        // Configuration warnings may interpolate full URLs (including userinfo,\n        // query tokens, or private endpoint paths). Readiness is UI-facing, so\n        // preserve the stable code but never forward a raw config message.\n        c.warn({ check: 'network', code: 'NETWORK_ENDPOINT_MISMATCH', field: 'config', message: 'A configured network endpoint appears to target another Stellar network. Check your network and endpoint settings.' });
+        // Configuration warnings may interpolate full URLs (including userinfo,
+        // query tokens, or private endpoint paths). Readiness is UI-facing, so
+        // preserve the stable code but never forward a raw config message.
+        c.warn({
+          check: 'network',
+          code: 'NETWORK_ENDPOINT_MISMATCH',
+          field: 'config',
+          message: 'A configured network endpoint appears to target another Stellar network. Check your network and endpoint settings.',
+        });
       }
     }
     if (input.networkPassphrase !== undefined && input.networkPassphrase !== passphrase) {
@@ -645,7 +653,9 @@ export async function checkTransactionReadiness(
       check: 'network',
       code: 'NETWORK_CONFIG_INVALID',
       field: 'config',
-      // Configuration messages can include raw untrusted endpoint values,\n      // credentials or query tokens. Use a static UI-safe message here.\n      message: 'SDK configuration is invalid. Check network and endpoint settings.',
+      // Configuration messages can include raw untrusted endpoint values,
+      // credentials or query tokens. Use a static UI-safe message here.
+      message: 'SDK configuration is invalid. Check network and endpoint settings.',
       cause: firstError?.code ?? configThrew?.code,
     });
   }
