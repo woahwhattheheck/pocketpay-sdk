@@ -106,6 +106,37 @@ describe('diagnoseTestnetAccount', () => {
     }
   });
 
+
+  it('does not mislabel another account or an unknown lookup result as funded/unfunded', async () => {
+    const queried = testnetAccountFixtures.funded.publicKey;
+    const another = testnetAccountFixtures.unfunded.publicKey;
+    const funded = testnetAccountFixtures.funded.result;
+    const unfunded = testnetAccountFixtures.unfunded.result;
+
+    const malformed = [
+      { ...funded, publicKey: another },
+      { ...funded, balance: { ...funded.balance, publicKey: another } },
+      { ...unfunded, publicKey: another },
+      { status: 'unavailable', publicKey: queried },
+      { status: 'unexpected', publicKey: queried },
+      { status: 'funded', publicKey: queried, balance: undefined },
+    ];
+
+    for (const result of malformed) {
+      const diagnosis = await diagnoseTestnetAccount(queried, {
+        lookup: async () => result as never,
+      });
+      expect(diagnosis).toEqual({
+        publicKey: queried,
+        network: 'testnet',
+        testnetOnly: true,
+        status: 'unavailable',
+        message: 'Testnet account state could not be determined.',
+      });
+      expect(JSON.stringify(diagnosis)).not.toContain('unexpected');
+    }
+  });
+
   it('rejects malformed public keys before invoking a lookup', async () => {
     const lookup = vi.fn(async () => testnetAccountFixtures.unfunded.result);
 
