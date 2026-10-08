@@ -273,14 +273,30 @@ function sanitizeValidation(
   validation: PocketPayError['validation'],
 ): PocketPayError['validation'] {
   if (!validation) return undefined;
-  return {
-    ...validation,
-    field: redactSensitive(validation.field),
-    reason: redactSensitive(validation.reason),
-    ...(typeof validation.value === 'string'
-      ? { value: redactSensitive(validation.value) }
-      : {}),
+
+  // Validation metadata may cross adapter/plugin boundaries at runtime. Read
+  // only the documented fields through the same trap-safe accessor used for
+  // provider errors; never spread untrusted metadata into a public error.
+  const rawField = safeField(validation, 'field');
+  const rawReason = safeField(validation, 'reason');
+  const rawValue = safeField(validation, 'value');
+
+  const sanitized: NonNullable<PocketPayError['validation']> = {
+    field: typeof rawField === 'string'
+      ? redactSensitive(rawField)
+      : 'unknown',
+    reason: typeof rawReason === 'string'
+      ? redactSensitive(rawReason)
+      : 'invalid',
   };
+
+  if (typeof rawValue === 'string') {
+    sanitized.value = redactSensitive(rawValue);
+  } else if (typeof rawValue === 'number' && Number.isFinite(rawValue)) {
+    sanitized.value = rawValue;
+  }
+
+  return sanitized;
 }
 
 function classifyCategory(error: unknown): PaymentFailureCategory {
