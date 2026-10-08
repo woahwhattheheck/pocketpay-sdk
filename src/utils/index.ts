@@ -446,10 +446,21 @@ export function wrapError(
 
   const message =
     error instanceof Error ? error.message : String(error);
-  const cause = error instanceof Error ? error : undefined;
+  const safeMessage = redactSensitive(message);
+  const safeContext = redactSensitive(context);
+
+  // A native upstream Error may expose credentials through its message, stack,
+  // nested cause or enumerable properties. Do not attach that raw object to a
+  // public SDK failure result: callers often serialize or log its .cause.
+  // Keep the error kind and sanitized description without those raw fields.
+  let cause: Error | undefined;
+  if (error instanceof Error) {
+    cause = new Error(safeMessage);
+    cause.name = redactSensitive(error.name);
+  }
 
   return new PocketPayError(
-    `${context}: ${message}`,
+    `${safeContext}: ${safeMessage}`,
     code,
     undefined,
     cause
