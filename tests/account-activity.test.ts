@@ -65,6 +65,26 @@ describe('account activity normalization', () => {
       .toBe(TransactionStatus.UNKNOWN);
   });
 
+  it('does not infer an incoming transaction from another source account alone', () => {
+    const unrelated: TransactionSummary = {
+      hash: 'unrelated-tx',
+      createdAt: '2026-10-05T11:30:00.000Z',
+      sourceAccount: OTHER,
+      successful: true,
+    };
+
+    expect(mapTransactionSummaryToActivity(unrelated, ACCOUNT).direction)
+      .toBe('neutral');
+    expect(mapTransactionSummaryToActivity({
+      ...unrelated,
+      direction: TransactionDirection.INCOMING,
+    }, ACCOUNT).direction).toBe(TransactionDirection.INCOMING);
+    expect(mapTransactionSummaryToActivity({
+      ...unrelated,
+      sourceAccount: ACCOUNT,
+    }, ACCOUNT).direction).toBe(TransactionDirection.OUTGOING);
+  });
+
   it('preserves pending/unknown receipt states instead of treating them as failures', () => {
     const pending: PaymentReceipt = {
       status: TransactionStatus.PENDING,
