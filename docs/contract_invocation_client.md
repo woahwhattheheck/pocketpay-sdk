@@ -17,7 +17,7 @@ methods: provide a supported method schema to reject missing/wrong-kind calls
 before any network or signing step.
 
 ```ts
-import { createContractClient } from '@stellar-pocketpay/sdk';
+import { createContractClient } from 'stellar-pocketpay-sdk';
 
 const client = createContractClient({
   contractId, // deployed, trusted C... contract ID
