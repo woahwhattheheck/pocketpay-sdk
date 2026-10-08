@@ -184,6 +184,45 @@ describe('Transactions Module - getTransactions', () => {
     });
   });
 
+  it('normalizes Horizon hash and return memos to canonical hex across history mappers', async () => {
+    const binaryMemo = Buffer.from(Array.from({ length: 32 }, (_, index) => index));
+    const horizonMemo = binaryMemo.toString('base64');
+    const canonicalHex = binaryMemo.toString('hex');
+
+    const page = makeHorizonTxPage();
+    page.records[0].memo_type = 'hash';
+    page.records[0].memo = horizonMemo;
+    mockTxCall.mockResolvedValue(page);
+
+    const history = await getTransactions(account);
+    expect(history.records[0]).toMatchObject({
+      memo: canonicalHex,
+      memoType: 'hash',
+    });
+
+    const summary = mapTransactionToSummary(
+      {
+        id: 'tx-id',
+        paging_token: '123',
+        tx_hash: 'txhash',
+        created_at: '2024-01-15T10:30:00Z',
+        source_account: account,
+        fee_account: account,
+        fee_charged: '100',
+        memo_type: 'return',
+        memo: horizonMemo,
+        successful: true,
+        operations: [],
+      },
+      { userAccount: account },
+    );
+
+    expect(summary).toMatchObject({
+      memo: canonicalHex,
+      memoType: 'return',
+    });
+  });
+
   it('sets nextCursor to the last record paging token', async () => {
     mockTxCall.mockResolvedValue(makeHorizonTxPage());
     const result = await getTransactions(account);
