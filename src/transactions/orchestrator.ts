@@ -27,11 +27,11 @@ import type {
   LifecycleFailure,
   LifecycleResult,
   LifecycleStage,
-  PocketPayError,
   SDKConfig,
   SubmissionOutcome,
 } from '../types';
 import { TransactionStatus } from '../types/transaction';
+import { PocketPayError } from '../types';
 import type { GuardedSubmitOptions, SubmittableTransaction } from './guarded-submit';
 import { submitWithGuard } from './guarded-submit';
 import {
@@ -164,12 +164,45 @@ export async function submitGuarded(
       submitTransactionIdempotently(transaction, options, config),
     );
 
-    const hash =
-      (response as { hash?: string } | undefined)?.hash ?? transactionHash;
+    // An RPC record is not evidence of success merely because it is truthy
+    // or contains a hash. Bind its identity to this exact signed envelope and
+    // require an explicit boolean outcome before reporting ledger confirmation.
+    let responseHash: unknown;
+    let successful: unknown;
+    try {
+      responseHash = (response as { hash?: unknown } | null | undefined)?.hash;
+      successful = (response as { successful?: unknown } | null | undefined)?.successful;
+    } catch {
+      // Unexpected provider accessors are no stronger than missing evidence.
+    }
+    let outcomeError: PocketPayError | undefined;
+    if (
+      typeof responseHash !== 'string' ||
+      responseHash.toLowerCase() !== transactionHash.toLowerCase() ||
+      typeof successful !== 'boolean'
+    ) {
+      outcomeError = new PocketPayError(
+        'The transaction outcome could not be verified on Horizon.',
+        'TX_STATUS_UNKNOWN',
+        504,
+        undefined,
+        transactionHash,
+        false,
+      );
+    } else if (!successful) {
+      outcomeError = new PocketPayError(
+        'Horizon reports that the transaction was rejected.',
+        'TX_REJECTED',
+        400,
+        undefined,
+        transactionHash,
+        false,
+      );
+    }
 
     return {
       response,
-      result: toLifecycleResult(classifySubmissionOutcome(undefined, hash)),
+      result: toLifecycleResult(classifySubmissionOutcome(outcomeError, transactionHash)),
     };
   } catch (error) {
     const classified = classifySubmitError(error, transactionHash);
