@@ -89,6 +89,39 @@ describe('pollTransaction request and cancellation lifecycle', () => {
     }
   });
 
+  it('snapshots Horizon identity and success before classifying the result', async () => {
+    const response = { ...CONFIRMED };
+    let hashReads = 0;
+    let successfulReads = 0;
+    Object.defineProperty(response, 'hash', {
+      get() {
+        hashReads += 1;
+        return hashReads <= 2 ? HASH : 'f'.repeat(64);
+      },
+    });
+    Object.defineProperty(response, 'successful', {
+      get() {
+        successfulReads += 1;
+        return successfulReads === 1;
+      },
+    });
+    const call = vi.fn().mockResolvedValue(response);
+    installLookup(call);
+
+    const result = await pollTransaction(HASH, { timeout: 40, maxAttempts: 1 });
+    expect(result).toMatchObject({
+      status: 'success',
+      state: 'confirmed',
+      hash: HASH,
+      attempts: 1,
+      transaction: { hash: HASH, successful: true },
+    });
+    expect(hashReads).toBe(1);
+    expect(successfulReads).toBe(1);
+    expect(call).toHaveBeenCalledOnce();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
   it('retries a mismatched transaction response and accepts the matching one', async () => {
     const call = vi.fn()
       .mockResolvedValueOnce({ ...CONFIRMED, hash: 'f'.repeat(64) })
