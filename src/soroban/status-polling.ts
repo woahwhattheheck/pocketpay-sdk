@@ -1,4 +1,5 @@
 import { withTimeout } from '../network';
+import { classifySubmitError } from '../errors';
 
 /**
  * Resolve a submitted Soroban transaction without exceeding an overall
@@ -53,4 +54,28 @@ export async function pollSorobanTransactionStatus<T extends { status: string }>
   }
 
   return null;
+}
+
+/**
+ * Submit a pre-signed Soroban envelope once, retaining its locally known hash
+ * when the transport times out before returning a server-side response.
+ * An unknown submission may ALREADY be on-chain and is never retried here.
+ * Definitive rejections propagate unchanged to the caller.
+ */
+export async function submitSorobanWithKnownHash<T>(
+  signedHash: string,
+  send: () => Promise<T>,
+  timeoutMs: number,
+): Promise<{ kind: 'response'; response: T } | { kind: 'unknown'; hash: string }> {
+  try {
+    return {
+      kind: 'response',
+      response: await withTimeout('Soroban transaction submission', timeoutMs, send()),
+    };
+  } catch (error) {
+    if (classifySubmitError(error, signedHash).code === 'TX_STATUS_UNKNOWN') {
+      return { kind: 'unknown', hash: signedHash };
+    }
+    throw error;
+  }
 }
