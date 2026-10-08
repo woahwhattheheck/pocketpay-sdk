@@ -19,6 +19,7 @@ import {
   PocketPayError, SDKConfig, PaginationOptions, PocketPayResult,
 } from '../types';
 import { validatePublicKey, wrapError, toResult } from '../utils';
+import { formatMemoForDisplay } from '../utils/memo';
 import { resolveConfig } from '../config';
 import { withTimeout } from '../network';
 import { emitDiagnosticsEvent } from '../diagnostics/hooks';
@@ -121,7 +122,10 @@ export async function getTransactions(
       fee: tx.fee_charged,
       operationCount: tx.operation_count,
       successful: tx.successful,
-      memo: tx.memo || undefined,
+      memo:
+        tx.memo_type === 'text' && typeof tx.memo === 'string'
+          ? formatMemoForDisplay({ type: 'text', value: tx.memo })
+          : tx.memo || undefined,
       memoType: tx.memo_type,
       pagingToken: tx.paging_token,
     }));
