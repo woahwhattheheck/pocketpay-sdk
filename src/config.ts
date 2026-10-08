@@ -123,9 +123,7 @@ export function getHorizonServer(config?: Partial<SDKConfig>) {
 
 /** Resolve a network passphrase through the strict network boundary. */
 export function getNetworkPassphrase(network?: StellarNetwork): string {
-  const resolvedNetwork = network ?? resolveConfig().network;
-  validateNetwork(resolvedNetwork);
-  return getNetworkPassphraseBase(resolvedNetwork);
+  return getNetworkPassphraseBase(network);
 }
 
 /** Check a feature flag only after the supplied configuration is valid. */
