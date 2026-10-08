@@ -191,36 +191,56 @@ function safeMessageFor(category: PaymentFailureCategory): string {
   }
 }
 
+/** Third-party provider errors may expose throwing getters or Proxy traps. */
+function safeField(value: unknown, key: string): unknown {
+  if (value === null || (typeof value !== 'object' && typeof value !== 'function')) {
+    return undefined;
+  }
+  try {
+    return (value as Record<string, unknown>)[key];
+  } catch {
+    return undefined;
+  }
+}
+
 function rawMessage(error: unknown): string {
-  if (error instanceof Error) return error.message;
   if (typeof error === 'string') return error;
+  if (error instanceof Error) {
+    const message = safeField(error, 'message');
+    return typeof message === 'string' ? message : 'Unexpected payment failure';
+  }
   return 'Unexpected payment failure';
 }
 
-function rawObject(error: unknown): any {
-  if (error instanceof PocketPayError && error.cause) return error.cause as any;
-  return error as any;
+function rawObject(error: unknown): unknown {
+  const cause = error instanceof PocketPayError ? safeField(error, 'cause') : undefined;
+  return cause ?? error;
 }
 
 function resultCodes(error: unknown): { transaction?: string; operations?: string[] } | undefined {
   const raw = rawObject(error);
-  const result = raw?.response?.data?.extras?.result_codes;
+  const response = safeField(raw, 'response');
+  const data = safeField(response, 'data');
+  const extras = safeField(data, 'extras');
+  const result = safeField(extras, 'result_codes');
   if (!result || typeof result !== 'object') return undefined;
 
+  const transaction = safeField(result, 'transaction');
+  const operations = safeField(result, 'operations');
   return {
-    transaction: typeof result.transaction === 'string' ? result.transaction : undefined,
-    operations: Array.isArray(result.operations)
-      ? result.operations.filter((value: unknown): value is string => typeof value === 'string')
+    transaction: typeof transaction === 'string' ? transaction : undefined,
+    operations: Array.isArray(operations)
+      ? operations.filter((value: unknown): value is string => typeof value === 'string')
       : undefined,
   };
 }
 
 function statusCode(error: unknown): number | undefined {
-  if (error instanceof PocketPayError && error.statusCode !== undefined) {
-    return error.statusCode;
-  }
+  const known = error instanceof PocketPayError ? safeField(error, 'statusCode') : undefined;
+  if (typeof known === 'number') return known;
   const raw = rawObject(error);
-  const status = raw?.response?.status ?? raw?.statusCode ?? raw?.status;
+  const status = safeField(safeField(raw, 'response'), 'status') ??
+    safeField(raw, 'statusCode') ?? safeField(raw, 'status');
   return typeof status === 'number' ? status : undefined;
 }
 
@@ -228,7 +248,8 @@ function networkLike(error: unknown): boolean {
   if (error instanceof PocketPayError && NETWORK_CODES.has(error.code)) return true;
 
   const raw = rawObject(error);
-  const code = typeof raw?.code === 'string' ? raw.code.toUpperCase() : '';
+  const rawCode = safeField(raw, 'code');
+  const code = typeof rawCode === 'string' ? rawCode.toUpperCase() : '';
   if (['ETIMEDOUT', 'ECONNRESET', 'ECONNREFUSED', 'ENOTFOUND', 'EAI_AGAIN'].includes(code)) {
     return true;
   }
@@ -242,8 +263,9 @@ function networkLike(error: unknown): boolean {
 
 function sanitizeCause(cause: Error | undefined): Error | undefined {
   if (!cause) return undefined;
-  const safe = new Error(redactSensitive(cause.message));
-  safe.name = redactSensitive(cause.name);
+  const safe = new Error(redactSensitive(rawMessage(cause)));
+  const name = safeField(cause, 'name');
+  safe.name = typeof name === 'string' ? redactSensitive(name) : 'Error';
   return safe;
 }
 
