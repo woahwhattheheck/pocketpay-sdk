@@ -119,7 +119,7 @@ export function redactError(error: unknown): {
   }
 
   // Non-PocketPayError: still redact whatever text we have.
-  const message = error instanceof Error ? redactSensitive(error.message) : String(error);
+  const message = redactSensitive(error instanceof Error ? error.message : String(error));
   return {
     name: error instanceof Error ? error.name : 'Error',
     code: ErrorCode.SDK_INTERNAL,
