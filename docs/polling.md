@@ -36,6 +36,14 @@ The result intentionally exposes two related fields:
   completion status of the polling operation.
 - `attempts`: number of Horizon status lookups performed.
 
+Before contacting Horizon, the helper requires a valid 64-character hexadecimal
+transaction hash. Empty, non-string, malformed and secret-like inputs return
+`status: 'unknown'`, `state: 'unknown'`, `attempts: 0` and an empty reported
+hash. This prevents invalid hashes from being mislabelled `pending` and does
+not repeat caller-provided secrets in diagnostics. Hostile provider error
+getters/proxies are treated as unknown with fixed safe error text, never
+transaction settlement evidence.
+
 A Horizon `404 Not Found` means the transaction is not visible in a ledger yet,
 so it is treated as `pending` and polling continues. Retryable lookup failures,
 such as rate limiting or an indeterminate network timeout, remain inside the
