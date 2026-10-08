@@ -161,6 +161,7 @@ export async function diagnoseTestnetAccount(
         !balance ||
         balance.publicKey !== publicKey ||
         typeof balance.nativeBalance !== 'string' ||
+        !/^\\d+(?:\\.\\d{1,7})?$/.test(balance.nativeBalance) ||
         !Array.isArray(balance.balances)
       ) {
         throw new Error('Testnet account lookup returned malformed funded balance');
