@@ -873,6 +873,16 @@ export async function submitSignedTransaction(
       fee: resultObj.fee_charged || String(StellarSDK.BASE_FEE),
     };
   } catch (error) {
+    // Keep the signature guard's typed failure intact for the staged submit
+    // result. The envelope was rejected locally before Horizon was called.
+    if (error instanceof PocketPayError && error.code === ErrorCode.TX_SIGNER_MISSING) {
+      return {
+        success: false,
+        hash: signed.hash,
+        error: error.safeMessage ?? error.message,
+        errorCode: error.code,
+      };
+    }
     const horizonError = error as any;
     
     if (horizonError?.response?.data?.extras?.result_codes) {
