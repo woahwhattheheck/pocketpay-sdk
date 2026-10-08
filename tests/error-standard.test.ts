@@ -16,7 +16,7 @@ import {
   redactError,
   isRetryableCode,
 } from '../src/errors';
-import { classifySubmitError } from '../src/errors';
+import { classifySubmitError, classifySubmissionOutcome } from '../src/errors';
 import { PocketPayError } from '../src/types';
 
 // Build a realistic Stellar-secret-shaped string at runtime so no static
@@ -112,6 +112,16 @@ describe('classifySubmitError taxonomy wiring', () => {
     const err = classifySubmitError({ code: 'ETIMEDOUT' }, 'abc');
     expect(err.code).toBe(ErrorCode.TX_STATUS_UNKNOWN);
     expect(err.category).toBe(ErrorCategory.Transaction);
+  });
+
+  it('treats ambiguous HTTP responses after submission as unknown, not safe to retry', () => {
+    for (const status of [408, 500, 502, 503, 504]) {
+      const classified = classifySubmitError({ response: { status } }, 'tx-hash');
+      expect(classified.code, String(status)).toBe(ErrorCode.TX_STATUS_UNKNOWN);
+      expect(classified.retryable, String(status)).toBe(false);
+      expect(classified.transactionHash, String(status)).toBe('tx-hash');
+      expect(classifySubmissionOutcome(classified).kind, String(status)).toBe('unknown_status');
+    }
   });
 
   it('redacts secrets leaking from raw submission errors', () => {

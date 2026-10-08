@@ -111,14 +111,18 @@ export function classifySubmitError(error: unknown, txHash?: string): PocketPayE
     );
   }
 
-  const isTimeout =
-    status === 504 ||
+  // After a submission attempt, an HTTP timeout or server/gateway 5xx
+  // does not prove the envelope was rejected. It may already be accepted.
+  // Poll its known hash before any resubmission, even for a 503.
+  const isSubmissionOutcomeUnknown =
+    (typeof status === 'number' &&
+      (status === 408 || (status >= 500 && status < 600))) ||
     err?.code === 'ETIMEDOUT' ||
     err?.code === 'ECONNRESET' ||
     err?.code === 'ENOTFOUND' ||
     (typeof err?.message === 'string' && err.message.toLowerCase().includes('timeout'));
 
-  if (isTimeout) {
+  if (isSubmissionOutcomeUnknown) {
     return new PocketPayError(
       `Transaction status unknown after submission attempt for hash ${txHash ?? 'unknown'}`,
       ErrorCode.TX_STATUS_UNKNOWN,
