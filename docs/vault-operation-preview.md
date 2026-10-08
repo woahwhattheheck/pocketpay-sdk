@@ -22,9 +22,10 @@ an exact final fee.
 `createLock` is deliberately previewable so applications can render a future
 review flow, but the returned `supported` field is `false` and the warnings
 state that the current SDK cannot execute the lock action. A lock preview must
-also include `unlockAt` as a positive integer Unix timestamp in seconds; the
-same value is returned in the preview so the amount and lock timing can be
-reviewed together before any future execution path exists.
+also include `unlockAt` as a future positive integer Unix timestamp in seconds;
+past or current timestamps are rejected because they would not describe a
+time-locked position. The same value is returned in the preview so the amount
+and lock timing can be reviewed together before any future execution path exists.
 
 ## Example
 
