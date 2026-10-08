@@ -55,7 +55,15 @@ function extractExports(code: string): SurfaceEntry[] {
                ts.isTypeAliasDeclaration(node)) {
       const name = isDefault ? 'default' : node.name?.text;
       if (!name) throw new Error('Unnamed public declaration needs review');
-      add(name, ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node) ? 'type' : 'value');
+      // A class or enum is addressable in BOTH namespaces. A replacement
+      // `export const Client` keeps its runtime name but removes the consumer
+      // type; the snapshot must catch that breaking change.
+      if (ts.isClassDeclaration(node) || ts.isEnumDeclaration(node)) {
+        add(name, 'type');
+        add(name, 'value');
+      } else {
+        add(name, ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node) ? 'type' : 'value');
+      }
     } else {
       throw new Error('Unknown public declaration syntax; inspect src/index.ts');
     }
@@ -107,11 +115,23 @@ function selfTest(): void {
     'const value = 1; export default value;',
     'export default 42;',
     'export default function () {}',
-    'export default class {}',
   ]) {
     if (format(extractExports(source)) !== format([{ name: 'default', kind: 'value' }])) {
       throw new Error('Default export fixture failed');
     }
+  }
+  const dualNamespace = extractExports('export class Client {}\nexport enum State { Ready }\nexport default class {}');
+  if (format(dualNamespace) !== format([
+    { name: 'Client', kind: 'type' },
+    { name: 'Client', kind: 'value' },
+    { name: 'default', kind: 'type' },
+    { name: 'default', kind: 'value' },
+    { name: 'State', kind: 'type' },
+    { name: 'State', kind: 'value' },
+  ])) throw new Error('Class/enum dual namespace fixture failed');
+  if (format(extractExports('export class Client {}')) ===
+      format(extractExports('export const Client = 1;'))) {
+    throw new Error('Class-to-const breaking type removal was not detected');
   }
   const before = { main: './index.js', types: './index.d.ts', exports: {
     '.': { node: { import: './node.mjs', default: './node.js' }, default: './fallback.js' },
