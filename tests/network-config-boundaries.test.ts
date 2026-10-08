@@ -21,6 +21,7 @@ describe('network configuration preset boundaries', () => {
     delete process.env.STELLAR_NETWORK;
     delete process.env.STELLAR_HORIZON_URL;
     delete process.env.STELLAR_SOROBAN_RPC_URL;
+    delete process.env.STELLAR_TIMEOUT;
   });
 
   afterEach(() => {
@@ -113,6 +114,34 @@ describe('network configuration preset boundaries', () => {
 
     expect(config.networkPassphrase).toBe(getNetworkPassphrase('mainnet'));
     expect(config.sources.networkPassphrase).toBe('override');
+  });
+
+  it('rejects malformed or empty timeout environment values', () => {
+    process.env.STELLAR_TIMEOUT = '1000ms';
+
+    expectConfigError(() => resolveConfig(), 'INVALID_TIMEOUT');
+    expect(validatePocketPayConfig()).toMatchObject({
+      valid: false,
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          field: 'timeout',
+          code: 'INVALID_TIMEOUT',
+        }),
+      ]),
+    });
+
+    process.env.STELLAR_TIMEOUT = '';
+
+    expectConfigError(() => resolveConfig(), 'INVALID_TIMEOUT');
+    expect(validatePocketPayConfig()).toMatchObject({
+      valid: false,
+      errors: expect.arrayContaining([
+        expect.objectContaining({
+          field: 'timeout',
+          code: 'INVALID_TIMEOUT',
+        }),
+      ]),
+    });
   });
 
   it('rejects explicit null timeout in both validators', () => {

@@ -422,8 +422,8 @@ export function resolveConfig(overrides?: Partial<SDKConfig>): ResolvedSDKConfig
   const timeout =
     overrides?.timeout !== undefined
       ? overrides.timeout
-      : (process.env.STELLAR_TIMEOUT
-      ? parseInt(process.env.STELLAR_TIMEOUT, 10)
+      : (process.env.STELLAR_TIMEOUT !== undefined
+      ? Number(process.env.STELLAR_TIMEOUT)
       : DEFAULT_TIMEOUT_MS);
   validateTimeout(timeout);
 
@@ -715,8 +715,8 @@ export function validatePocketPayConfig(
   const rawTimeout: unknown =
     overrides?.timeout !== undefined
       ? overrides.timeout
-      : (process.env.STELLAR_TIMEOUT
-      ? parseInt(process.env.STELLAR_TIMEOUT, 10)
+      : (process.env.STELLAR_TIMEOUT !== undefined
+      ? Number(process.env.STELLAR_TIMEOUT)
       : DEFAULT_TIMEOUT_MS);
 
   if (typeof rawTimeout !== 'number' || Number.isNaN(rawTimeout)) {
