@@ -37,13 +37,13 @@ function assertHttpUrl(
 ): asserts value is string {
   if (typeof value !== 'string' || !isSupportedHttpProtocol(value)) {
     throw new PocketPayError(
-      `Invalid ${fieldName}: "${value}". Must be a valid HTTP(S) URL.`,
+      `Invalid ${fieldName}. Must be a valid HTTP(S) URL.`,
       errorCode,
       {
         validation: {
           field,
           reason: 'invalid_url',
-          value: typeof value === 'string' ? value : String(value),
+          value: '[REDACTED]',
         },
       }
     );
@@ -165,7 +165,7 @@ function strictUrlIssue(
     severity: 'error',
     field,
     code,
-    message: `Invalid ${label}: "${value}". Protocol must be http or https.`,
+    message: `Invalid ${label}. Protocol must be http or https.`,
   };
 }
 
