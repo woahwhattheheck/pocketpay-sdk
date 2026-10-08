@@ -88,8 +88,10 @@ negative result (`negative_result`). `equals` and `compare` work on value, so
 `validateAmount`, `stroopsToXLM` and `xlmToStroops` remain exported with their
 existing signatures. They no longer lose precision silently:
 
-- **`validateAmount`** — unchanged behaviour and error codes; exactness is now
-  delegated to the shared parser.
+- **`validateAmount`** — delegates precision and range to the shared parser; retains
+  `INVALID_AMOUNT_PRECISION` for more than 7 decimal places, and `INVALID_AMOUNT`
+  for invalid format, zero or values above signed int64 stroops. An overflow
+  cannot silently pass legacy payment or vault validation.
 - **`stroopsToXLM`** — exact across the whole range; rejects a `number` that is
   not a safe integer instead of rounding it. Pass large values as strings.
 - **`xlmToStroops`** — **deprecated.** Still returns a `number`, but now throws
