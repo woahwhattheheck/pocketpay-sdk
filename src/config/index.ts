@@ -27,7 +27,9 @@ export const NETWORK_PRESETS = {
   },
   mainnet: {
     horizonUrl: 'https://horizon.stellar.org',
-    sorobanRpcUrl: 'https://soroban.stellar.org',
+    // SDF does not provide a public Mainnet RPC endpoint. Mainnet callers
+    // must choose an ecosystem provider through config or the environment.
+    sorobanRpcUrl: '',
     networkPassphrase: StellarSDK.Networks.PUBLIC,
   },
 } as const satisfies Record<
