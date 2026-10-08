@@ -110,6 +110,44 @@ describe('buildAccountDiagnosticsReport — healthy account', () => {
     expect(JSON.stringify(report)).not.toContain('tenant=example');
   });
 
+  it('never uses a different account\'s funded balance to declare payment readiness', async () => {
+    const foreignKey = StellarSDK.Keypair.random().publicKey();
+    const original = funded('100.0000000');
+    if (original.status !== 'funded') throw new Error('Expected funded fixture');
+
+    const mismatches: BalanceResult[] = [
+      { ...original, publicKey: foreignKey },
+      { ...original, balance: { ...original.balance, publicKey: foreignKey } },
+    ];
+    for (const mismatched of mismatches) {
+      const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, {
+        config: TESTNET,
+        lookup: lookupReturning(mismatched),
+      });
+      expect(report.account).toMatchObject({
+        publicKey: PUBLIC_KEY,
+        status: 'error',
+        errorCode: 'ACCOUNT_DIAGNOSTICS_ERROR',
+        errorMessage: 'Account state could not be loaded.',
+      });
+      expect(report.paymentReadiness.status).toBe('unknown');
+      expect(report.paymentReadiness.feeBalancePresent).toBe(false);
+      expect(JSON.stringify(report)).not.toContain(foreignKey);
+    }
+  });
+
+  it('cannot report a different account\'s unfunded state as the queried wallet', async () => {
+    const foreignKey = StellarSDK.Keypair.random().publicKey();
+    const report = await buildAccountDiagnosticsReport(PUBLIC_KEY, {
+      config: TESTNET,
+      lookup: lookupReturning({ status: 'unfunded', publicKey: foreignKey }),
+    });
+    expect(report.account.status).toBe('error');
+    expect(report.account.errorCode).toBe('ACCOUNT_DIAGNOSTICS_ERROR');
+    expect(report.paymentReadiness.status).toBe('unknown');
+    expect(JSON.stringify(report)).not.toContain(foreignKey);
+  });
+
   it('reads Horizon through the config factory seam when no lookup is injected', async () => {
     const horizon: MockHorizonHandle = installMockHorizon();
     try {
