@@ -259,6 +259,14 @@ export async function buildAccountDiagnosticsReport(
     try {
       const result = await lookup(accountId, overrides);
 
+      // An injected provider or adapter may accidentally serve a cached response
+      // for a different wallet. Never report another account's balance or
+      // payment readiness under the requested identity.
+      if (result.publicKey !== accountId ||
+          (result.status === 'funded' && result.balance.publicKey !== accountId)) {
+        throw new Error('Account lookup returned a different public identity.');
+      }
+
       if (result.status === 'unfunded') {
         account = { publicKey: accountId, status: 'unfunded' };
       } else {
