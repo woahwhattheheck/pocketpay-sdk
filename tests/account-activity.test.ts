@@ -234,4 +234,52 @@ describe('account activity normalization', () => {
       asset: 'XLM',
     }).map((record) => record.transactionHash)).toEqual(['pending']);
   });
+  it('gives simultaneous hashless receipts different private stable IDs', () => {
+    const pending: PaymentReceipt = {
+      status: TransactionStatus.PENDING,
+      source: 'submission',
+      actionRequired: 'retry',
+      createdAt: '2026-10-05T15:00:00.000Z',
+      destination: OTHER,
+      amount: '1.25',
+      asset: 'XLM',
+      memo: 'private-first-memo',
+    };
+    const first = mapPaymentReceiptToActivity(pending, ACCOUNT);
+    const second = mapPaymentReceiptToActivity(
+      { ...pending, destination: ACCOUNT, memo: 'private-second-memo' },
+      ACCOUNT,
+    );
+    expect(first.id).not.toBe(second.id);
+    expect(first.id).toBe(mapPaymentReceiptToActivity(pending, ACCOUNT).id);
+    expect(first.id).not.toContain('private-first-memo');
+    expect(first.id).not.toContain(OTHER);
+    expect(second.id).not.toContain('private-second-memo');
+    expect(second.id).not.toContain(ACCOUNT);
+    expect(mapPaymentReceiptToActivity({
+      ...pending, transactionHash: 'signed-tx-hash',
+    }, ACCOUNT).id).toBe('receipt:signed-tx-hash');
+  });
+
+  it('keeps multiple vault operations within one transaction distinct', () => {
+    const deposit: VaultMappedResult = {
+      success: true, status: 'success', operation: 'deposit',
+      hash: 'shared-transaction', amount: '2',
+    };
+    const withdrawal: VaultMappedResult = {
+      ...deposit, operation: 'withdraw', amount: '1',
+    };
+    const first = mapVaultResultToActivity({
+      result: deposit, createdAt: '2026-10-05T15:00:00.000Z',
+    });
+    const second = mapVaultResultToActivity({
+      result: withdrawal, createdAt: '2026-10-05T15:00:00.000Z',
+    });
+    expect(first.transactionHash).toBe('shared-transaction');
+    expect(second.transactionHash).toBe('shared-transaction');
+    expect(first.id).toBe('vault:shared-transaction:deposit');
+    expect(second.id).toBe('vault:shared-transaction:withdraw');
+    expect(first.id).not.toBe(second.id);
+  });
+
 });
