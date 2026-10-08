@@ -105,10 +105,13 @@ export function redactError(error: unknown): {
   transactionHash?: string;
 } {
   if (error instanceof PocketPayError) {
-    const desc = describeError(error.code);
+    // Error codes are public identifiers, but the constructor accepts arbitrary strings.
+    // Never echo an unrecognized caller-provided value across the log-safe boundary.
+    const code = isKnownErrorCode(error.code) ? error.code : ErrorCode.SDK_INTERNAL;
+    const desc = describeError(code);
     return {
       name: redactSensitive(error.name),
-      code: error.code,
+      code,
       category: desc.category,
       retryable: desc.retryable,
       safeMessage: desc.safeMessage,
